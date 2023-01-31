@@ -1,88 +1,76 @@
 package model.board;
 
 import model.Colour;
-import model.pieces.Bishop;
-import model.pieces.Queen;
-import model.pieces.Rook;
-
-import java.util.ArrayList;
-import java.util.List;
+import model.pieces.*;
 
 /**
  * Represents the game board.
  */
 public class Board {
     private static final int SIZE = 8;
-    private final List<Square> gameState;
+    private final Square[] gameState;
 
     /**
-     * EFFECTS: Constructs a new Board with all pieces in their starting positions.
+     * EFFECTS: Constructs a new empty Board.
      */
     public Board() {
-        gameState = new ArrayList<>();
+        gameState = new Square[SIZE * SIZE];
 
         // Initialize an empty board.
         for (int i = 0; i < SIZE * SIZE; i++) {
-            gameState.add(new Square(i % SIZE, i / SIZE));
-        }
-
-        resetPieces();
-    }
-
-    /**
-     * EFFECTS: Removes all pieces from the board.
-     * MODIFIES: this
-     */
-    public void clearPieces() {
-        for (int i = 0; i < SIZE * SIZE; i++) {
-            gameState.get(i).setPiece(null);
+            gameState[i] = new Square(i % SIZE, i / SIZE);
         }
     }
 
     /**
-     * EFFECTS: Sets all pieces in their starting positions.
+     * EFFECTS: Sets all pieces of the given colour in their starting positions.
      * MODIFIES: this
      */
-    public void resetPieces() {
-        clearPieces();
+    public void setupPieces(Colour colour) {
+        int y = colour.getDirection().getY() > 0 ? 0 : SIZE - 1;
 
-        for (int i = 0; i < SIZE; i++) {
-            getSquare(i, 1); // white pawn
-            getSquare(i, 7); // black pawn
-        }
+        // Remove any pieces of the given colour first.
+        clearPieces(colour);
 
         // No better way than to hard-code this...
-        getSquare(0, 0).setPiece(new Rook(Colour.WHITE));
-        getSquare(1, 0); // white knight
-        getSquare(2, 0).setPiece(new Bishop(Colour.WHITE));
-        getSquare(3, 0).setPiece(new Queen(Colour.WHITE));
-        getSquare(4, 0); // white king
-        getSquare(5, 0).setPiece(new Bishop(Colour.WHITE));
-        getSquare(6, 0); // white knight
-        getSquare(7, 0).setPiece(new Rook(Colour.WHITE));
+        getSquare(0, y).setPiece(new Rook(colour));
+        getSquare(1, y).setPiece(new Knight(colour));
+        getSquare(2, y).setPiece(new Bishop(colour));
+        getSquare(3, y).setPiece(new Queen(colour));
+        getSquare(SIZE - 4, y); // white king
+        getSquare(SIZE - 3, y).setPiece(new Bishop(colour));
+        getSquare(SIZE - 2, y).setPiece(new Knight(colour));
+        getSquare(SIZE - 1, y).setPiece(new Rook(colour));
 
-        getSquare(0, 7).setPiece(new Rook(Colour.WHITE));
-        getSquare(1, 7); // black knight
-        getSquare(2, 7).setPiece(new Bishop(Colour.BLACK));
-        getSquare(3, 7).setPiece(new Queen(Colour.BLACK));
-        getSquare(4, 7); // black king
-        getSquare(5, 7).setPiece(new Bishop(Colour.BLACK));
-        getSquare(6, 7); // black knight
-        getSquare(7, 7).setPiece(new Rook(Colour.BLACK));
+        for (int i = 0; i < SIZE; i++) {
+            getSquare(i, y + colour.getDirection().getY()).setPiece(new Pawn(colour));
+        }
+    }
+
+    /**
+     * EFFECTS: Removes all pieces of the given colour from the board.
+     * MODIFIES: this
+     */
+    public void clearPieces(Colour colour) {
+        for (Square square : gameState) {
+            if (square.getPiece().getColour() == colour) {
+                square.setPiece(null);
+            }
+        }
     }
 
     /**
      * EFFECTS: Returns true if the given coordinate is off the board.
      */
     public boolean isOutOfBounds(int x, int y) {
-        return x < 0 || y < 0 || x > SIZE || y > SIZE;
+        return x < 0 || y < 0 || x > SIZE - 1 || y > SIZE - 1;
     }
 
     /**
      * EFFECTS: Returns the square at the given position.
-     * REQUIRES: x, y in [0, 7]
+     * REQUIRES: x, y in [0, SIZE - 1]
      */
     public Square getSquare(int x, int y) {
-        return gameState.get(y * SIZE + x);
+        return gameState[y * SIZE + x];
     }
 }

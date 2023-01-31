@@ -15,10 +15,10 @@ public class Move {
     /**
      * EFFECTS: Constructs a new Move with given params.
      */
-    public Move(Piece piece, Square from, Square to) {
+    public Move(Piece piece, Square start, Square end) {
         this.piece = piece;
-        this.start = from;
-        this.end = to;
+        this.start = start;
+        this.end = end;
     }
 
     /**

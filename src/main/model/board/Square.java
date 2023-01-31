@@ -33,7 +33,6 @@ public class Square {
     }
 
     /**
-     * EFFECTS: Sets piece.
      * MODIFIES: this
      */
     public void setPiece(Piece to) {
