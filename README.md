@@ -1,19 +1,36 @@
 # :chess_pawn::clock1: CPSC Program Similar to Chess
 
 ## What will the application do?
-**CPSC** (CPSC Program Similar to Chess) allows users to play a variant of chess with only premoves. In other words, all moves must be made a certain number of turns in advance. The longer the delay, the more difficult it is to predict and react to the opponent's strategy.
+
+**CPSC** (CPSC Program Similar to Chess) allows users to play a variant of chess with fog of war.
+In other words, a player can only see squares that a piece of their colour can move to on the next turn.
 
 ## Who will use it?
-Anyone with some free time and a friend to play with can try **CPSC**, especially those with an interest in chess.
+
+Anyone with some free time and a friend to play with can try **CPSC**, especially those with an interest in chess or
+other strategic games.
 
 ## Why is this project of interest to you?
-Chess has recently undergone an unprecedented rise in popularity, and I wanted to try putting a unique spin on the classic format. Additionally, from a programming standpoint, I believe that chess is a sufficiently complex game which will be challenging but rewarding to implement.
+
+Chess has recently undergone an unprecedented rise in popularity, and I wanted to try putting a unique spin on the
+classic format. Additionally, from a programming standpoint, I believe that chess is a sufficiently complex game which
+will be challenging but rewarding to implement.
 
 ---
 
-## User Stories
+# User Stories
+
 As a user, I want to be able to...
-- [ ] add a move to a list of pending moves.
-- [ ] view a list of prior and pending moves.
+
+- [ ] add a move to a list of prior moves.
+- [ ] play against another user on the same device.
 - [ ] save and resume a game in progress.
 - [ ] view the current state of the board.
+
+---
+
+# Mechanics
+
+1. Players can only see squares that a piece of their colour can move to on the next turn.
+2. Players are not informed of check; the king may move into or be left in check.
+3. There is no checkmate; the game ends when a player's king is captured.

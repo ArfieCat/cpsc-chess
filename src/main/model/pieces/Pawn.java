@@ -68,9 +68,6 @@ public class Pawn extends Piece {
         return hasMoved;
     }
 
-    /**
-     * MODIFIES: this
-     */
     public void setHasMoved(boolean to) {
         hasMoved = to;
     }
@@ -79,9 +76,6 @@ public class Pawn extends Piece {
         return holyHell;
     }
 
-    /**
-     * MODIFIES: this
-     */
     public void setCanBeCapturedEnPassant(boolean to) {
         holyHell = to;
     }

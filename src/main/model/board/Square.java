@@ -32,9 +32,6 @@ public class Square {
         return piece;
     }
 
-    /**
-     * MODIFIES: this
-     */
     public void setPiece(Piece to) {
         piece = to;
     }
