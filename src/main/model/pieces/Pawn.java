@@ -12,7 +12,7 @@ import java.util.List;
  * Represents a pawn piece.
  */
 public class Pawn extends Piece {
-    private static final String PREFIX = "";
+    private static final String PREFIX = "P";
     private static final Direction[] CAPTURE_DIRECTIONS = {Direction.EAST, Direction.WEST};
     private boolean hasMoved;
     private boolean holyHell; // Google en passant... Holy Hell! :]
@@ -98,7 +98,8 @@ public class Pawn extends Piece {
 
                 // Check if the adjacent square is occupied by a pawn that can be captured en passant.
                 boolean canCaptureEnPassant = adjacentSquare.getPiece() != null
-                        && diagonalSquare.getPiece().getClass() == Pawn.class
+                        && adjacentSquare.getPiece().getColour() != getColour()
+                        && adjacentSquare.getPiece().getClass() == Pawn.class
                         && ((Pawn) diagonalSquare.getPiece()).canBeCapturedEnPassant();
 
                 if (canCapture || canCaptureEnPassant) {

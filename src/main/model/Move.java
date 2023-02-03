@@ -8,15 +8,14 @@ import model.pieces.Piece;
  * Represents a move of a piece on the board from one square to another.
  */
 public class Move {
-    private final Piece piece;
     private final Square start;
     private final Square end;
 
     /**
      * EFFECTS: Constructs a new Move with given params.
+     * REQUIRES: start contains a piece
      */
-    public Move(Piece piece, Square start, Square end) {
-        this.piece = piece;
+    public Move(Square start, Square end) {
         this.start = start;
         this.end = end;
     }
@@ -25,11 +24,7 @@ public class Move {
      * EFFECTS: Returns true if the move is valid.
      */
     public boolean isValid(Board board) {
-        return piece.isValidMove(board, start, end);
-    }
-
-    public Piece getPiece() {
-        return piece;
+        return start.getPiece().getValidSquares(board, start).contains(end);
     }
 
     public Square getStart() {

@@ -19,51 +19,67 @@ public class Menu {
      * EFFECTS: Starts the menu command line interface.
      */
     public void start() {
-        String[] command = scanner.nextLine().trim().toLowerCase().split(" ");
+        while (true) {
+            // Split user input into command and args.
+            String[] input = scanner.nextLine().trim().toLowerCase().split(" ", 2);
 
-        switch (command[0]) {
-            case "p": case "play": {
-                new Game(scanner).setupBoard().displayHelp().nextMove();
-                break;
-            }
-            case "l": case "load": {
-                new Game(scanner).load().displayHelp().nextMove();
-                break;
-            }
-            case "h": case "help": {
-                displayHelp();
-                break;
-            }
-            case "q": case "quit": {
-                System.exit(0); // die
-                break;
-            }
-            default: {
-                System.out.println("[!] Input a valid command.");
-                start();
+            switch (input[0]) {
+                case "play": {
+                    new Game(scanner).setupBoard().displayBoard().displayHelp().start();
+                    break;
+                }
+                case "load": {
+                    loadFile(input[1]);
+                    break;
+                }
+                case "help": {
+                    displayHelp();
+                    break;
+                }
+                case "quit": {
+                    System.exit(0); // die
+                    break;
+                }
+                default: {
+                    System.out.println("[!] Input a valid command.");
+                }
             }
         }
     }
 
     /**
-     * EFFECTS: Prints out a list of valid commands.
+     * EFFECTS: Prints out a list of valid commands and returns this menu for chaining.
      */
     public Menu displayHelp() {
-        System.out.println("play               | Start a new game.");
-        System.out.println("load <path-to-csf> | Load an existing game.");
-        System.out.println("help               | See valid commands.");
-        System.out.println("quit               | Quit.");
+        System.out.println("play             | Start a new game.");
+        System.out.println("load <file-path> | Load an existing game.");
+        System.out.println("help             | See valid commands.");
+        System.out.println("quit             | Quit.");
 
         return this;
     }
 
     /**
-     * EFFECTS: Prints out the intro blurb.
+     * EFFECTS: Prints out the intro blurb and returns this menu for chaining.
      */
     public Menu displayIntro() {
-        System.out.println("CPSC Program Similar to Chess");
-        // TODO: cool title
+        System.out.println("/**");
+        System.out.println(" * CPSC Program Similar to Chess");
+        System.out.println(" */");
 
+        // TODO: cool title
         return this;
+    }
+
+    /**
+     * EFFECTS: Loads an existing game from a JSON file.
+     */
+    private void loadFile(String path) {
+        // Catch any exceptions caused by a faulty path or JSON file.
+        try {
+            new Game(scanner).loadFile(path).displayBoard().displayHelp().start();
+        } catch (Exception e) {
+            System.out.println("[!] Could not load file from path: " + path);
+        }
     }
 }

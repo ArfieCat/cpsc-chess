@@ -47,7 +47,6 @@ public class Bishop extends Piece {
                 validSquares.add(square);
             }
         }
-
         return validSquares;
     }
 

@@ -13,6 +13,7 @@ public class Game {
     private final Scanner scanner;
     private final Board board;
     private int moveCount;
+    private boolean gameOver;
 
     /**
      * EFFECTS: Constructs a new Game with given params.
@@ -21,78 +22,101 @@ public class Game {
         this.scanner = scanner;
         this.board = new Board();
         this.moveCount = 0;
-    }
-
-    /**
-     * EFFECTS: Sets all pieces in their starting positions on the board.
-     * MODIFIES: this
-     */
-    public Game setupBoard() {
-        for (Colour colour : PLAYERS) {
-            board.setupPieces(colour);
-        }
-        return this;
+        this.gameOver = false;
     }
 
     /**
      * EFFECTS: Starts the game command line interface.
      */
     public void start() {
-        String[] command = scanner.nextLine().trim().toLowerCase().split(" ");
+        while (true) {
+            // Split user input into command and args.
+            String[] input = scanner.nextLine().trim().toLowerCase().split(" ", 2);
 
-        switch (command[0]) {
-            case "m": case "move": {
-                nextMove();
-                return;
-            }
-            case "h": case "help": {
-                displayHelp();
-                return;
-            }
-            case "s": case "save": {
-                save();
-                return;
-            }
-            default: {
-                System.out.println("[!] Input a valid command.");
-                start();
+            switch (input[0]) {
+                case "move": {
+                    parseMove(input[1].split(" "));
+                    break;
+                }
+                case "help": {
+                    displayHelp();
+                    break;
+                }
+                case "save": {
+                    saveFile(input[1]);
+                    break;
+                }
+                case "quit": {
+                    System.exit(0); // die
+                    break;
+                }
+                default: {
+                    System.out.println("[!] Input a valid command.");
+                }
             }
         }
     }
 
     /**
-     * EFFECTS: Starts the next move for the current player.
+     * EFFECTS: Prints out a list of valid commands and returns this game for chaining.
      */
-    public void nextMove() {
-        Colour currentPlayer = PLAYERS[moveCount % PLAYERS.length];
+    public Game displayHelp() {
+        System.out.println("move <start> <end> | Move a piece.");
+        System.out.println("help               | See valid commands.");
+        System.out.println("save <file-name>   | Save the current game.");
+        System.out.println("quit               | Quit.");
 
-        // TODO: handle moves
+        return this;
     }
 
     /**
-     * EFFECTS: Loads an existing game from a JSON file.
+     * EFFECTS: Prints out the board and returns this game for chaining.
+     */
+    public Game displayBoard() {
+        // TODO: board to string
+        System.out.print(board);
+        System.out.println(PLAYERS[moveCount % PLAYERS.length] + " to play.");
+
+        return this;
+    }
+
+    /**
+     * EFFECTS: Sets all pieces in their starting positions and returns this game for chaining.
      * MODIFIES: this
      */
-    public Game load() {
-        // TODO: load game
+    public Game setupBoard() {
+        for (Colour colour : PLAYERS) {
+            board.setupPieces(colour);
+        }
+
         return this;
+    }
+
+    /**
+     * EFFECTS: Loads an existing game from a JSON file and returns this game for chaining.
+     * MODIFIES: this
+     */
+    public Game loadFile(String path) {
+        // TODO: load from json
+        return this;
+    }
+
+    /**
+     * EFFECTS: Constructs a move from command represents a valid move and makes that move.
+     */
+    private void parseMove(String[] args) {
+        if (gameOver) {
+            System.out.println("[!] The game has ended.");
+            return;
+        }
+
+        // TODO: check that the input is well formed
     }
 
     /**
      * EFFECTS: Saves the game to a JSON file.
      */
-    public void save() {
+    private void saveFile(String path) {
         // TODO: save game
-    }
-
-    /**
-     * EFFECTS: Prints out a list of valid commands.
-     */
-    public Game displayHelp() {
-        System.out.println("move <start> <end> | Move a piece.");
-        System.out.println("help               | See valid commands.");
-        System.out.println("save <file-name>   | Save and quit.");
-
-        return this;
     }
 }

@@ -47,7 +47,6 @@ public class Rook extends Piece {
                 validSquares.add(square);
             }
         }
-
         return validSquares;
     }
 

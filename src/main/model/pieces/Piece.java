@@ -19,13 +19,6 @@ public abstract class Piece {
         this.colour = colour;
     }
 
-    /**
-     * EFFECTS: Returns true if the piece can make the given move.
-     */
-    public boolean isValidMove(Board board, Square start, Square end) {
-        return getValidSquares(board, start).contains(end);
-    }
-
     public Colour getColour() {
         return colour;
     }
