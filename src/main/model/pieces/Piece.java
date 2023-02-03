@@ -4,7 +4,7 @@ import model.Colour;
 import model.board.Board;
 import model.board.Square;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a generic piece.
@@ -24,9 +24,9 @@ public abstract class Piece {
     }
 
     /**
-     * EFFECTS: Returns a list of all squares on the board that the piece can move to.
+     * EFFECTS: Returns the set of all squares on the board that the piece can move to.
      */
-    public abstract List<Square> getValidSquares(Board board, Square start);
+    public abstract Set<Square> getValidSquares(Board board, Square start);
 
     public abstract String getPrefix();
 }

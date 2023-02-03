@@ -4,8 +4,8 @@ import model.Colour;
 import model.board.Board;
 import model.board.Square;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a knight piece.
@@ -26,8 +26,8 @@ public class Knight extends Piece {
      * EFFECTS: See Piece.getValidSquares.
      */
     @Override
-    public List<Square> getValidSquares(Board board, Square start) {
-        List<Square> validSquares = new ArrayList<>();
+    public Set<Square> getValidSquares(Board board, Square start) {
+        Set<Square> validSquares = new HashSet<>();
 
         // Apply offset to starting square based on preset move offsets.
         for (int i = 0, x = start.getX() + MOVE_OFFSETS_X[i], y = start.getY() + MOVE_OFFSETS_Y[i];
@@ -36,7 +36,7 @@ public class Knight extends Piece {
                 Square square = board.getSquare(x, y);
 
                 // Check if the square is empty or occupied by a piece of the opposite colour.
-                if (square.getPiece() == null || square.getPiece().getColour() != getColour()) {
+                if (!square.hasPiece() || square.getPiece().getColour() != getColour()) {
                     validSquares.add(square);
                 }
             }

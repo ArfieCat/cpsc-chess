@@ -5,8 +5,8 @@ import model.Direction;
 import model.board.Board;
 import model.board.Square;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a king piece.
@@ -29,17 +29,17 @@ public class King extends Piece {
      * EFFECTS: See Piece.getValidSquares.
      */
     @Override
-    public List<Square> getValidSquares(Board board, Square start) {
-        List<Square> validSquares = new ArrayList<>();
+    public Set<Square> getValidSquares(Board board, Square start) {
+        Set<Square> validSquares = new HashSet<>();
 
-        // Apply offset to starting square based on preset move offsets.
+        // Apply offset to starting square based on direction.
         for (int i = 0, x = start.getX() + MOVE_DIRECTIONS[i].getX(), y = start.getY() + MOVE_DIRECTIONS[i].getY();
                 i < MOVE_DIRECTIONS.length; i++) {
             if (!board.isOutOfBounds(x, y)) {
                 Square square = board.getSquare(x, y);
 
                 // Check if the square is empty or occupied by a piece of the opposite colour.
-                if (square.getPiece() == null || square.getPiece().getColour() != getColour()) {
+                if (!square.hasPiece() || square.getPiece().getColour() != getColour()) {
                     validSquares.add(square);
                 }
             }

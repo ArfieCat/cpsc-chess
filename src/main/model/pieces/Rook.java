@@ -5,8 +5,8 @@ import model.Direction;
 import model.board.Board;
 import model.board.Square;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a rook piece.
@@ -28,8 +28,8 @@ public class Rook extends Piece {
      * EFFECTS: See Piece.getValidSquares.
      */
     @Override
-    public List<Square> getValidSquares(Board board, Square start) {
-        List<Square> validSquares = new ArrayList<>();
+    public Set<Square> getValidSquares(Board board, Square start) {
+        Set<Square> validSquares = new HashSet<>();
 
         for (Direction direction : MOVE_DIRECTIONS) {
             // Apply offset to starting square based on direction until out of bounds.
@@ -38,7 +38,7 @@ public class Rook extends Piece {
                 Square square = board.getSquare(x, y);
 
                 // Check if the square is occupied by another piece.
-                if (square.getPiece() != null) {
+                if (square.hasPiece()) {
                     if (square.getPiece().getColour() != getColour()) {
                         validSquares.add(square);
                     }

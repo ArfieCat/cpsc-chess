@@ -5,8 +5,8 @@ import model.Direction;
 import model.board.Board;
 import model.board.Square;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a pawn piece.
@@ -30,8 +30,8 @@ public class Pawn extends Piece {
      * EFFECTS: See Piece.getValidSquares.
      */
     @Override
-    public List<Square> getValidSquares(Board board, Square start) {
-        List<Square> validSquares = new ArrayList<>();
+    public Set<Square> getValidSquares(Board board, Square start) {
+        Set<Square> validSquares = new HashSet<>();
         int x = start.getX();
         int y = start.getY() + getColour().getDirection().getY();
 
@@ -40,7 +40,7 @@ public class Pawn extends Piece {
             Square square = board.getSquare(x, y);
 
             // Check if the square is empty.
-            if (square.getPiece() == null) {
+            if (!square.hasPiece()) {
                 validSquares.add(square);
             }
         }
@@ -50,7 +50,7 @@ public class Pawn extends Piece {
             Square square = board.getSquare(x, y + getColour().getDirection().getY());
 
             // Check if the square is empty.
-            if (square.getPiece() == null) {
+            if (!square.hasPiece()) {
                 validSquares.add(square);
             }
         }
@@ -81,10 +81,10 @@ public class Pawn extends Piece {
     }
 
     /**
-     * EFFECTS: Checks for valid squares by capture and adds them to the given list.
-     * MODIFIES: list reference
+     * EFFECTS: Checks for valid squares by capture and adds them to the given set.
+     * MODIFIES: set reference
      */
-    private void addCaptureSquares(List<Square> validSquares, Board board, Square start) {
+    private void addCaptureSquares(Set<Square> validSquares, Board board, Square start) {
         // Apply offset to starting square based on direction.
         for (int i = 0, x = start.getX() + CAPTURE_DIRECTIONS[i].getX(), y = start.getY()
                 + getColour().getDirection().getY(); i < CAPTURE_DIRECTIONS.length; i++) {
@@ -93,13 +93,13 @@ public class Pawn extends Piece {
                 Square adjacentSquare = board.getSquare(x, start.getY());
 
                 // Check if the diagonal square is occupied by a piece of the opposite colour.
-                boolean canCapture = diagonalSquare.getPiece() != null
+                boolean canCapture = diagonalSquare.hasPiece()
                         && diagonalSquare.getPiece().getColour() != getColour();
 
                 // Check if the adjacent square is occupied by a pawn that can be captured en passant.
-                boolean canCaptureEnPassant = adjacentSquare.getPiece() != null
+                boolean canCaptureEnPassant = adjacentSquare.hasPiece()
                         && adjacentSquare.getPiece().getColour() != getColour()
-                        && adjacentSquare.getPiece().getClass() == Pawn.class
+                        && adjacentSquare.getPiece().getClass() == getClass()
                         && ((Pawn) diagonalSquare.getPiece()).canBeCapturedEnPassant();
 
                 if (canCapture || canCaptureEnPassant) {
