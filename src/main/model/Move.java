@@ -2,7 +2,6 @@ package model;
 
 import model.board.Board;
 import model.board.Square;
-import model.pieces.Piece;
 
 /**
  * Represents a move of a piece on the board from one square to another.
@@ -22,6 +21,7 @@ public class Move {
 
     /**
      * EFFECTS: Returns true if the move is valid.
+     * REQUIRES: start.hasPiece()
      */
     public boolean isValid(Board board) {
         return start.getPiece().getValidSquares(board, start).contains(end);

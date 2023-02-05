@@ -2,6 +2,7 @@ package model.board;
 
 import model.Colour;
 import model.pieces.*;
+import model.Move;
 
 /**
  * Represents the game board.
@@ -60,6 +61,26 @@ public class Board {
     }
 
     /**
+     * EFFECTS: Updates the board according to the given move and returns false if the game is over.
+     * MODIFIES: this
+     * REQUIRES: move.isValid()
+     */
+    public boolean doMove(Move move) {
+        boolean isGameOver = move.getEnd().hasPiece() && move.getEnd().getPiece() instanceof King;
+        Piece piece = move.getStart().getPiece();
+
+        // Change the position of the piece on the start square.
+        move.getStart().setPiece(null);
+        move.getEnd().setPiece(piece);
+
+        if (piece instanceof Pawn && !((Pawn) piece).hasMoved()) {
+            ((Pawn) piece).setHasMoved(true);
+        }
+
+        return isGameOver;
+    }
+
+    /**
      * EFFECTS: Returns true if the given coordinate is off the board.
      */
     public boolean isOutOfBounds(int x, int y) {
@@ -68,9 +89,27 @@ public class Board {
 
     /**
      * EFFECTS: Returns the square at the given position.
-     * REQUIRES: x, y are not out of bounds
+     * REQUIRES: !isOutOfBounds(x, y)
      */
     public Square getSquare(int x, int y) {
         return gameState[y * SIZE + x];
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int y = SIZE - 1; y >= 0; y--) {
+            stringBuilder.append(y + 1).append(" ");
+
+            for (int x = 0; x < SIZE; x++) {
+                stringBuilder.append(getSquare(x, y).hasPiece() ? getSquare(x, y).getPiece() : ".").append(" ");
+            }
+
+            stringBuilder.append("\n");
+        }
+
+        stringBuilder.append("  a b c d e f g h");
+        return stringBuilder.toString();
     }
 }

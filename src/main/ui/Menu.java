@@ -18,9 +18,9 @@ public class Menu {
     /**
      * EFFECTS: Starts the menu command line interface.
      */
+    @SuppressWarnings({"methodlength"}) // This method can't get any shorter.
     public void start() {
         while (true) {
-            // Split user input into command and args.
             String[] input = scanner.nextLine().trim().toLowerCase().split(" ", 2);
 
             switch (input[0]) {
@@ -29,7 +29,7 @@ public class Menu {
                     break;
                 }
                 case "load": {
-                    loadFile(input[1]);
+                    loadFile(input);
                     break;
                 }
                 case "help": {
@@ -55,7 +55,6 @@ public class Menu {
         System.out.println("load <file-path> | Load an existing game.");
         System.out.println("help             | See valid commands.");
         System.out.println("quit             | Quit.");
-
         return this;
     }
 
@@ -74,12 +73,17 @@ public class Menu {
     /**
      * EFFECTS: Loads an existing game from a JSON file.
      */
-    private void loadFile(String path) {
+    private void loadFile(String[] input) {
+        if (input.length != 2) {
+            System.out.println("[!] Command did not match: load <file-path>");
+            return;
+        }
+
         // Catch any exceptions caused by a faulty path or JSON file.
         try {
-            new Game(scanner).loadFile(path).displayBoard().displayHelp().start();
+            new Game(scanner).loadFile(input[1]).displayBoard().displayHelp().start();
         } catch (Exception e) {
-            System.out.println("[!] Could not load file from path: " + path);
+            System.out.println("[!] Could not load file from path: " + input[1]);
         }
     }
 }

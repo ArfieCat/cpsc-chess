@@ -59,11 +59,6 @@ public class Pawn extends Piece {
         return validSquares;
     }
 
-    @Override
-    public String getPrefix() {
-        return PREFIX;
-    }
-
     public boolean hasMoved() {
         return hasMoved;
     }
@@ -107,5 +102,10 @@ public class Pawn extends Piece {
                 }
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return PREFIX;
     }
 }

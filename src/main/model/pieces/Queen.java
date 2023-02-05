@@ -52,7 +52,7 @@ public class Queen extends Piece {
     }
 
     @Override
-    public String getPrefix() {
+    public String toString() {
         return PREFIX;
     }
 }
