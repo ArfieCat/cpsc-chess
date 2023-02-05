@@ -4,6 +4,9 @@ import model.Colour;
 import model.pieces.*;
 import model.Move;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Represents the game board.
  */
@@ -95,20 +98,35 @@ public class Board {
         return gameState[y * SIZE + x];
     }
 
-    @Override
-    public String toString() {
+    /**
+     * EFFECTS: Returns a string representation of the board for display.
+     */
+    public String getDisplayString(Colour colour) {
         StringBuilder stringBuilder = new StringBuilder();
+        Set<Square> visibleSquares = new HashSet<>();
+
+        for (Square square : gameState) {
+            if (square.hasPiece() && square.getPiece().getColour() == colour) {
+                visibleSquares.add(square);
+                visibleSquares.addAll(square.getPiece().getValidSquares(this, square));
+            }
+        }
 
         // Reverse iterate over rows to get the correct display order.
         for (int y = SIZE - 1; y >= 0; y--) {
-            stringBuilder.append(y + 1).append(" ");
+            stringBuilder.append(y + 1).append("  ");
             for (int x = 0; x < SIZE; x++) {
-                stringBuilder.append(getSquare(x, y).hasPiece() ? getSquare(x, y).getPiece() : ".").append(" ");
+                if (visibleSquares.contains(getSquare(x, y))) {
+                    stringBuilder.append(getSquare(x, y).hasPiece() ? getSquare(x, y).getPiece() : ".");
+                } else {
+                    stringBuilder.append(" ");
+                }
+                stringBuilder.append("  ");
             }
             stringBuilder.append("\n");
         }
 
-        stringBuilder.append("  a b c d e f g h");
+        stringBuilder.append("   a  b  c  d  e  f  g  h");
         return stringBuilder.toString();
     }
 }

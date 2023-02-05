@@ -75,12 +75,13 @@ public class Game {
      * EFFECTS: Prints out the board and returns this game for chaining.
      */
     public Game displayBoard() {
-        System.out.println(board);
+        Colour currentPlayer = PLAYERS[moveCount % PLAYERS.length];
 
+        System.out.println(board.getDisplayString(currentPlayer));
         if (isGameOver) {
             System.out.println("King captured. " + PLAYERS[(moveCount - 1) % PLAYERS.length] + " wins.");
         } else {
-            System.out.println(PLAYERS[moveCount % PLAYERS.length] + " to play.");
+            System.out.println(currentPlayer + " to play.");
         }
 
         return this;
@@ -126,7 +127,7 @@ public class Game {
     }
 
     /**
-     * EFFECTS: Ensures that the user input for a move is valid.
+     * EFFECTS: Ensures that the user input for a move is valid and updates the game.
      */
     private void validateMove(String[] args) {
         for (String arg : args) {
@@ -149,16 +150,25 @@ public class Game {
             return;
         }
 
-        doMove(move);
+        // As a side effect this updates the board.
+        isGameOver = board.doMove(move);
+        moveCount++;
+
+        delay();
+        displayBoard();
     }
 
     /**
-     * EFFECTS: Updates the game according to the given move.
+     * EFFECTS: Prints out whitespace and waits for any input as a rudimentary anti-screen-cheating measure.
      */
-    private void doMove(Move move) {
-        isGameOver = board.doMove(move);
-        moveCount++;
-        displayBoard();
+    private void delay() {
+        for (int i = 0; i < 50; i++) {
+            System.out.println();
+        }
+
+        System.out.println("Pass the device to " + PLAYERS[moveCount % PLAYERS.length]
+                + ", then press ENTER to continue.");
+        scanner.nextLine();
     }
 
     /**
