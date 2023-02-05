@@ -80,9 +80,10 @@ public class Pawn extends Piece {
      * MODIFIES: set reference
      */
     private void addCaptureSquares(Set<Square> validSquares, Board board, Square start) {
-        // Apply offset to starting square based on direction.
-        for (int i = 0, x = start.getX() + CAPTURE_DIRECTIONS[i].getX(), y = start.getY()
-                + getColour().getDirection().getY(); i < CAPTURE_DIRECTIONS.length; i++) {
+        for (int i = 0, y = start.getY() + getColour().getDirection().getY(); i < CAPTURE_DIRECTIONS.length; i++) {
+            // Apply offset to starting square based on direction.
+            int x = start.getX() + CAPTURE_DIRECTIONS[i].getX();
+
             if (!board.isOutOfBounds(x, y)) {
                 Square diagonalSquare = board.getSquare(x, y);
                 Square adjacentSquare = board.getSquare(x, start.getY());

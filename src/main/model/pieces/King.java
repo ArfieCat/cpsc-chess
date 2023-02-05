@@ -32,9 +32,11 @@ public class King extends Piece {
     public Set<Square> getValidSquares(Board board, Square start) {
         Set<Square> validSquares = new HashSet<>();
 
-        // Apply offset to starting square based on direction.
-        for (int i = 0, x = start.getX() + MOVE_DIRECTIONS[i].getX(), y = start.getY() + MOVE_DIRECTIONS[i].getY();
-                i < MOVE_DIRECTIONS.length; i++) {
+        for (Direction direction : MOVE_DIRECTIONS) {
+            // Apply offset to starting square based on direction.
+            int x = start.getX() + direction.getX();
+            int y = start.getY() + direction.getY();
+
             if (!board.isOutOfBounds(x, y)) {
                 Square square = board.getSquare(x, y);
 

@@ -34,8 +34,8 @@ public class Queen extends Piece {
 
         for (Direction direction : MOVE_DIRECTIONS) {
             // Apply offset to starting square based on direction until out of bounds.
-            for (int i = 1, x = start.getX() + direction.getX() * i, y = start.getY() + direction.getY() * i;
-                    !board.isOutOfBounds(x, y); i++) {
+            for (int x = start.getX() + direction.getX(), y = start.getY() + direction.getY();
+                    !board.isOutOfBounds(x, y); x += direction.getX(), y += direction.getY()) {
                 Square square = board.getSquare(x, y);
 
                 // Check if the square is occupied by another piece.

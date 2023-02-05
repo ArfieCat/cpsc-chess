@@ -78,7 +78,7 @@ public class Game {
         System.out.println(board);
 
         if (isGameOver) {
-            System.out.println("King captured. " + PLAYERS[moveCount - 1 % PLAYERS.length] + " wins.");
+            System.out.println("King captured. " + PLAYERS[(moveCount - 1) % PLAYERS.length] + " wins.");
         } else {
             System.out.println(PLAYERS[moveCount % PLAYERS.length] + " to play.");
         }

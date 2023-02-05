@@ -99,13 +99,12 @@ public class Board {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
 
+        // Reverse iterate over rows to get the correct display order.
         for (int y = SIZE - 1; y >= 0; y--) {
             stringBuilder.append(y + 1).append(" ");
-
             for (int x = 0; x < SIZE; x++) {
                 stringBuilder.append(getSquare(x, y).hasPiece() ? getSquare(x, y).getPiece() : ".").append(" ");
             }
-
             stringBuilder.append("\n");
         }
 

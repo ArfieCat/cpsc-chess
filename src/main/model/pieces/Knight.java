@@ -29,9 +29,11 @@ public class Knight extends Piece {
     public Set<Square> getValidSquares(Board board, Square start) {
         Set<Square> validSquares = new HashSet<>();
 
-        // Apply offset to starting square based on preset move offsets.
-        for (int i = 0, x = start.getX() + MOVE_OFFSETS_X[i], y = start.getY() + MOVE_OFFSETS_Y[i];
-                i < MOVE_OFFSETS_X.length; i++) {
+        for (int i = 0; i < MOVE_OFFSETS_X.length; i++) {
+            // Apply offset to starting square based on preset move offsets.
+            int x = start.getX() + MOVE_OFFSETS_X[i];
+            int y = start.getY() + MOVE_OFFSETS_Y[i];
+
             if (!board.isOutOfBounds(x, y)) {
                 Square square = board.getSquare(x, y);
 
