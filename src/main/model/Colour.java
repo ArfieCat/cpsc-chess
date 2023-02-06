@@ -4,16 +4,16 @@ package model;
  * Represents a player or piece colour.
  */
 public enum Colour {
-    WHITE(Direction.NORTH),
-    BLACK(Direction.SOUTH);
+    WHITE(1),
+    BLACK(-1);
 
-    private Direction direction;
+    private final int direction;
 
-    Colour(Direction direction) {
+    Colour(int direction) {
         this.direction = direction;
     }
 
-    public Direction getDirection() {
+    public int getDirection() {
         return direction;
     }
 }

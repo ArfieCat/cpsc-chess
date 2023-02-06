@@ -1,7 +1,6 @@
 package model.pieces;
 
 import model.Colour;
-import model.Direction;
 import model.board.Board;
 import model.board.Square;
 
@@ -11,9 +10,9 @@ import java.util.Set;
 /**
  * Represents a pawn piece.
  */
-public class Pawn extends Piece {
+public class Pawn extends Piece implements HasMovedRule {
     private static final String PREFIX = "P";
-    private static final Direction[] CAPTURE_DIRECTIONS = {Direction.EAST, Direction.WEST};
+    private static final int[] CAPTURE_OFFSETS_X = {1, -1};
     private boolean hasMoved;
     private boolean holyHell; // Google en passant... Holy Hell! :]
 
@@ -33,23 +32,19 @@ public class Pawn extends Piece {
     public Set<Square> getValidSquares(Board board, Square start) {
         Set<Square> validSquares = new HashSet<>();
         int x = start.getX();
-        int y = start.getY() + getColour().getDirection().getY();
+        int y = start.getY() + getColour().getDirection();
 
         // Basic 1-square pawn push.
         if (!board.isOutOfBounds(x, y)) {
             Square square = board.getSquare(x, y);
-
-            // Check if the square is empty.
             if (!square.hasPiece()) {
                 validSquares.add(square);
             }
         }
 
-        // A 2-square pawn push on the first move enables en passant.
-        if (!hasMoved && !board.isOutOfBounds(x, y + getColour().getDirection().getY())) {
-            Square square = board.getSquare(x, y + getColour().getDirection().getY());
-
-            // Check if the square is empty.
+        // 2-square pawn push on the first move.
+        if (!hasMoved && !board.isOutOfBounds(x, y + getColour().getDirection())) {
+            Square square = board.getSquare(x, y + getColour().getDirection());
             if (!square.hasPiece()) {
                 validSquares.add(square);
             }
@@ -59,12 +54,9 @@ public class Pawn extends Piece {
         return validSquares;
     }
 
-    public boolean hasMoved() {
-        return hasMoved;
-    }
-
-    public void setHasMoved(boolean to) {
-        hasMoved = to;
+    @Override
+    public void setHasMoved() {
+        hasMoved = true;
     }
 
     public boolean canBeCapturedEnPassant() {
@@ -80,9 +72,9 @@ public class Pawn extends Piece {
      * MODIFIES: set reference
      */
     private void addCaptureSquares(Set<Square> validSquares, Board board, Square start) {
-        for (int i = 0, y = start.getY() + getColour().getDirection().getY(); i < CAPTURE_DIRECTIONS.length; i++) {
-            // Apply offset to starting square based on direction.
-            int x = start.getX() + CAPTURE_DIRECTIONS[i].getX();
+        for (int i = 0, y = start.getY() + getColour().getDirection(); i < CAPTURE_OFFSETS_X.length; i++) {
+            // Apply offset to starting square based on preset capture offsets.
+            int x = start.getX() + CAPTURE_OFFSETS_X[i];
 
             if (!board.isOutOfBounds(x, y)) {
                 Square diagonalSquare = board.getSquare(x, y);
@@ -95,8 +87,8 @@ public class Pawn extends Piece {
                 // Check if the adjacent square is occupied by a pawn that can be captured en passant.
                 boolean canCaptureEnPassant = adjacentSquare.hasPiece()
                         && adjacentSquare.getPiece().getColour() != getColour()
-                        && adjacentSquare.getPiece().getClass() == getClass()
-                        && ((Pawn) diagonalSquare.getPiece()).canBeCapturedEnPassant();
+                        && adjacentSquare.getPiece() instanceof Pawn
+                        && ((Pawn) adjacentSquare.getPiece()).canBeCapturedEnPassant();
 
                 if (canCapture || canCaptureEnPassant) {
                     validSquares.add(diagonalSquare);

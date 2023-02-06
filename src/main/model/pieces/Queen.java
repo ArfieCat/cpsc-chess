@@ -48,6 +48,7 @@ public class Queen extends Piece {
                 validSquares.add(square);
             }
         }
+
         return validSquares;
     }
 

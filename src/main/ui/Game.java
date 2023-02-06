@@ -128,6 +128,7 @@ public class Game {
 
     /**
      * EFFECTS: Ensures that the user input for a move is valid and updates the game.
+     * MODIFIES: this
      */
     private void validateMove(String[] args) {
         for (String arg : args) {
@@ -153,8 +154,9 @@ public class Game {
         // As a side effect this updates the board.
         isGameOver = board.doMove(move);
         moveCount++;
-
-        delay();
+        if (!isGameOver) {
+            delay();
+        }
         displayBoard();
     }
 

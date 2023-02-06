@@ -11,11 +11,12 @@ import java.util.Set;
 /**
  * Represents a rook piece.
  */
-public class Rook extends Piece {
+public class Rook extends Piece implements HasMovedRule {
     private static final String PREFIX = "R";
     private static final Direction[] MOVE_DIRECTIONS = {
             Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH
     };
+    private boolean hasMoved;
 
     /**
      * EFFECTS: Constructs a new Rook with given params.
@@ -48,6 +49,15 @@ public class Rook extends Piece {
             }
         }
         return validSquares;
+    }
+
+    public boolean getHasMoved() {
+        return hasMoved;
+    }
+
+    @Override
+    public void setHasMoved() {
+        hasMoved = true;
     }
 
     @Override
