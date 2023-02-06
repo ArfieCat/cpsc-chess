@@ -167,7 +167,6 @@ public class Game {
         for (int i = 0; i < 50; i++) {
             System.out.println();
         }
-
         System.out.println("Pass the device to " + PLAYERS[moveCount % PLAYERS.length]
                 + ", then press ENTER to continue.");
         scanner.nextLine();

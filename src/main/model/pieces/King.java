@@ -17,6 +17,7 @@ public class King extends Piece implements HasMovedRule {
             Direction.EAST, Direction.NORTHEAST, Direction.NORTH, Direction.NORTHWEST,
             Direction.WEST, Direction.SOUTHWEST, Direction.SOUTH, Direction.SOUTHEAST
     };
+    private static final Direction[] CASTLE_DIRECTIONS = {Direction.EAST, Direction.WEST};
     private static final int[] CASTLE_OFFSETS_X = {2, -2};
     private boolean hasMoved;
 
@@ -67,11 +68,25 @@ public class King extends Piece implements HasMovedRule {
      * MODIFIES: set reference
      */
     private void addCastleSquares(Set<Square> validSquares, Board board, Square start) {
-        for (int i = 0, y = start.getY(); i < CASTLE_OFFSETS_X.length; i++) {
-            // Apply offset to starting square based on direction.
-            int x = start.getX() + CASTLE_OFFSETS_X[i];
+        for (int i = 0; i < CASTLE_DIRECTIONS.length; i++) {
+            Direction direction = CASTLE_DIRECTIONS[i];
 
-            // TODO: check if rook has moved
+            // Apply offset to starting square based on direction until out of bounds.
+            for (int x = start.getX() + direction.getX(), y = start.getY();
+                    !board.isOutOfBounds(x, y); x += direction.getX()) {
+                Square square = board.getSquare(x, y);
+
+                // Check if the first occupied square has an unmoved rook of the same colour.
+                if (square.hasPiece()) {
+                    boolean canCastle = square.getPiece().getColour() == getColour()
+                            && square.getPiece() instanceof Rook
+                            && !((Rook) square.getPiece()).getHasMoved();
+                    if (canCastle) {
+                        validSquares.add(board.getSquare(start.getX() + CASTLE_OFFSETS_X[i], y));
+                    }
+                    break;
+                }
+            }
         }
     }
 

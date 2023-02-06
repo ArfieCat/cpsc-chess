@@ -180,7 +180,22 @@ public class Board {
         }
     }
 
+    /**
+     * EFFECTS: Castles with the appropriate rook if applicable.
+     * MODIFIES: this
+     */
     private void doCastling(Move move) {
-        // TODO: do this
+        // Determine if the king castled king- or queen-side.
+        if (move.getEnd().getX() - move.getStart().getX() > 1) {
+            Square start = getSquare(SIZE - 1, move.getEnd().getY());
+            Square end = getSquare(move.getEnd().getX() - 1, move.getEnd().getY());
+            end.setPiece(start.getPiece());
+            start.setPiece(null);
+        } else if (move.getEnd().getX() - move.getStart().getX() < -1) {
+            Square start = getSquare(0, move.getEnd().getY());
+            Square end = getSquare(move.getEnd().getX() + 1, move.getEnd().getY());
+            end.setPiece(start.getPiece());
+            start.setPiece(null);
+        }
     }
 }

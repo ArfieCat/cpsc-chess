@@ -23,6 +23,7 @@ public class Rook extends Piece implements HasMovedRule {
      */
     public Rook(Colour colour) {
         super(colour);
+        this.hasMoved = false;
     }
 
     /**
@@ -48,6 +49,7 @@ public class Rook extends Piece implements HasMovedRule {
                 validSquares.add(square);
             }
         }
+
         return validSquares;
     }
 
