@@ -1,4 +1,4 @@
-# :chess_pawn::clock1: CPSC Program Similar to Chess
+# :chess_pawn: CPSC Program Similar to Chess
 
 ## What will the application do?
 
@@ -22,15 +22,20 @@ will be challenging but rewarding to implement.
 
 As a user, I want to be able to...
 
-- [ ] add a move to a list of prior moves.
-- [ ] play against another user on the same device.
+- [x] add a move to a list of prior moves.
+- [x] move pieces on the board following (mostly) standard chess rules.
+- [x] play against another user on the same device.
+- [x] view the current state of the board.
 - [ ] save and resume a game in progress.
-- [ ] view the current state of the board.
+- [ ] export a game to a PGN-like(?) format.
 
----
-
-# Mechanics
+## Mechanics
 
 1. Players can only see squares that a piece of their colour can move to on the next turn.
-2. Players are not informed of check; the king may move into or be left in check.
+2. Players are not informed of check---the king may move into or be left in check.
 3. There is no checkmate; the game ends when a player's king is captured.
+
+## Known Limitations 
+
+1. Under-promotion is not implemented---a pawn is automatically promoted to a queen on its last rank.
+2. The implementation for castling is somewhat fragile.
