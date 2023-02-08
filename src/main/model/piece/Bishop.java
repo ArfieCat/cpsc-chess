@@ -1,4 +1,4 @@
-package model.pieces;
+package model.piece;
 
 import model.Colour;
 import model.Direction;
@@ -52,7 +52,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public String toString() {
+    public String getPrefix() {
         return PREFIX;
     }
 }

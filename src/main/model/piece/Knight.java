@@ -1,4 +1,4 @@
-package model.pieces;
+package model.piece;
 
 import model.Colour;
 import model.board.Board;
@@ -48,7 +48,7 @@ public class Knight extends Piece {
     }
 
     @Override
-    public String toString() {
+    public String getPrefix() {
         return PREFIX;
     }
 }

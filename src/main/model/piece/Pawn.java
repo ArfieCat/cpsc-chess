@@ -1,4 +1,4 @@
-package model.pieces;
+package model.piece;
 
 import model.Colour;
 import model.board.Board;
@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Represents a pawn piece.
  */
-public class Pawn extends Piece implements HasMovedRule {
+public class Pawn extends Piece implements FirstMove {
     private static final String PREFIX = "P";
     private static final int[] CAPTURE_OFFSETS_X = {1, -1};
     private boolean hasMoved;
@@ -55,6 +55,11 @@ public class Pawn extends Piece implements HasMovedRule {
     }
 
     @Override
+    public String getPrefix() {
+        return PREFIX;
+    }
+
+    @Override
     public void setHasMoved() {
         hasMoved = true;
     }
@@ -95,10 +100,5 @@ public class Pawn extends Piece implements HasMovedRule {
                 }
             }
         }
-    }
-
-    @Override
-    public String toString() {
-        return PREFIX;
     }
 }

@@ -2,7 +2,7 @@ package model.board;
 
 import model.Colour;
 import model.Move;
-import model.pieces.*;
+import model.piece.*;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -13,7 +13,7 @@ import java.util.Set;
  * Represents the game board.
  */
 public class Board {
-    private static final int SIZE = 8;
+    public static final int SIZE = 8;
     private final Square[] gameState;
     private final List<Move> history;
 
@@ -56,18 +56,6 @@ public class Board {
     }
 
     /**
-     * EFFECTS: Removes all pieces of the given colour from the board.
-     * MODIFIES: this
-     */
-    public void clearPieces(Colour colour) {
-        for (Square square : gameState) {
-            if (square.getPiece() != null && square.getPiece().getColour() == colour) {
-                square.setPiece(null);
-            }
-        }
-    }
-
-    /**
      * EFFECTS: Updates the board according to the given move and returns false if the game is over.
      * MODIFIES: this
      * REQUIRES: move.isValid()
@@ -88,8 +76,8 @@ public class Board {
             doCastling(move);
         }
 
-        if (move.getStartPiece() instanceof HasMovedRule) {
-            ((HasMovedRule) move.getStartPiece()).setHasMoved();
+        if (move.getStartPiece() instanceof FirstMove) {
+            ((FirstMove) move.getStartPiece()).setHasMoved();
         }
 
         return isGameOver;
@@ -131,8 +119,8 @@ public class Board {
                 Piece piece = getSquare(x, y).getPiece();
                 String string = !visibleSquares.contains(getSquare(x, y)) ? " "
                         : piece == null ? "."
-                        : piece.getColour() == colour ? piece.toString()
-                        : piece.toString().toLowerCase();
+                        : piece.getColour() == colour ? piece.getPrefix()
+                        : piece.getPrefix().toLowerCase();
                 stringBuilder.append(string).append("  ");
             }
             stringBuilder.append("\n");
@@ -140,6 +128,18 @@ public class Board {
 
         stringBuilder.append("   a  b  c  d  e  f  g  h");
         return stringBuilder.toString();
+    }
+
+    /**
+     * EFFECTS: Removes all pieces of the given colour from the board.
+     * MODIFIES: this
+     */
+    private void clearPieces(Colour colour) {
+        for (Square square : gameState) {
+            if (square.getPiece() != null && square.getPiece().getColour() == colour) {
+                square.setPiece(null);
+            }
+        }
     }
 
     /**

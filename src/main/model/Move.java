@@ -2,7 +2,7 @@ package model;
 
 import model.board.Board;
 import model.board.Square;
-import model.pieces.Piece;
+import model.piece.Piece;
 
 /**
  * Represents a move of a piece on the board from one square to another.

@@ -1,4 +1,4 @@
-package model.pieces;
+package model.piece;
 
 import model.Colour;
 import model.board.Board;
@@ -27,4 +27,6 @@ public abstract class Piece {
      * EFFECTS: Returns the set of all squares on the board that the piece can move to.
      */
     public abstract Set<Square> getValidSquares(Board board, Square start);
+
+    public abstract String getPrefix();
 }

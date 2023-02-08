@@ -1,6 +1,6 @@
 package model.board;
 
-import model.pieces.Piece;
+import model.piece.Piece;
 
 /**
  * Represents a square on the board.

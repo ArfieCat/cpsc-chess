@@ -1,4 +1,4 @@
-package model.pieces;
+package model.piece;
 
 import model.Colour;
 import model.Direction;
@@ -9,21 +9,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Represents a rook piece.
+ * Represents a queen piece.
  */
-public class Rook extends Piece implements HasMovedRule {
-    private static final String PREFIX = "R";
+public class Queen extends Piece {
+    private static final String PREFIX = "Q";
     private static final Direction[] MOVE_DIRECTIONS = {
-            Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH
+            Direction.EAST, Direction.NORTHEAST, Direction.NORTH, Direction.NORTHWEST,
+            Direction.WEST, Direction.SOUTHWEST, Direction.SOUTH, Direction.SOUTHEAST
     };
-    private boolean hasMoved;
 
     /**
-     * EFFECTS: Constructs a new Rook with given params.
+     * EFFECTS: Constructs a new Queen with given params.
      */
-    public Rook(Colour colour) {
+    public Queen(Colour colour) {
         super(colour);
-        this.hasMoved = false;
     }
 
     /**
@@ -53,17 +52,8 @@ public class Rook extends Piece implements HasMovedRule {
         return validSquares;
     }
 
-    public boolean getHasMoved() {
-        return hasMoved;
-    }
-
     @Override
-    public void setHasMoved() {
-        hasMoved = true;
-    }
-
-    @Override
-    public String toString() {
+    public String getPrefix() {
         return PREFIX;
     }
 }

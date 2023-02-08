@@ -147,7 +147,7 @@ public class Game {
 
         Move move = new Move(start, board.getSquare(args[1].charAt(0) - 'a', args[1].charAt(1) - '1'));
         if (!move.isValid(board)) {
-            System.out.println("[!] Illegal move: " + start.getPiece().toString() + " " + args[0] + " " + args[1]);
+            System.out.println("[!] Illegal move: " + start.getPiece().getPrefix() + " " + args[0] + " " + args[1]);
             return;
         }
 

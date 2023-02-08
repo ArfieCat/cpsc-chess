@@ -1,4 +1,4 @@
-package model.pieces;
+package model.piece;
 
 import model.Colour;
 import model.Direction;
@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Represents a king piece.
  */
-public class King extends Piece implements HasMovedRule {
+public class King extends Piece implements FirstMove {
     private static final String PREFIX = "K";
     private static final Direction[] MOVE_DIRECTIONS = {
             Direction.EAST, Direction.NORTHEAST, Direction.NORTH, Direction.NORTHWEST,
@@ -59,6 +59,11 @@ public class King extends Piece implements HasMovedRule {
     }
 
     @Override
+    public String getPrefix() {
+        return PREFIX;
+    }
+
+    @Override
     public void setHasMoved() {
         hasMoved = true;
     }
@@ -88,10 +93,5 @@ public class King extends Piece implements HasMovedRule {
                 }
             }
         }
-    }
-
-    @Override
-    public String toString() {
-        return PREFIX;
     }
 }
