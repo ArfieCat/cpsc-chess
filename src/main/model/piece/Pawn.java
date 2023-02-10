@@ -80,24 +80,25 @@ public class Pawn extends Piece implements FirstMove {
         for (int i = 0, y = start.getY() + getColour().getDirection(); i < CAPTURE_OFFSETS_X.length; i++) {
             // Apply offset to starting square based on preset capture offsets.
             int x = start.getX() + CAPTURE_OFFSETS_X[i];
+            if (board.isOutOfBounds(x, y)) {
+                continue;
+            }
 
-            if (!board.isOutOfBounds(x, y)) {
-                Square diagonalSquare = board.getSquare(x, y);
-                Square adjacentSquare = board.getSquare(x, start.getY());
+            Square diagonalSquare = board.getSquare(x, y);
+            Square adjacentSquare = board.getSquare(x, start.getY());
 
-                // Check if the diagonal square is occupied by a piece of the opposite colour.
-                boolean canCapture = diagonalSquare.hasPiece()
-                        && diagonalSquare.getPiece().getColour() != getColour();
+            // Check if the diagonal square is occupied by a piece of the opposite colour.
+            boolean canCapture = diagonalSquare.hasPiece()
+                    && diagonalSquare.getPiece().getColour() != getColour();
 
-                // Check if the adjacent square is occupied by a pawn that can be captured en passant.
-                boolean canCaptureEnPassant = adjacentSquare.hasPiece()
-                        && adjacentSquare.getPiece().getColour() != getColour()
-                        && adjacentSquare.getPiece() instanceof Pawn
-                        && ((Pawn) adjacentSquare.getPiece()).canBeCapturedEnPassant();
+            // Check if the adjacent square is occupied by a pawn that can be captured en passant.
+            boolean canCaptureEnPassant = adjacentSquare.hasPiece()
+                    && adjacentSquare.getPiece().getColour() != getColour()
+                    && adjacentSquare.getPiece() instanceof Pawn
+                    && ((Pawn) adjacentSquare.getPiece()).canBeCapturedEnPassant();
 
-                if (canCapture || canCaptureEnPassant) {
-                    validSquares.add(diagonalSquare);
-                }
+            if (canCapture || canCaptureEnPassant) {
+                validSquares.add(diagonalSquare);
             }
         }
     }

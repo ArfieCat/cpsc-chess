@@ -30,7 +30,6 @@ public class KnightTest {
     public void getValidSquaresTest() {
         board.getSquare(6, 1).setPiece(new Pawn(Colour.WHITE));
         board.getSquare(3, 2).setPiece(new Pawn(Colour.BLACK));
-
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 
         assertEquals(3, validSquares.size());

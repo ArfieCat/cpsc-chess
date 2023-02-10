@@ -83,11 +83,10 @@ public class King extends Piece implements FirstMove {
 
                 // Check if the first occupied square has an unmoved rook of the same colour.
                 if (square.hasPiece()) {
-                    boolean canCastle = square.getPiece().getColour() == getColour()
-                            && square.getPiece() instanceof Rook
-                            && !((Rook) square.getPiece()).getHasMoved();
-                    if (canCastle) {
-                        validSquares.add(board.getSquare(start.getX() + CASTLE_OFFSETS_X[i], y));
+                    if (square.getPiece().getColour() == getColour()) {
+                        if (square.getPiece() instanceof Rook && !((Rook) square.getPiece()).getHasMoved()) {
+                            validSquares.add(board.getSquare(start.getX() + CASTLE_OFFSETS_X[i], y));
+                        }
                     }
                     break;
                 }

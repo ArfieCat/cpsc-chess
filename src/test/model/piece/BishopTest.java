@@ -30,7 +30,6 @@ public class BishopTest {
     public void getValidSquaresTest() {
         board.getSquare(7, 3).setPiece(new Pawn(Colour.WHITE));
         board.getSquare(0, 4).setPiece(new Pawn(Colour.BLACK));
-
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 
         assertEquals(8, validSquares.size());

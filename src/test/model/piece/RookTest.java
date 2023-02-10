@@ -32,7 +32,6 @@ public class RookTest {
     public void getValidSquaresTest() {
         board.getSquare(4, 7).setPiece(new Pawn(Colour.WHITE));
         board.getSquare(0, 0).setPiece(new Pawn(Colour.BLACK));
-
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 
         assertEquals(13, validSquares.size());
@@ -42,8 +41,7 @@ public class RookTest {
 
     @Test
     public void hasMovedTest() {
-        board.doMove(new Move(board.getSquare(4, 1), board.getSquare(0, 1)));
-
+        piece.setHasMoved();
         assertTrue(piece.getHasMoved());
     }
 }

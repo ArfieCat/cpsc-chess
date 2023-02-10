@@ -30,7 +30,6 @@ public class KingTest {
     public void getValidSquaresTest() {
         board.getSquare(5, 1).setPiece(new Pawn(Colour.WHITE));
         board.getSquare(3, 0).setPiece(new Pawn(Colour.BLACK));
-
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 
         assertEquals(4, validSquares.size());
@@ -38,23 +37,55 @@ public class KingTest {
         assertTrue(validSquares.contains(board.getSquare(3, 0)));
     }
 
+    // Successful king-side castle.
     @Test
     public void getValidSquaresTestCastle() {
         board.getSquare(7, 0).setPiece(new Rook(Colour.WHITE));
-        board.getSquare(0, 0).setPiece(new Rook(Colour.BLACK));
-
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 
         assertEquals(6, validSquares.size());
         assertTrue(validSquares.contains(board.getSquare(6, 0)));
-        assertFalse(validSquares.contains(board.getSquare(2, 0)));
     }
 
+    // Attempting to castle with a king that has already moved.
     @Test
-    public void getValidSquaresTestCastleMoved() {
+    public void getValidSquaresTestCastleMovedKing() {
         piece.setHasMoved();
-        board.getSquare(7, 0).setPiece(new Rook(Colour.WHITE));
 
+        board.getSquare(7, 0).setPiece(new Rook(Colour.WHITE));
+        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
+
+        assertEquals(5, validSquares.size());
+        assertFalse(validSquares.contains(board.getSquare(6, 0)));
+    }
+
+    // Attempting to castle with a rook that has already moved.
+    @Test
+    public void getValidSquaresTestCastleMovedRook() {
+        Rook rook = new Rook(Colour.WHITE);
+        rook.setHasMoved();
+
+        board.getSquare(7, 0).setPiece(rook);
+        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
+
+        assertEquals(5, validSquares.size());
+        assertFalse(validSquares.contains(board.getSquare(6, 0)));
+    }
+
+    // Attempting to castle with a piece that is not a rook.
+    @Test
+    public void getValidSquaresTestCastleWithoutRook() {
+        board.getSquare(7, 0).setPiece(new Pawn(Colour.WHITE));
+        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
+
+        assertEquals(5, validSquares.size());
+        assertFalse(validSquares.contains(board.getSquare(6, 0)));
+    }
+
+    // Attempting to castle with a rook of the wrong colour.
+    @Test
+    public void getValidSquaresTestCastleWrongRook() {
+        board.getSquare(7, 0).setPiece(new Rook(Colour.BLACK));
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 
         assertEquals(5, validSquares.size());
