@@ -51,10 +51,7 @@ public class King extends Piece implements FirstMove {
             }
         }
 
-        if (!hasMoved) {
-            addCastleSquares(validSquares, board, start);
-        }
-
+        addCastleSquares(validSquares, board, start);
         return validSquares;
     }
 
@@ -73,22 +70,24 @@ public class King extends Piece implements FirstMove {
      * MODIFIES: set reference
      */
     private void addCastleSquares(Set<Square> validSquares, Board board, Square start) {
-        for (int i = 0; i < CASTLE_DIRECTIONS.length; i++) {
-            Direction direction = CASTLE_DIRECTIONS[i];
+        if (!hasMoved) {
+            for (int i = 0; i < CASTLE_DIRECTIONS.length; i++) {
+                Direction direction = CASTLE_DIRECTIONS[i];
 
-            // Apply offset to starting square based on direction until out of bounds.
-            for (int x = start.getX() + direction.getX(), y = start.getY();
-                    !board.isOutOfBounds(x, y); x += direction.getX()) {
-                Square square = board.getSquare(x, y);
+                // Apply offset to starting square based on direction until out of bounds.
+                for (int x = start.getX() + direction.getX(), y = start.getY();
+                        !board.isOutOfBounds(x, y); x += direction.getX()) {
+                    Square square = board.getSquare(x, y);
 
-                // Check if the first occupied square has an unmoved rook of the same colour.
-                if (square.hasPiece()) {
-                    if (square.getPiece().getColour() == getColour()) {
-                        if (square.getPiece() instanceof Rook && !((Rook) square.getPiece()).getHasMoved()) {
-                            validSquares.add(board.getSquare(start.getX() + CASTLE_OFFSETS_X[i], y));
+                    // Check if the first occupied square has an unmoved rook of the same colour.
+                    if (square.hasPiece()) {
+                        if (square.getPiece().getColour() == getColour()) {
+                            if (square.getPiece() instanceof Rook && !((Rook) square.getPiece()).getHasMoved()) {
+                                validSquares.add(board.getSquare(start.getX() + CASTLE_OFFSETS_X[i], y));
+                            }
                         }
+                        break;
                     }
-                    break;
                 }
             }
         }

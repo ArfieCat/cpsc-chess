@@ -39,14 +39,14 @@ public class Pawn extends Piece implements FirstMove {
             Square square = board.getSquare(x, y);
             if (!square.hasPiece()) {
                 validSquares.add(square);
-            }
-        }
 
-        // 2-square pawn push on the first move.
-        if (!hasMoved && !board.isOutOfBounds(x, y + getColour().getDirection())) {
-            Square square = board.getSquare(x, y + getColour().getDirection());
-            if (!square.hasPiece()) {
-                validSquares.add(square);
+                // 2-square pawn push on the first move.
+                if (!hasMoved && !board.isOutOfBounds(x, y + getColour().getDirection())) {
+                    Square doubleSquare = board.getSquare(x, y + getColour().getDirection());
+                    if (!doubleSquare.hasPiece()) {
+                        validSquares.add(doubleSquare);
+                    }
+                }
             }
         }
 
@@ -64,11 +64,11 @@ public class Pawn extends Piece implements FirstMove {
         hasMoved = true;
     }
 
-    public boolean canBeCapturedEnPassant() {
+    public boolean getEnPassable() {
         return holyHell;
     }
 
-    public void setCanBeCapturedEnPassant(boolean to) {
+    public void setEnPassable(boolean to) {
         holyHell = to;
     }
 
@@ -77,28 +77,24 @@ public class Pawn extends Piece implements FirstMove {
      * MODIFIES: set reference
      */
     private void addCaptureSquares(Set<Square> validSquares, Board board, Square start) {
-        for (int i = 0, y = start.getY() + getColour().getDirection(); i < CAPTURE_OFFSETS_X.length; i++) {
+        for (int offset : CAPTURE_OFFSETS_X) {
             // Apply offset to starting square based on preset capture offsets.
-            int x = start.getX() + CAPTURE_OFFSETS_X[i];
-            if (board.isOutOfBounds(x, y)) {
-                continue;
-            }
+            int x = start.getX() + offset;
+            int y = start.getY() + getColour().getDirection();
 
-            Square diagonalSquare = board.getSquare(x, y);
-            Square adjacentSquare = board.getSquare(x, start.getY());
+            if (!board.isOutOfBounds(x, y)) {
+                Square diagonalSquare = board.getSquare(x, y);
+                Square adjacentSquare = board.getSquare(x, start.getY());
 
-            // Check if the diagonal square is occupied by a piece of the opposite colour.
-            boolean canCapture = diagonalSquare.hasPiece()
-                    && diagonalSquare.getPiece().getColour() != getColour();
-
-            // Check if the adjacent square is occupied by a pawn that can be captured en passant.
-            boolean canCaptureEnPassant = adjacentSquare.hasPiece()
-                    && adjacentSquare.getPiece().getColour() != getColour()
-                    && adjacentSquare.getPiece() instanceof Pawn
-                    && ((Pawn) adjacentSquare.getPiece()).canBeCapturedEnPassant();
-
-            if (canCapture || canCaptureEnPassant) {
-                validSquares.add(diagonalSquare);
+                // Check for captures on diagonal squares or en passant on adjacent squares.
+                if (diagonalSquare.hasPiece() && diagonalSquare.getPiece().getColour() != getColour()) {
+                    validSquares.add(diagonalSquare);
+                } else if (adjacentSquare.hasPiece() && adjacentSquare.getPiece().getColour() != getColour()) {
+                    if (adjacentSquare.getPiece() instanceof Pawn
+                            && ((Pawn) adjacentSquare.getPiece()).getEnPassable()) {
+                        validSquares.add(diagonalSquare);
+                    }
+                }
             }
         }
     }
