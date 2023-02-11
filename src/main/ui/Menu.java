@@ -9,14 +9,14 @@ public class Menu {
     private final Scanner scanner;
 
     /**
-     * EFFECTS: Constructs a new Menu.
+     * @EFFECTS: Constructs a new Menu.
      */
     public Menu() {
         this.scanner = new Scanner(System.in);
     }
 
     /**
-     * EFFECTS: Starts the menu command line interface.
+     * @EFFECTS: Starts the menu command line interface.
      */
     @SuppressWarnings({"methodlength"}) // This method can't get any shorter.
     public void start() {
@@ -48,7 +48,7 @@ public class Menu {
     }
 
     /**
-     * EFFECTS: Prints out a list of valid commands and returns this menu for chaining.
+     * @EFFECTS: Prints out a list of valid commands, and returns {@code this} for chaining.
      */
     public Menu displayHelp() {
         System.out.println("play             | Start a new game.");
@@ -59,19 +59,22 @@ public class Menu {
     }
 
     /**
-     * EFFECTS: Prints out the intro blurb and returns this menu for chaining.
+     * @EFFECTS: Prints out the intro blurb, and returns {@code this} for chaining.
      */
     public Menu displayIntro() {
-        System.out.println("/**");
-        System.out.println(" * CPSC Program Similar to Chess");
-        System.out.println(" */");
-
-        // TODO: cool title
+        // It looks better without the extra backslashes...
+        System.out.println("_________ __________  __________________");
+        System.out.println("\\_   ___ \\\\______   \\/   _____/\\_   ___ \\");
+        System.out.println("/    \\  \\/ |     ___/\\_____  \\ /    \\  \\/");
+        System.out.println("\\     \\____|    |    /        \\\\     \\____");
+        System.out.println(" \\______  /|____|   /_______  / \\______  /");
+        System.out.println("        \\/                  \\/         \\/");
+        System.out.println("CPSC Program Similar to Chess.");
         return this;
     }
 
     /**
-     * EFFECTS: Loads an existing game from a JSON file.
+     * @EFFECTS: Loads an existing game from a JSON file.
      */
     private void loadFile(String[] input) {
         if (input.length != 2) {

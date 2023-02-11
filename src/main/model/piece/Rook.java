@@ -19,7 +19,7 @@ public class Rook extends Piece implements FirstMove {
     private boolean hasMoved;
 
     /**
-     * EFFECTS: Constructs a new Rook with given params.
+     * @EFFECTS: Constructs a new Rook with given params.
      */
     public Rook(Colour colour) {
         super(colour);
@@ -27,7 +27,7 @@ public class Rook extends Piece implements FirstMove {
     }
 
     /**
-     * EFFECTS: See Piece.getValidSquares.
+     * @EFFECTS: See {@code Piece.getValidSquares}.
      */
     @Override
     public Set<Square> getValidSquares(Board board, Square start) {

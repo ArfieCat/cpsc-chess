@@ -18,14 +18,14 @@ public class Bishop extends Piece {
     };
 
     /**
-     * EFFECTS: Constructs a new Bishop with given params.
+     * @EFFECTS: Constructs a new Bishop with given params.
      */
     public Bishop(Colour colour) {
         super(colour);
     }
 
     /**
-     * EFFECTS: See Piece.getValidSquares.
+     * @EFFECTS: See {@code Piece.getValidSquares}.
      */
     @Override
     public Set<Square> getValidSquares(Board board, Square start) {

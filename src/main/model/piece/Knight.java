@@ -16,14 +16,14 @@ public class Knight extends Piece {
     private static final int[] MOVE_OFFSETS_Y = {1, 2, 2, 1, -1, -2, -2, -1};
 
     /**
-     * EFFECTS: Constructs a new Knight with given params.
+     * @EFFECTS: Constructs a new Knight with given params.
      */
     public Knight(Colour colour) {
         super(colour);
     }
 
     /**
-     * EFFECTS: See Piece.getValidSquares.
+     * @EFFECTS: See {@code Piece.getValidSquares}.
      */
     @Override
     public Set<Square> getValidSquares(Board board, Square start) {

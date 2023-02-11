@@ -22,7 +22,7 @@ public class King extends Piece implements FirstMove {
     private boolean hasMoved;
 
     /**
-     * EFFECTS: Constructs a new Pawn with given params.
+     * @EFFECTS: Constructs a new King with given params.
      */
     public King(Colour colour) {
         super(colour);
@@ -30,7 +30,7 @@ public class King extends Piece implements FirstMove {
     }
 
     /**
-     * EFFECTS: See Piece.getValidSquares.
+     * @EFFECTS: See {@code Piece.getValidSquares}.
      */
     @Override
     public Set<Square> getValidSquares(Board board, Square start) {
@@ -66,8 +66,8 @@ public class King extends Piece implements FirstMove {
     }
 
     /**
-     * EFFECTS: Checks for valid squares by castling and adds them to the given set.
-     * MODIFIES: set reference
+     * @EFFECTS: Checks for valid squares by castling and adds them to the given set.
+     * @MODIFIES: {@code validSquares}
      */
     private void addCastleSquares(Set<Square> validSquares, Board board, Square start) {
         if (!hasMoved) {

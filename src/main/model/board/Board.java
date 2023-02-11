@@ -18,7 +18,7 @@ public class Board {
     private final List<Move> history;
 
     /**
-     * EFFECTS: Constructs a new empty Board.
+     * @EFFECTS: Constructs a new empty Board.
      */
     public Board() {
         this.gameState = new Square[SIZE * SIZE];
@@ -31,8 +31,8 @@ public class Board {
     }
 
     /**
-     * EFFECTS: Sets all pieces of the given colour in their starting positions.
-     * MODIFIES: this
+     * @EFFECTS: Sets all pieces of the given colour in their starting positions.
+     * @MODIFIES: this
      */
     public void setupPieces(Colour colour) {
         int y = colour.getDirection() > 0 ? 0 : SIZE - 1;
@@ -56,9 +56,9 @@ public class Board {
     }
 
     /**
-     * EFFECTS: Updates the board according to the given move and returns false if the game is over.
-     * MODIFIES: this
-     * REQUIRES: move.isValid()
+     * @EFFECTS: Updates the board according to the given move, and returns {@code false} if the game is over.
+     * @MODIFIES: {@code this}
+     * @REQUIRES: {@code move.isValid()}
      */
     public boolean doMove(Move move) {
         boolean isGameOver = move.getEndPiece() instanceof King;
@@ -84,22 +84,22 @@ public class Board {
     }
 
     /**
-     * EFFECTS: Returns true if the given coordinate is off the board.
+     * @EFFECTS: Returns {@code true} if the given coordinate is off the board.
      */
     public boolean isOutOfBounds(int x, int y) {
         return x < 0 || y < 0 || x > SIZE - 1 || y > SIZE - 1;
     }
 
     /**
-     * EFFECTS: Returns the square at the given position.
-     * REQUIRES: !isOutOfBounds(x, y)
+     * @EFFECTS: Returns the square at the given position.
+     * @REQUIRES: {@code !isOutOfBounds(x, y)}
      */
     public Square getSquare(int x, int y) {
         return gameState[y * SIZE + x];
     }
 
     /**
-     * EFFECTS: Returns a string representation of the board for display.
+     * @EFFECTS: Returns a String representation of the board for display.
      */
     public String getDisplayString(Colour colour) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -131,8 +131,8 @@ public class Board {
     }
 
     /**
-     * EFFECTS: Removes all pieces of the given colour from the board.
-     * MODIFIES: this
+     * @EFFECTS: Removes all pieces of the given colour from the board.
+     * @MODIFIES: {@code this}
      */
     private void clearPieces(Colour colour) {
         for (Square square : gameState) {
@@ -143,8 +143,8 @@ public class Board {
     }
 
     /**
-     * EFFECTS: Handles en passant if applicable.
-     * MODIFIES: this
+     * @EFFECTS: Handles en passant, if applicable.
+     * @MODIFIES: {@code this}
      */
     private void doEnPassant(Move move) {
         Pawn pawn = (Pawn) move.getStartPiece();
@@ -169,8 +169,8 @@ public class Board {
     }
 
     /**
-     * EFFECTS: Promotes a pawn on its last rank to a queen if applicable.
-     * MODIFIES: this
+     * @EFFECTS: Promotes a pawn on its last rank to a queen, if applicable.
+     * @MODIFIES: {@code this}
      */
     private void doPromotion(Move move) {
         Pawn pawn = (Pawn) move.getStartPiece();
@@ -183,8 +183,8 @@ public class Board {
     }
 
     /**
-     * EFFECTS: Castles with the appropriate rook if applicable.
-     * MODIFIES: this
+     * @EFFECTS: Castles with the appropriate rook, if applicable.
+     * @MODIFIES: {@code this}
      */
     private void doCastling(Move move) {
         if (Math.abs(move.getEnd().getX() - move.getStart().getX()) == 2) {

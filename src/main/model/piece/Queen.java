@@ -19,14 +19,14 @@ public class Queen extends Piece {
     };
 
     /**
-     * EFFECTS: Constructs a new Queen with given params.
+     * @EFFECTS: Constructs a new Queen with given params.
      */
     public Queen(Colour colour) {
         super(colour);
     }
 
     /**
-     * EFFECTS: See Piece.getValidSquares.
+     * @EFFECTS: See {@code Piece.getValidSquares}.
      */
     @Override
     public Set<Square> getValidSquares(Board board, Square start) {

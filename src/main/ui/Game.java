@@ -18,7 +18,7 @@ public class Game {
     private boolean isGameOver;
 
     /**
-     * EFFECTS: Constructs a new Game with given params.
+     * @EFFECTS: Constructs a new Game with given params.
      */
     public Game(Scanner scanner) {
         this.scanner = scanner;
@@ -28,7 +28,7 @@ public class Game {
     }
 
     /**
-     * EFFECTS: Starts the game command line interface.
+     * @EFFECTS: Starts the game command line interface.
      */
     @SuppressWarnings({"methodlength"}) // This method can't get any shorter.
     public void start() {
@@ -61,7 +61,7 @@ public class Game {
     }
 
     /**
-     * EFFECTS: Prints out a list of valid commands and returns this game for chaining.
+     * @EFFECTS: Prints out a list of valid commands, and returns {@code this} for chaining.
      */
     public Game displayHelp() {
         System.out.println("move <start> <end> | Move a piece.");
@@ -72,7 +72,7 @@ public class Game {
     }
 
     /**
-     * EFFECTS: Prints out the board and returns this game for chaining.
+     * @EFFECTS: Prints out the board, and returns {@code this} for chaining.
      */
     public Game displayBoard() {
         Colour currentPlayer = PLAYERS[moveCount % PLAYERS.length];
@@ -88,8 +88,8 @@ public class Game {
     }
 
     /**
-     * EFFECTS: Sets all pieces in their starting positions and returns this game for chaining.
-     * MODIFIES: this
+     * @EFFECTS: Sets all pieces in their starting positions, and returns {@code this} for chaining.
+     * @MODIFIES: {@code this}
      */
     public Game setupBoard() {
         for (Colour colour : PLAYERS) {
@@ -99,8 +99,8 @@ public class Game {
     }
 
     /**
-     * EFFECTS: Loads an existing game from a JSON file and returns this game for chaining.
-     * MODIFIES: this
+     * @EFFECTS: Loads an existing game from a JSON file, and returns {@code this} for chaining.
+     * @MODIFIES: {@code this}
      */
     public Game loadFile(String path) {
         // TODO: instantiate moves from json
@@ -109,7 +109,7 @@ public class Game {
     }
 
     /**
-     * EFFECTS: Ensures that the user input for a move is well-formed.
+     * @EFFECTS: Ensures that the user input for a move is well-formed.
      */
     private void parseMove(String[] input) {
         if (isGameOver) {
@@ -127,8 +127,8 @@ public class Game {
     }
 
     /**
-     * EFFECTS: Ensures that the user input for a move is valid and updates the game.
-     * MODIFIES: this
+     * @EFFECTS: Ensures that the user input for a move is valid and updates the game.
+     * @MODIFIES: {@code this}
      */
     private void validateMove(String[] args) {
         for (String arg : args) {
@@ -161,7 +161,7 @@ public class Game {
     }
 
     /**
-     * EFFECTS: Prints out whitespace and waits for any input as a rudimentary anti-screen-cheating measure.
+     * @EFFECTS: Prints out whitespace and waits for any input as a rudimentary anti-screen-cheating measure.
      */
     private void delay() {
         for (int i = 0; i < 50; i++) {
@@ -173,7 +173,7 @@ public class Game {
     }
 
     /**
-     * EFFECTS: Saves the game to a JSON file.
+     * @EFFECTS: Saves the game to a JSON file.
      */
     private void saveFile(String[] input) {
         if (input.length != 2) {

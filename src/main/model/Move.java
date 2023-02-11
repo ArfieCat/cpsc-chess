@@ -14,8 +14,8 @@ public class Move {
     private final Piece endPiece;
 
     /**
-     * EFFECTS: Constructs a new Move with given params.
-     * REQUIRES: start.hasPiece()
+     * @EFFECTS: Constructs a new Move with given params.
+     * @REQUIRES: {@code start.hasPiece()}
      */
     public Move(Square start, Square end) {
         this.start = start;
@@ -25,7 +25,7 @@ public class Move {
     }
 
     /**
-     * EFFECTS: Returns true if the move is valid.
+     * @EFFECTS: Returns {@code true} if the start piece can move to the end square.
      */
     public boolean isValid(Board board) {
         return start.getPiece().getValidSquares(board, start).contains(end);

@@ -17,7 +17,7 @@ public class Pawn extends Piece implements FirstMove {
     private boolean holyHell; // Google en passant... Holy Hell! :]
 
     /**
-     * EFFECTS: Constructs a new Pawn with given params.
+     * @EFFECTS: Constructs a new Pawn with given params.
      */
     public Pawn(Colour colour) {
         super(colour);
@@ -26,7 +26,7 @@ public class Pawn extends Piece implements FirstMove {
     }
 
     /**
-     * EFFECTS: See Piece.getValidSquares.
+     * @EFFECTS: See {@code Piece.getValidSquares}.
      */
     @Override
     public Set<Square> getValidSquares(Board board, Square start) {
@@ -73,8 +73,8 @@ public class Pawn extends Piece implements FirstMove {
     }
 
     /**
-     * EFFECTS: Checks for valid squares by capture and adds them to the given set.
-     * MODIFIES: set reference
+     * @EFFECTS: Checks for valid squares by capture and adds them to the given set.
+     * @MODIFIES: {@code validSquares}
      */
     private void addCaptureSquares(Set<Square> validSquares, Board board, Square start) {
         for (int offset : CAPTURE_OFFSETS_X) {

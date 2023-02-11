@@ -11,8 +11,7 @@ public class Square {
     private Piece piece;
 
     /**
-     * EFFECTS: Constructs a new Square with given params.
-     * REQUIRES: x, y in [0, 7]
+     * @EFFECTS: Constructs a new Square with given params.
      */
     public Square(int x, int y) {
         this.positionX = x;
