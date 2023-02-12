@@ -66,19 +66,22 @@ public class PawnTest {
         assertFalse(validSquares.contains(board.getSquare(4, 2)));
     }
 
-    // Attempting to move a pawn that is blocked from the front.
+    // Attempting to move a pawn that is completely blocked from the front.
     @Test
-    public void getValidSquaresTestBlocked() {
+    public void getValidSquaresTestVeryBlocked() {
         board.getSquare(4, 1).setPiece(new Pawn(Colour.WHITE));
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
         assertEquals(0, validSquares.size());
     }
 
-    // Attempting to move a pawn already on its last rank (should never happen).
+    // Attempting to move two squares with a pawn that is blocked from the front.
     @Test
-    public void getValidSquaresTestOutOfBounds() {
-        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 7));
-        assertEquals(0, validSquares.size());
+    public void getValidSquaresTestBlocked() {
+        board.getSquare(4, 2).setPiece(new Pawn(Colour.WHITE));
+        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
+
+        assertEquals(1, validSquares.size());
+        assertFalse(validSquares.contains(board.getSquare(4, 2)));
     }
 
     // Attempting to capture a piece that is not a pawn en passant.
@@ -122,5 +125,17 @@ public class PawnTest {
 
         assertEquals(2, validSquares.size());
         assertFalse(validSquares.contains(board.getSquare(5, 1)));
+    }
+
+    // Attempting to move a pawn off the board (should never happen).
+    @Test
+    public void getValidSquaresTestOutOfBounds() {
+        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 6));
+        assertEquals(1, validSquares.size());
+        assertTrue(validSquares.contains(board.getSquare(4, 7)));
+
+        piece.setHasMoved();
+        validSquares = piece.getValidSquares(board, board.getSquare(4, 7));
+        assertEquals(0, validSquares.size());
     }
 }
