@@ -73,7 +73,7 @@ public class BoardTest {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
         board.getSquare(4, 3).setPiece(new Rook(Colour.WHITE));
         Move setup = new Move(board.getSquare(4, 1), board.getSquare(4, 2));
-        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 3));
+        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 2));
 
         board.doMove(setup);
         assertTrue(board.getSquare(4, 3).hasPiece());
@@ -87,7 +87,7 @@ public class BoardTest {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
         board.getSquare(4, 3).setPiece(new Pawn(Colour.WHITE));
         Move setup = new Move(board.getSquare(4, 1), board.getSquare(4, 2));
-        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 3));
+        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 2));
 
         board.doMove(setup);
         assertTrue(board.getSquare(4, 3).hasPiece());
@@ -101,7 +101,7 @@ public class BoardTest {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
         board.getSquare(4, 3).setPiece(new Pawn(Colour.BLACK));
         Move setup = new Move(board.getSquare(4, 1), board.getSquare(4, 2));
-        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 3));
+        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 2));
 
         board.doMove(setup);
         assertTrue(board.getSquare(4, 3).hasPiece());

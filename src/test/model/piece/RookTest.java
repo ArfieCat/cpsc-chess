@@ -36,7 +36,7 @@ public class RookTest {
 
         assertEquals(13, validSquares.size());
         assertFalse(validSquares.contains(board.getSquare(4, 7)));
-        assertTrue(validSquares.contains(board.getSquare(0, 1)));
+        assertTrue(validSquares.contains(board.getSquare(0, 0)));
     }
 
     @Test
