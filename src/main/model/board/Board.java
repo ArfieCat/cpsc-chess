@@ -13,7 +13,7 @@ import java.util.Set;
  * Represents the game board.
  */
 public class Board {
-    public static final int SIZE = 8;
+    private static final int SIZE = 8;
     private final Square[] gameState;
     private final List<Move> history;
 
@@ -84,21 +84,6 @@ public class Board {
     }
 
     /**
-     * @EFFECTS: Returns {@code true} if the given coordinate is off the board.
-     */
-    public boolean isOutOfBounds(int x, int y) {
-        return x < 0 || y < 0 || x > SIZE - 1 || y > SIZE - 1;
-    }
-
-    /**
-     * @EFFECTS: Returns the square at the given position.
-     * @REQUIRES: {@code !isOutOfBounds(x, y)}
-     */
-    public Square getSquare(int x, int y) {
-        return gameState[y * SIZE + x];
-    }
-
-    /**
      * @EFFECTS: Returns a String representation of the board for display.
      */
     public String getDisplayString(Colour colour) {
@@ -131,12 +116,27 @@ public class Board {
     }
 
     /**
+     * @EFFECTS: Returns {@code true} if the given coordinate is off the board.
+     */
+    public boolean isOutOfBounds(int x, int y) {
+        return x < 0 || y < 0 || x > SIZE - 1 || y > SIZE - 1;
+    }
+
+    /**
+     * @EFFECTS: Returns the square at the given position.
+     * @REQUIRES: {@code !isOutOfBounds(x, y)}
+     */
+    public Square getSquare(int x, int y) {
+        return gameState[y * SIZE + x];
+    }
+
+    /**
      * @EFFECTS: Removes all pieces of the given colour from the board.
      * @MODIFIES: {@code this}
      */
     private void clearPieces(Colour colour) {
         for (Square square : gameState) {
-            if (square.getPiece() != null && square.getPiece().getColour() == colour) {
+            if (square.hasPiece() && square.getPiece().getColour() == colour) {
                 square.setPiece(null);
             }
         }
@@ -160,7 +160,7 @@ public class Board {
 
             if (square.hasPiece()) {
                 if (square.getPiece().getColour() != pawn.getColour()) {
-                    if (square.getPiece() instanceof Pawn && !((Pawn) square.getPiece()).getEnPassable()) {
+                    if (square.getPiece() instanceof Pawn && ((Pawn) square.getPiece()).getEnPassable()) {
                         square.setPiece(null);
                     }
                 }

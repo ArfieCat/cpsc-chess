@@ -63,12 +63,14 @@ public class Menu {
      */
     public Menu displayIntro() {
         // It looks better without the extra backslashes...
-        System.out.println("_________ __________  __________________");
-        System.out.println("\\_   ___ \\\\______   \\/   _____/\\_   ___ \\");
-        System.out.println("/    \\  \\/ |     ___/\\_____  \\ /    \\  \\/");
-        System.out.println("\\     \\____|    |    /        \\\\     \\____");
-        System.out.println(" \\______  /|____|   /_______  / \\______  /");
-        System.out.println("        \\/                  \\/         \\/");
+        String string = "_________ __________  __________________ \n"
+                + "\\_   ___ \\\\______   \\/   _____/\\_   ___ \\ \n"
+                + "/    \\  \\/ |     ___/\\_____  \\ /    \\  \\/ \n"
+                + "\\     \\____|    |    /        \\\\     \\____ \n"
+                + " \\______  /|____|   /_______  / \\______  / \n"
+                + "        \\/                  \\/         \\/";
+
+        System.out.println(string);
         System.out.println("CPSC Program Similar to Chess.");
         return this;
     }
