@@ -21,13 +21,13 @@ public class BoardTest {
     public void initTest() {
         for (int x = 0; x < 8; x++) {
             assertTrue(board.getSquare(x, 0).hasPiece());
-            assertTrue(board.getSquare(x, 1).hasPiece());
+            assertTrue(board.getSquare(x, 1).getPiece() instanceof Pawn);
         }
     }
 
     @Test
     public void doMoveTest() {
-        Move move = new Move(board.getSquare(4, 1), board.getSquare(4, 2));
+        Move move = new Move(board.getSquare(6, 0), board.getSquare(5, 2));
         assertFalse(board.doMove(move));
         assertFalse(move.getStart().hasPiece());
         assertSame(move.getStartPiece(), move.getEnd().getPiece());
@@ -47,12 +47,67 @@ public class BoardTest {
         Move setup = new Move(board.getSquare(4, 1), board.getSquare(4, 3));
         Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 2));
 
-        assertFalse(board.doMove(setup));
+        board.doMove(setup);
         assertTrue(((Pawn) setup.getStartPiece()).getEnPassable());
 
-        assertFalse(board.doMove(move));
+        board.doMove(move);
         assertFalse(setup.getEnd().hasPiece());
         assertSame(move.getStartPiece(), move.getEnd().getPiece());
+    }
+
+    @Test
+    public void doEnPassantTestWithoutPiece() {
+        board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
+        Move setup = new Move(board.getSquare(4, 1), board.getSquare(4, 2));
+        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 2));
+
+        board.doMove(setup);
+        assertFalse(board.getSquare(4, 3).hasPiece());
+
+        board.doMove(move);
+        assertFalse(board.getSquare(4, 3).hasPiece());
+    }
+
+    @Test
+    public void doEnPassantTestWithoutPawn() {
+        board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
+        board.getSquare(4, 3).setPiece(new Rook(Colour.WHITE));
+        Move setup = new Move(board.getSquare(4, 1), board.getSquare(4, 2));
+        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 3));
+
+        board.doMove(setup);
+        assertTrue(board.getSquare(4, 3).hasPiece());
+
+        board.doMove(move);
+        assertTrue(board.getSquare(4, 2).hasPiece());
+    }
+
+    @Test
+    public void doEnPassantTestWrongPawn() {
+        board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
+        board.getSquare(4, 3).setPiece(new Pawn(Colour.WHITE));
+        Move setup = new Move(board.getSquare(4, 1), board.getSquare(4, 2));
+        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 3));
+
+        board.doMove(setup);
+        assertTrue(board.getSquare(4, 3).hasPiece());
+
+        board.doMove(move);
+        assertTrue(board.getSquare(4, 2).hasPiece());
+    }
+
+    @Test
+    public void doEnPassantTestWrongPiece() {
+        board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
+        board.getSquare(4, 3).setPiece(new Pawn(Colour.BLACK));
+        Move setup = new Move(board.getSquare(4, 1), board.getSquare(4, 2));
+        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 3));
+
+        board.doMove(setup);
+        assertTrue(board.getSquare(4, 3).hasPiece());
+
+        board.doMove(move);
+        assertTrue(board.getSquare(4, 2).hasPiece());
     }
 
     @Test
@@ -60,7 +115,7 @@ public class BoardTest {
         board.getSquare(4, 6).setPiece(new Pawn(Colour.WHITE));
         Move move = new Move(board.getSquare(4, 6), board.getSquare(4, 7));
 
-        assertFalse(board.doMove(move));
+        board.doMove(move);
         assertTrue(move.getEnd().getPiece() instanceof Queen);
     }
 
@@ -70,7 +125,7 @@ public class BoardTest {
         board.getSquare(4, 6).setPiece(new Pawn(Colour.BLACK));
         Move move = new Move(board.getSquare(4, 6), board.getSquare(4, 7));
 
-        assertFalse(board.doMove(move));
+        board.doMove(move);
         assertTrue(move.getEnd().getPiece() instanceof Pawn);
     }
 
@@ -80,7 +135,7 @@ public class BoardTest {
         board.getSquare(6, 0).setPiece(null);
         Move move = new Move(board.getSquare(4, 0), board.getSquare(6, 0));
 
-        assertFalse(board.doMove(move));
+        board.doMove(move);
         assertFalse(board.getSquare(7, 0).hasPiece());
         assertTrue(board.getSquare(5, 0).getPiece() instanceof Rook);
     }
@@ -92,23 +147,28 @@ public class BoardTest {
         board.getSquare(1, 0).setPiece(null);
         Move move = new Move(board.getSquare(4, 0), board.getSquare(2, 0));
 
-        assertFalse(board.doMove(move));
+        board.doMove(move);
         assertFalse(board.getSquare(0, 0).hasPiece());
         assertTrue(board.getSquare(3, 0).getPiece() instanceof Rook);
     }
 
     @Test
     public void getDisplayStringTest() {
-        String string = "8                          \n"
-                + "7                          \n"
-                + "6                          \n"
-                + "5                          \n"
-                + "4  .  .  .  .  .  .  .  .  \n"
-                + "3  .  .  .  .  .  .  .  .  \n"
-                + "2  P  P  P  P  P  P  P  P  \n"
-                + "1  R  N  B  Q  K  B  N  R  \n"
-                + "   a  b  c  d  e  f  g  h";
+        // Wayward Queen attack.
+        board.setupPieces(Colour.BLACK);
+        board.doMove(new Move(board.getSquare(4, 1), board.getSquare(4, 3)));
+        board.doMove(new Move(board.getSquare(4, 6), board.getSquare(4, 4)));
+        board.doMove(new Move(board.getSquare(3, 0), board.getSquare(7, 4)));
 
+        String string = "8                          \n"
+                + "7                 p     p  \n"
+                + "6  .                 .  .  \n"
+                + "5     .        p  .  .  Q  \n"
+                + "4  .  .  .  .  P  .  .  .  \n"
+                + "3  .  .  .  .     .  .  .  \n"
+                + "2  P  P  P  P  .  P  P  P  \n"
+                + "1  R  N  B  .  K  B  N  R  \n"
+                + "   a  b  c  d  e  f  g  h";
         assertEquals(string, board.getDisplayString(Colour.WHITE));
     }
 
