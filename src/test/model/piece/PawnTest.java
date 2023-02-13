@@ -120,7 +120,7 @@ public class PawnTest {
         Pawn pawn = new Pawn(Colour.WHITE);
         pawn.setEnPassable(true);
 
-        board.getSquare(5, 1).setPiece(new Pawn(Colour.WHITE));
+        board.getSquare(5, 1).setPiece(pawn);
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 
         assertEquals(2, validSquares.size());

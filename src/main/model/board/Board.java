@@ -16,6 +16,7 @@ public class Board {
     private static final int SIZE = 8;
     private final Square[] gameState;
     private final List<Move> history;
+    private Pawn lastEnPassantTarget;
 
     /**
      * @EFFECTS: Constructs a new empty Board.
@@ -23,6 +24,7 @@ public class Board {
     public Board() {
         this.gameState = new Square[SIZE * SIZE];
         this.history = new LinkedList<>();
+        this.lastEnPassantTarget = null;
 
         // Initialize an empty board.
         for (int i = 0; i < gameState.length; i++) {
@@ -149,11 +151,6 @@ public class Board {
     private void doEnPassant(Move move) {
         Pawn pawn = (Pawn) move.getStartPiece();
 
-        // Enable en passant after a 2-square pawn push.
-        if (Math.abs(move.getEnd().getY() - move.getStart().getY()) == 2) {
-            pawn.setEnPassable(true);
-        }
-
         if (move.getStart().getX() != move.getEnd().getX()) {
             // Backtrack one square to determine if the current move is en passant.
             Square square = getSquare(move.getEnd().getX(), move.getEnd().getY() - pawn.getColour().getDirection());
@@ -165,6 +162,17 @@ public class Board {
                     }
                 }
             }
+        }
+
+        // Disable en passant for the last-moved pawn after one move.
+        if (lastEnPassantTarget != null) {
+            lastEnPassantTarget.setEnPassable(false);
+        }
+
+        // Enable en passant after any 2-square pawn push.
+        if (Math.abs(move.getEnd().getY() - move.getStart().getY()) == 2) {
+            pawn.setEnPassable(true);
+            lastEnPassantTarget = pawn;
         }
     }
 

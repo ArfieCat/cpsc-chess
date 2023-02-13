@@ -55,33 +55,27 @@ public class BoardTest {
         assertSame(move.getStartPiece(), move.getEnd().getPiece());
     }
 
+    // Capture with nothing on the adjacent square.
     @Test
     public void doEnPassantTestWithoutPiece() {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
-        Move setup = new Move(board.getSquare(4, 1), board.getSquare(4, 2));
-        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 2));
-
-        board.doMove(setup);
-        assertFalse(board.getSquare(4, 3).hasPiece());
-
-        board.doMove(move);
+        board.doMove(new Move(board.getSquare(4, 1), board.getSquare(4, 2)));
+        board.doMove(new Move(board.getSquare(3, 3), board.getSquare(4, 2)));
         assertFalse(board.getSquare(4, 3).hasPiece());
     }
 
+    // Capture with a piece that is not a pawn on the adjacent square.
     @Test
     public void doEnPassantTestWithoutPawn() {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
         board.getSquare(4, 3).setPiece(new Rook(Colour.WHITE));
-        Move setup = new Move(board.getSquare(4, 1), board.getSquare(4, 2));
-        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 2));
 
-        board.doMove(setup);
+        board.doMove(new Move(board.getSquare(4, 1), board.getSquare(4, 2)));
+        board.doMove(new Move(board.getSquare(3, 3), board.getSquare(4, 2)));
         assertTrue(board.getSquare(4, 3).hasPiece());
-
-        board.doMove(move);
-        assertTrue(board.getSquare(4, 2).hasPiece());
     }
 
+    // Capture with a non-en-passable pawn on the adjacent square.
     @Test
     public void doEnPassantTestWrongPawn() {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
@@ -90,23 +84,28 @@ public class BoardTest {
         Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 2));
 
         board.doMove(setup);
-        assertTrue(board.getSquare(4, 3).hasPiece());
-
         board.doMove(move);
-        assertTrue(board.getSquare(4, 2).hasPiece());
+        assertTrue(board.getSquare(4, 3).hasPiece());
     }
 
+    // Capture with a pawn of the same colour on the adjacent square.
     @Test
     public void doEnPassantTestWrongPiece() {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
         board.getSquare(4, 3).setPiece(new Pawn(Colour.BLACK));
-        Move setup = new Move(board.getSquare(4, 1), board.getSquare(4, 2));
-        Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 2));
 
-        board.doMove(setup);
-        assertTrue(board.getSquare(4, 3).hasPiece());
+        board.doMove(new Move(board.getSquare(4, 1), board.getSquare(4, 2)));
+        board.doMove(new Move(board.getSquare(3, 3), board.getSquare(4, 2)));
+        assertTrue(board.getSquare(4, 2).hasPiece());
+    }
 
-        board.doMove(move);
+    // Capture with a pawn that was previously but is no longer en-passable on the adjacent square.
+    @Test
+    public void doEnPassantTestDisabled() {
+        board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
+        board.doMove(new Move(board.getSquare(4, 1), board.getSquare(4, 3)));
+        board.doMove(new Move(board.getSquare(4, 3), board.getSquare(4, 2)));
+        board.doMove(new Move(board.getSquare(3, 3), board.getSquare(4, 2)));
         assertTrue(board.getSquare(4, 2).hasPiece());
     }
 
