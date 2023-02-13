@@ -18,31 +18,25 @@ public class Menu {
     /**
      * @EFFECTS: Starts the menu command line interface.
      */
-    @SuppressWarnings({"methodlength"}) // This method can't get any shorter.
     public void start() {
         while (true) {
             String[] input = scanner.nextLine().trim().toLowerCase().split(" ", 2);
 
             switch (input[0]) {
-                case "play": {
+                case "play":
                     new Game(scanner).setupBoard().displayBoard().displayHelp().start();
                     break;
-                }
-                case "load": {
+                case "load":
                     loadFile(input);
                     break;
-                }
-                case "help": {
+                case "help":
                     displayHelp();
                     break;
-                }
-                case "quit": {
+                case "quit":
                     System.exit(0); // die
                     break;
-                }
-                default: {
+                default:
                     System.out.println("[!] Input a valid command.");
-                }
             }
         }
     }

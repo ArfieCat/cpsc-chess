@@ -30,32 +30,26 @@ public class Game {
     /**
      * @EFFECTS: Starts the game command line interface.
      */
-    @SuppressWarnings({"methodlength"}) // This method can't get any shorter.
     public void start() {
         while (true) {
             // Split user input into command and args.
             String[] input = scanner.nextLine().trim().toLowerCase().split(" ", 2);
 
             switch (input[0]) {
-                case "move": {
+                case "move":
                     parseMove(input);
                     break;
-                }
-                case "help": {
+                case "help":
                     displayHelp();
                     break;
-                }
-                case "save": {
+                case "save":
                     saveFile(input);
                     break;
-                }
-                case "quit": {
+                case "quit":
                     System.exit(0); // die
                     break;
-                }
-                default: {
+                default:
                     System.out.println("[!] Input a valid command.");
-                }
             }
         }
     }
