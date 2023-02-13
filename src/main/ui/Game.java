@@ -164,7 +164,7 @@ public class Game {
      * @EFFECTS: Prints out whitespace and waits for any input as a rudimentary anti-screen-cheating measure.
      */
     private void delay() {
-        System.out.println("\n".repeat(50));
+        System.out.println(new String(new char[50]).replace("\0", "\n"));
         System.out.println("Pass the device to " + PLAYERS[moveCount % PLAYERS.length]
                 + ", then press ENTER to continue.");
         scanner.nextLine();
