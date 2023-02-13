@@ -16,9 +16,7 @@ Chess has recently undergone an unprecedented rise in popularity, and I wanted t
 classic format. Additionally, from a programming standpoint, I believe that chess is a sufficiently complex game which
 will be challenging but rewarding to implement.
 
----
-
-# User Stories
+# :bust_in_silhouette: User Stories
 
 As a user, I want to be able to...
 
@@ -29,13 +27,14 @@ As a user, I want to be able to...
 - [ ] save and resume a game in progress.
 - [ ] export a game to a PGN-like(?) format.
 
-## Mechanics
+---
 
-1. Players can only see squares that a piece of their colour can move to on the next turn.
-2. Players are not informed of check---the king may move into or be left in check.
-3. There is no checkmate; the game ends when a player's king is captured.
+### Mechanics
 
-## Known Limitations 
+1. A square is only visible if a piece of the player's colour is on it or can move to it on the next turn. 
+2. Players are not informed of check. The king may move into or be left in check.
+3. There is no checkmate. The game ends when a player's king is captured.
 
-1. Under-promotion is not implemented---a pawn is automatically promoted to a queen on its last rank.
-2. The implementation for castling is somewhat fragile.
+### Known Limitations 
+
+1. Under-promotion is not implemented—a pawn is automatically promoted to a queen on its last rank.
