@@ -64,10 +64,12 @@ public class Game {
      * @EFFECTS: Prints out a list of valid commands, and returns {@code this} for chaining.
      */
     public Game displayHelp() {
-        System.out.println("move <start> <end> | Move a piece.");
-        System.out.println("help               | See valid commands.");
-        System.out.println("save <file-name>   | Save the current game.");
-        System.out.println("quit               | Quit.");
+        String string = "move <start> <end> | Move a piece. \n"
+                + "help               | See valid commands. \n"
+                + "save <file-name>   | Save the current game. \n"
+                + "quit               | Quit.";
+
+        System.out.println(string);
         return this;
     }
 
@@ -76,14 +78,12 @@ public class Game {
      */
     public Game displayBoard() {
         Colour currentPlayer = PLAYERS[moveCount % PLAYERS.length];
-
         System.out.println(board.getDisplayString(currentPlayer));
         if (isGameOver) {
             System.out.println("King captured. " + PLAYERS[(moveCount - 1) % PLAYERS.length] + " wins.");
         } else {
             System.out.println(currentPlayer + " to play.");
         }
-
         return this;
     }
 
@@ -164,9 +164,7 @@ public class Game {
      * @EFFECTS: Prints out whitespace and waits for any input as a rudimentary anti-screen-cheating measure.
      */
     private void delay() {
-        for (int i = 0; i < 50; i++) {
-            System.out.println();
-        }
+        System.out.println("\n".repeat(50));
         System.out.println("Pass the device to " + PLAYERS[moveCount % PLAYERS.length]
                 + ", then press ENTER to continue.");
         scanner.nextLine();

@@ -51,10 +51,12 @@ public class Menu {
      * @EFFECTS: Prints out a list of valid commands, and returns {@code this} for chaining.
      */
     public Menu displayHelp() {
-        System.out.println("play             | Start a new game.");
-        System.out.println("load <file-path> | Load an existing game.");
-        System.out.println("help             | See valid commands.");
-        System.out.println("quit             | Quit.");
+        String string = "play             | Start a new game. \n"
+                + "load <file-path> | Load an existing game. \n"
+                + "help             | See valid commands. \n"
+                + "quit             | Quit.";
+
+        System.out.println(string);
         return this;
     }
 

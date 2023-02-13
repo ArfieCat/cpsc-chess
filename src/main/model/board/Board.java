@@ -97,8 +97,8 @@ public class Board {
             }
         }
 
-        // Reverse iterate over rows to get the correct display order.
-        for (int y = SIZE - 1; y >= 0; y--) {
+        // Flip the board depending on the player colour.
+        for (int y = colour.getDirection() < 0 ? 0 : SIZE - 1; !isOutOfBounds(0, y); y -= colour.getDirection()) {
             stringBuilder.append(y + 1).append("  ");
             for (int x = 0; x < SIZE; x++) {
                 Piece piece = getSquare(x, y).getPiece();
