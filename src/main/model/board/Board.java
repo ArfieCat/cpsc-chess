@@ -89,31 +89,23 @@ public class Board {
      * @EFFECTS: Returns a String representation of the board for display.
      */
     public String getDisplayString(Colour colour) {
+        Set<Square> visibleSquares = getVisibleSquares(colour);
         StringBuilder stringBuilder = new StringBuilder();
-        Set<Square> visibleSquares = new HashSet<>();
 
-        for (Square square : gameState) {
-            if (square.hasPiece() && square.getPiece().getColour() == colour) {
-                visibleSquares.add(square);
-                visibleSquares.addAll(square.getPiece().getValidSquares(this, square));
-            }
-        }
-
-        // Flip the board depending on the player colour.
+        // Iterate up or down depending on the current player to visually "flip" the board.
         for (int y = colour.getDirection() < 0 ? 0 : SIZE - 1; !isOutOfBounds(0, y); y -= colour.getDirection()) {
             stringBuilder.append(y + 1).append("  ");
-            for (int x = 0; x < SIZE; x++) {
-                Piece piece = getSquare(x, y).getPiece();
-                String string = !visibleSquares.contains(getSquare(x, y)) ? " "
-                        : piece == null ? "."
-                        : piece.getColour() == colour ? piece.getPrefix()
-                        : piece.getPrefix().toLowerCase();
-                stringBuilder.append(string).append("  ");
+            for (int x = colour.getDirection() > 0 ? 0 : SIZE - 1;
+                    !isOutOfBounds(x, 0); x += colour.getDirection()) {
+                stringBuilder.append(getDisplaySymbol(visibleSquares, getSquare(x, y), colour)).append("  ");
             }
             stringBuilder.append("\n");
         }
+        stringBuilder.append("   ");
+        for (int x = colour.getDirection() > 0 ? 0 : SIZE - 1; !isOutOfBounds(x, 0); x += colour.getDirection()) {
+            stringBuilder.append((char) (x + 'a')).append("  ");
+        }
 
-        stringBuilder.append("   a  b  c  d  e  f  g  h");
         return stringBuilder.toString();
     }
 
@@ -142,6 +134,34 @@ public class Board {
                 square.setPiece(null);
             }
         }
+    }
+
+    /**
+     * @EFFECTS: Returns the set of all squares visible to the given player colour.
+     */
+    private Set<Square> getVisibleSquares(Colour colour) {
+        Set<Square> visibleSquares = new HashSet<>();
+        for (Square square : gameState) {
+            if (square.hasPiece() && square.getPiece().getColour() == colour) {
+                visibleSquares.add(square);
+                visibleSquares.addAll(square.getPiece().getValidSquares(this, square));
+            }
+        }
+        return visibleSquares;
+    }
+
+    /**
+     * @EFFECTS: Returns a String representation of the given square.
+     */
+    private String getDisplaySymbol(Set<Square> visibleSquares, Square square, Colour colour) {
+        if (!visibleSquares.contains(square)) {
+            return " ";
+        } else if (!square.hasPiece()) {
+            return ".";
+        } else if (square.getPiece().getColour() == colour) {
+            return square.getPiece().getPrefix();
+        }
+        return square.getPiece().getPrefix().toLowerCase();
     }
 
     /**
