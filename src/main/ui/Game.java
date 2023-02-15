@@ -103,7 +103,8 @@ public class Game {
     }
 
     /**
-     * @EFFECTS: Ensures that the user input for a move is well-formed.
+     * @EFFECTS: Ensures that the user input for a move is well-formed and updates the game.
+     * @MODIFIES: {@code this}
      */
     private void parseMove(String[] input) {
         if (isGameOver) {
