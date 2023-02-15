@@ -1,7 +1,6 @@
 package model.piece;
 
 import model.Colour;
-import model.Move;
 import model.board.Board;
 import model.board.Square;
 import org.junit.jupiter.api.BeforeEach;

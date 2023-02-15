@@ -2,7 +2,10 @@ package model.board;
 
 import model.Colour;
 import model.Move;
-import model.piece.*;
+import model.piece.King;
+import model.piece.Pawn;
+import model.piece.Queen;
+import model.piece.Rook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -159,15 +162,15 @@ public class BoardTest {
         board.doMove(new Move(board.getSquare(4, 6), board.getSquare(4, 4)));
         board.doMove(new Move(board.getSquare(3, 0), board.getSquare(7, 4)));
 
-        String string = "8                          \n" +
-                "7                 p     p  \n" +
-                "6  .                 .  .  \n" +
-                "5     .        p  .  .  Q  \n" +
-                "4  .  .  .  .  P  .  .  .  \n" +
-                "3  .  .  .  .     .  .  .  \n" +
-                "2  P  P  P  P  .  P  P  P  \n" +
-                "1  R  N  B  .  K  B  N  R  \n" +
-                "   a  b  c  d  e  f  g  h  ";
+        String string = "8                          \n"
+                + "7                 p     p  \n"
+                + "6  .                 .  .  \n"
+                + "5     .        p  .  .  Q  \n"
+                + "4  .  .  .  .  P  .  .  .  \n"
+                + "3  .  .  .  .     .  .  .  \n"
+                + "2  P  P  P  P  .  P  P  P  \n"
+                + "1  R  N  B  .  K  B  N  R  \n"
+                + "   a  b  c  d  e  f  g  h  ";
         assertEquals(string, board.getDisplayString(Colour.WHITE));
     }
 
@@ -178,15 +181,15 @@ public class BoardTest {
         board.doMove(new Move(board.getSquare(4, 6), board.getSquare(4, 4)));
         board.doMove(new Move(board.getSquare(3, 0), board.getSquare(7, 4)));
 
-        String string = "1                          \n" +
-                "2                          \n" +
-                "3                       .  \n" +
-                "4  .                 .     \n" +
-                "5     .  .  P  .  .  .  .  \n" +
-                "6  .  .  .     .  .  .  .  \n" +
-                "7  P  P  P  .  P  P  P  P  \n" +
-                "8  R  N  B  K  Q  B  N  R  \n" +
-                "   h  g  f  e  d  c  b  a  ";
+        String string = "1                          \n"
+                + "2                          \n"
+                + "3                       .  \n"
+                + "4  .                 .     \n"
+                + "5     .  .  P  .  .  .  .  \n"
+                + "6  .  .  .     .  .  .  .  \n"
+                + "7  P  P  P  .  P  P  P  P  \n"
+                + "8  R  N  B  K  Q  B  N  R  \n"
+                + "   h  g  f  e  d  c  b  a  ";
         assertEquals(string, board.getDisplayString(Colour.BLACK));
     }
 
