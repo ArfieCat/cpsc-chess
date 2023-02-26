@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Static helper functions for reading and writing a list of moves to JSON.
  */
-public class JsonUtils {
+public final class JsonUtils {
     private static final String PATH = "./data/";
     private static final String EXT = ".cpsc";
 
@@ -57,5 +57,12 @@ public class JsonUtils {
                     .put(move.getEnd().getX()).put(move.getEnd().getY()));
         }
         return new JSONObject().put("moves", json);
+    }
+
+    /**
+     * @REQUIRES: Instantiation of a utility class is not allowed.
+     */
+    private JsonUtils() {
+        throw new AssertionError();
     }
 }
