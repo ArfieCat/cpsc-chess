@@ -7,14 +7,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Static helper functions for reading and writing a list of moves to JSON.
  */
-public class JsonUtil {
+public class JsonUtils {
     private static final String PATH = "./data/";
     private static final String EXT = ".cpsc";
 
@@ -22,7 +22,7 @@ public class JsonUtil {
      * @EFFECTS: Loads a list of moves from the JSON file at the given path.
      */
     public static List<Move> load(String fileName, Board board) throws IOException {
-        String jsonString = Files.readString(Path.of(PATH + fileName + EXT));
+        String jsonString = new String(Files.readAllBytes(Paths.get(PATH + fileName + EXT)));
         return fromJson(new JSONObject(jsonString), board);
     }
 
@@ -30,7 +30,7 @@ public class JsonUtil {
      * @EFFECTS: Saves a list of moves to the JSON file at the given path.
      */
     public static void save(String fileName, List<Move> moves) throws IOException {
-        Files.write(Path.of(PATH + fileName + EXT), toJson(moves).toString().getBytes());
+        Files.write(Paths.get(PATH + fileName + EXT), toJson(moves).toString().getBytes());
     }
 
     /**

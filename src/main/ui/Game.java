@@ -4,7 +4,7 @@ import model.Colour;
 import model.Move;
 import model.board.Board;
 import model.board.Square;
-import persistence.JsonUtil;
+import persistence.JsonUtils;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -103,7 +103,7 @@ public class Game {
      * @MODIFIES: {@code this}
      */
     public Game loadFile(String path) throws IOException {
-        List<Move> moves = JsonUtil.load(path, board);
+        List<Move> moves = JsonUtils.load(path, board);
         for (Move move : moves) {
             isGameOver = board.doMove(move);
             history.add(move);
@@ -195,7 +195,7 @@ public class Game {
 
         // Catch any exceptions caused by a faulty path or JSON file.
         try {
-            JsonUtil.save(input[1], history);
+            JsonUtils.save(input[1], history);
             System.out.println("[@] Game successfully saved as: " + input[1]);
         } catch (IOException e) {
             System.out.println("[!] Could not save to file: " + input[1]);
