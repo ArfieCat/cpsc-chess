@@ -63,6 +63,5 @@ public final class JsonUtils {
      * @REQUIRES: Instantiation of a utility class is not allowed.
      */
     private JsonUtils() {
-        throw new AssertionError();
     }
 }
