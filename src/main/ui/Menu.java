@@ -46,7 +46,7 @@ public class Menu {
      */
     public Menu displayHelp() {
         String string = "play             | Start a new game. \n"
-                + "load <file-path> | Load an existing game. \n"
+                + "load <file-name> | Load an existing game. \n"
                 + "help             | See valid commands. \n"
                 + "quit             | Quit.";
 
@@ -82,9 +82,9 @@ public class Menu {
 
         // Catch any exceptions caused by a faulty path or JSON file.
         try {
-            new Game(scanner).loadFile(input[1]).displayBoard().displayHelp().start();
+            new Game(scanner).setupBoard().loadFile(input[1]).displayBoard().displayHelp().start();
         } catch (Exception e) {
-            System.out.println("[!] Could not load file from path: " + input[1]);
+            System.out.println("[!] Could not load file: " + input[1]);
         }
     }
 }

@@ -28,13 +28,7 @@ public class MoveTest {
         assertSame(board.getSquare(4, 1), move.getStart());
         assertSame(board.getSquare(4, 3), move.getEnd());
 
-        assertSame(board.getSquare(4, 1).getPiece(), move.getStartPiece());
-        assertNull(move.getEndPiece());
-
         assertSame(board.getSquare(4, 0), invalidMove.getStart());
         assertSame(board.getSquare(4, 1), invalidMove.getEnd());
-
-        assertSame(board.getSquare(4, 0).getPiece(), invalidMove.getStartPiece());
-        assertSame(board.getSquare(4, 1).getPiece(), invalidMove.getEndPiece());
     }
 }

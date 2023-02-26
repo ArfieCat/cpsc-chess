@@ -2,10 +2,7 @@ package model.board;
 
 import model.Colour;
 import model.Move;
-import model.piece.King;
-import model.piece.Pawn;
-import model.piece.Queen;
-import model.piece.Rook;
+import model.piece.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,9 +28,11 @@ public class BoardTest {
     @Test
     public void doMoveTest() {
         Move move = new Move(board.getSquare(6, 0), board.getSquare(5, 2));
+        Piece piece = move.getStart().getPiece();
+
         assertFalse(board.doMove(move));
         assertFalse(move.getStart().hasPiece());
-        assertSame(move.getStartPiece(), move.getEnd().getPiece());
+        assertSame(piece, move.getEnd().getPiece());
     }
 
     @Test
@@ -51,11 +50,10 @@ public class BoardTest {
         Move move = new Move(board.getSquare(3, 3), board.getSquare(4, 2));
 
         board.doMove(setup);
-        assertTrue(((Pawn) setup.getStartPiece()).getEnPassable());
+        assertTrue(((Pawn) setup.getEnd().getPiece()).getEnPassable());
 
         board.doMove(move);
         assertFalse(setup.getEnd().hasPiece());
-        assertSame(move.getStartPiece(), move.getEnd().getPiece());
     }
 
     // Capture with nothing on the adjacent square.

@@ -5,8 +5,6 @@ import model.Move;
 import model.piece.*;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,7 +13,6 @@ import java.util.Set;
 public class Board {
     private static final int SIZE = 8;
     private final Square[] gameState;
-    private final List<Move> history;
     private Pawn lastEnPassantTarget;
 
     /**
@@ -23,7 +20,6 @@ public class Board {
      */
     public Board() {
         this.gameState = new Square[SIZE * SIZE];
-        this.history = new LinkedList<>();
         this.lastEnPassantTarget = null;
 
         // Initialize an empty board.
@@ -63,23 +59,25 @@ public class Board {
      * @REQUIRES: {@code move.isValid()}
      */
     public boolean doMove(Move move) {
-        boolean isGameOver = move.getEndPiece() instanceof King;
-
-        // Change the position of the piece on the start square.
-        move.getStart().setPiece(null);
-        move.getEnd().setPiece(move.getStartPiece());
-        history.add(move);
+        boolean isGameOver = move.getEnd().getPiece() instanceof King;
 
         // Handle "special" moves.
-        if (move.getStartPiece() instanceof Pawn) {
+        if (move.getStart().getPiece() instanceof Pawn) {
             doEnPassant(move);
-            doPromotion(move);
-        } else if (move.getStartPiece() instanceof King) {
+        } else if (move.getStart().getPiece() instanceof King) {
             doCastling(move);
         }
 
-        if (move.getStartPiece() instanceof FirstMove) {
-            ((FirstMove) move.getStartPiece()).setHasMoved();
+        if (move.getStart().getPiece() instanceof FirstMove) {
+            ((FirstMove) move.getStart().getPiece()).setHasMoved();
+        }
+
+        // Change the position of the piece on the start square.
+        move.getEnd().setPiece(move.getStart().getPiece());
+        move.getStart().setPiece(null);
+
+        if (move.getEnd().getPiece() instanceof Pawn) {
+            doPromotion(move);
         }
 
         return isGameOver;
@@ -169,7 +167,7 @@ public class Board {
      * @MODIFIES: {@code this}
      */
     private void doEnPassant(Move move) {
-        Pawn pawn = (Pawn) move.getStartPiece();
+        Pawn pawn = (Pawn) move.getStart().getPiece();
 
         if (move.getStart().getX() != move.getEnd().getX()) {
             // Backtrack one square to determine if the current move is en passant.
@@ -197,20 +195,6 @@ public class Board {
     }
 
     /**
-     * @EFFECTS: Promotes a pawn on its last rank to a queen, if applicable.
-     * @MODIFIES: {@code this}
-     */
-    private void doPromotion(Move move) {
-        Pawn pawn = (Pawn) move.getStartPiece();
-        int y = pawn.getColour().getDirection() < 0 ? 0 : SIZE - 1;
-
-        // Check if the pawn is on its last rank.
-        if (move.getEnd().getY() == y) {
-            move.getEnd().setPiece(new Queen(pawn.getColour()));
-        }
-    }
-
-    /**
      * @EFFECTS: Castles with the appropriate rook, if applicable.
      * @MODIFIES: {@code this}
      */
@@ -224,6 +208,20 @@ public class Board {
             // Move the rook to the appropriate square.
             getSquare(move.getEnd().getX() + offset, y).setPiece(getSquare(x, y).getPiece());
             getSquare(x, y).setPiece(null);
+        }
+    }
+
+    /**
+     * @EFFECTS: Promotes a pawn on its last rank to a queen, if applicable.
+     * @MODIFIES: {@code this}
+     */
+    private void doPromotion(Move move) {
+        Pawn pawn = (Pawn) move.getEnd().getPiece();
+        int y = pawn.getColour().getDirection() < 0 ? 0 : SIZE - 1;
+
+        // Check if the pawn is on its last rank.
+        if (move.getEnd().getY() == y) {
+            move.getEnd().setPiece(new Queen(pawn.getColour()));
         }
     }
 }

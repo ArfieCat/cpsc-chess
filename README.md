@@ -21,10 +21,11 @@ will be challenging but rewarding to implement.
 As a user, I want to be able to...
 
 - [x] add a move to a list of prior moves.
-- [x] move pieces on the board following (mostly) standard chess rules.
+- [x] move pieces on the board according to chess rules.
 - [x] play against another user on the same device.
 - [x] view the current state of the board.
-- [ ] save and resume a game in progress.
+- [x] save a game that is currently in progress.
+- [x] load a previously saved game and continue playing.
 - [ ] export a game to a PGN-like(?) format.
 
 ---

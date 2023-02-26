@@ -4,7 +4,11 @@ import model.Colour;
 import model.Move;
 import model.board.Board;
 import model.board.Square;
+import persistence.JsonUtil;
 
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -13,15 +17,17 @@ import java.util.Scanner;
 public class Game {
     private static final Colour[] PLAYERS = {Colour.WHITE, Colour.BLACK};
     private final Scanner scanner;
+    private final List<Move> history;
     private final Board board;
     private int moveCount;
     private boolean isGameOver;
 
     /**
-     * @EFFECTS: Constructs a new Game with given params.
+     * @EFFECTS: Constructs a new Game.
      */
     public Game(Scanner scanner) {
         this.scanner = scanner;
+        this.history = new LinkedList<>();
         this.board = new Board();
         this.moveCount = 0;
         this.isGameOver = false;
@@ -74,9 +80,9 @@ public class Game {
         Colour currentPlayer = PLAYERS[moveCount % PLAYERS.length];
         System.out.println(board.getDisplayString(currentPlayer));
         if (isGameOver) {
-            System.out.println("King captured. " + PLAYERS[(moveCount - 1) % PLAYERS.length] + " wins.");
+            System.out.println("[@] King captured. " + PLAYERS[(moveCount - 1) % PLAYERS.length] + " wins.");
         } else {
-            System.out.println(currentPlayer + " to play.");
+            System.out.println("[@] " + currentPlayer + " to play.");
         }
         return this;
     }
@@ -96,9 +102,13 @@ public class Game {
      * @EFFECTS: Loads an existing game from a JSON file, and returns {@code this} for chaining.
      * @MODIFIES: {@code this}
      */
-    public Game loadFile(String path) {
-        // TODO: instantiate moves from json
-        int die = (new int[1])[1];
+    public Game loadFile(String path) throws IOException {
+        List<Move> moves = JsonUtil.load(path, board);
+        for (Move move : moves) {
+            isGameOver = board.doMove(move);
+            history.add(move);
+            moveCount++;
+        }
         return this;
     }
 
@@ -146,9 +156,18 @@ public class Game {
             return;
         }
 
-        // As a side effect this updates the board.
+        confirmMove(move);
+    }
+
+    /**
+     * @EFFECTS: Updates the game with the given move.
+     * @MODIFIES: {@code this}
+     */
+    private void confirmMove(Move move) {
         isGameOver = board.doMove(move);
+        history.add(move);
         moveCount++;
+
         if (!isGameOver) {
             delay();
         }
@@ -160,7 +179,7 @@ public class Game {
      */
     private void delay() {
         System.out.println(new String(new char[50]).replace("\0", "\n"));
-        System.out.println("Pass the device to " + PLAYERS[moveCount % PLAYERS.length]
+        System.out.println("[@] Pass the device to " + PLAYERS[moveCount % PLAYERS.length]
                 + ", then press ENTER to continue.");
         scanner.nextLine();
     }
@@ -173,6 +192,13 @@ public class Game {
             System.out.println("[!] Command did not match: save <file-name>");
             return;
         }
-        // TODO: save to file
+
+        // Catch any exceptions caused by a faulty path or JSON file.
+        try {
+            JsonUtil.save(input[1], history);
+            System.out.println("[@] Game successfully saved as: " + input[1]);
+        } catch (IOException e) {
+            System.out.println("[!] Could not save to file: " + input[1]);
+        }
     }
 }
