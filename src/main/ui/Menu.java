@@ -76,7 +76,7 @@ public class Menu {
      */
     private void loadFile(String[] input) {
         if (input.length != 2) {
-            System.out.println("[!] Command did not match: load <file-path>");
+            System.out.println("[!] Command did not match: load <file-name>");
             return;
         }
 
