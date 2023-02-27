@@ -23,6 +23,7 @@ public class BoardTest {
             assertTrue(board.getSquare(x, 0).hasPiece());
             assertTrue(board.getSquare(x, 1).getPiece() instanceof Pawn);
         }
+        assertEquals(0, board.getHistory().size());
     }
 
     @Test
@@ -33,6 +34,7 @@ public class BoardTest {
         assertFalse(board.doMove(move));
         assertFalse(move.getStart().hasPiece());
         assertSame(piece, move.getEnd().getPiece());
+        assertEquals(1, board.getHistory().size());
     }
 
     @Test
