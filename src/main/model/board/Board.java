@@ -5,6 +5,8 @@ import model.Move;
 import model.piece.*;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,6 +15,7 @@ import java.util.Set;
 public class Board {
     private static final int SIZE = 8;
     private final Square[] gameState;
+    private final List<Move> history;
     private Pawn lastEnPassantTarget;
 
     /**
@@ -20,6 +23,7 @@ public class Board {
      */
     public Board() {
         this.gameState = new Square[SIZE * SIZE];
+        this.history = new LinkedList<>();
         this.lastEnPassantTarget = null;
 
         // Initialize an empty board.
@@ -75,6 +79,7 @@ public class Board {
         // Change the position of the piece on the start square.
         move.getEnd().setPiece(move.getStart().getPiece());
         move.getStart().setPiece(null);
+        history.add(move);
 
         if (move.getEnd().getPiece() instanceof Pawn) {
             doPromotion(move);
@@ -122,6 +127,10 @@ public class Board {
         return gameState[y * SIZE + x];
     }
 
+    public List<Move> getHistory() {
+        return history;
+    }
+
     /**
      * @EFFECTS: Removes all pieces of the given colour from the board.
      * @MODIFIES: {@code this}
@@ -132,34 +141,6 @@ public class Board {
                 square.setPiece(null);
             }
         }
-    }
-
-    /**
-     * @EFFECTS: Returns the set of all squares visible to the given player colour.
-     */
-    private Set<Square> getVisibleSquares(Colour colour) {
-        Set<Square> visibleSquares = new HashSet<>();
-        for (Square square : gameState) {
-            if (square.hasPiece() && square.getPiece().getColour() == colour) {
-                visibleSquares.add(square);
-                visibleSquares.addAll(square.getPiece().getValidSquares(this, square));
-            }
-        }
-        return visibleSquares;
-    }
-
-    /**
-     * @EFFECTS: Returns a String representation of the given square.
-     */
-    private String getDisplaySymbol(Set<Square> visibleSquares, Square square, Colour colour) {
-        if (!visibleSquares.contains(square)) {
-            return " ";
-        } else if (!square.hasPiece()) {
-            return ".";
-        } else if (square.getPiece().getColour() == colour) {
-            return square.getPiece().getPrefix();
-        }
-        return square.getPiece().getPrefix().toLowerCase();
     }
 
     /**
@@ -223,6 +204,34 @@ public class Board {
         if (move.getEnd().getY() == y) {
             move.getEnd().setPiece(new Queen(pawn.getColour()));
         }
+    }
+
+    /**
+     * @EFFECTS: Returns the set of all squares visible to the given player colour.
+     */
+    private Set<Square> getVisibleSquares(Colour colour) {
+        Set<Square> visibleSquares = new HashSet<>();
+        for (Square square : gameState) {
+            if (square.hasPiece() && square.getPiece().getColour() == colour) {
+                visibleSquares.add(square);
+                visibleSquares.addAll(square.getPiece().getValidSquares(this, square));
+            }
+        }
+        return visibleSquares;
+    }
+
+    /**
+     * @EFFECTS: Returns a String representation of the given square.
+     */
+    private String getDisplaySymbol(Set<Square> visibleSquares, Square square, Colour colour) {
+        if (!visibleSquares.contains(square)) {
+            return " ";
+        } else if (!square.hasPiece()) {
+            return ".";
+        } else if (square.getPiece().getColour() == colour) {
+            return square.getPiece().getPrefix();
+        }
+        return square.getPiece().getPrefix().toLowerCase();
     }
 }
 

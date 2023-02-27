@@ -7,7 +7,6 @@ import model.board.Square;
 import persistence.JsonUtils;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,9 +16,7 @@ import java.util.Scanner;
 public class Game {
     private static final Colour[] PLAYERS = {Colour.WHITE, Colour.BLACK};
     private final Scanner scanner;
-    private final List<Move> history;
     private final Board board;
-    private int moveCount;
     private boolean isGameOver;
 
     /**
@@ -27,9 +24,7 @@ public class Game {
      */
     public Game(Scanner scanner) {
         this.scanner = scanner;
-        this.history = new LinkedList<>();
         this.board = new Board();
-        this.moveCount = 0;
         this.isGameOver = false;
     }
 
@@ -77,12 +72,12 @@ public class Game {
      * @EFFECTS: Prints out the board, and returns {@code this} for chaining.
      */
     public Game displayBoard() {
-        Colour currentPlayer = PLAYERS[moveCount % PLAYERS.length];
-        System.out.println(board.getDisplayString(currentPlayer));
+        System.out.println(board.getDisplayString(getCurrentPlayer()));
         if (isGameOver) {
-            System.out.println("[@] King captured. " + PLAYERS[(moveCount - 1) % PLAYERS.length] + " wins.");
+            Colour previousPlayer = PLAYERS[(board.getHistory().size() - 1) % PLAYERS.length];
+            System.out.println("[@] King captured. " + previousPlayer + " wins.");
         } else {
-            System.out.println("[@] " + currentPlayer + " to play.");
+            System.out.println("[@] " + getCurrentPlayer() + " to play.");
         }
         return this;
     }
@@ -106,8 +101,6 @@ public class Game {
         List<Move> moves = JsonUtils.load(path, board);
         for (Move move : moves) {
             isGameOver = board.doMove(move);
-            history.add(move);
-            moveCount++;
         }
         return this;
     }
@@ -144,9 +137,8 @@ public class Game {
         }
 
         Square start = board.getSquare(args[0].charAt(0) - 'a', args[0].charAt(1) - '1');
-        Colour currentPlayer = PLAYERS[moveCount % PLAYERS.length];
-        if (!start.hasPiece() || start.getPiece().getColour() != currentPlayer) {
-            System.out.println("[!] Not a " + currentPlayer + " piece.");
+        if (!start.hasPiece() || start.getPiece().getColour() != getCurrentPlayer()) {
+            System.out.println("[!] Not a " + getCurrentPlayer() + " piece.");
             return;
         }
 
@@ -156,18 +148,7 @@ public class Game {
             return;
         }
 
-        confirmMove(move);
-    }
-
-    /**
-     * @EFFECTS: Updates the game with the given move.
-     * @MODIFIES: {@code this}
-     */
-    private void confirmMove(Move move) {
         isGameOver = board.doMove(move);
-        history.add(move);
-        moveCount++;
-
         if (!isGameOver) {
             delay();
         }
@@ -179,8 +160,7 @@ public class Game {
      */
     private void delay() {
         System.out.println(new String(new char[50]).replace("\0", "\n"));
-        System.out.println("[@] Pass the device to " + PLAYERS[moveCount % PLAYERS.length]
-                + ", then press ENTER to continue.");
+        System.out.println("[@] Pass the device to " + getCurrentPlayer() + ", then press ENTER to continue.");
         scanner.nextLine();
     }
 
@@ -195,10 +175,17 @@ public class Game {
 
         // Catch any exceptions caused by a faulty path or JSON file.
         try {
-            JsonUtils.save(input[1], history);
+            JsonUtils.save(input[1], board.getHistory());
             System.out.println("[@] Game successfully saved as: " + input[1]);
         } catch (IOException e) {
             System.out.println("[!] Could not save to file: " + input[1]);
         }
+    }
+
+    /**
+     * @EFFECTS: Returns the player colour whose turn it currently is.
+     */
+    private Colour getCurrentPlayer() {
+        return PLAYERS[board.getHistory().size() % PLAYERS.length];
     }
 }
