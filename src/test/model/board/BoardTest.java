@@ -34,7 +34,9 @@ public class BoardTest {
         assertFalse(board.doMove(move));
         assertFalse(move.getStart().hasPiece());
         assertSame(piece, move.getEnd().getPiece());
+
         assertEquals(1, board.getHistory().size());
+        assertSame(move, board.getHistory().get(0));
     }
 
     @Test
