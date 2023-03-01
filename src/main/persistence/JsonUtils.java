@@ -19,7 +19,7 @@ public final class JsonUtils {
     private static final String EXT = ".cpsc";
 
     /**
-     * @EFFECTS: Loads a list of moves from the JSON file at the given path.
+     * @EFFECTS: Returns a list of moves loaded from the JSON file at the given path.
      */
     public static List<Move> load(String fileName, Board board) throws IOException {
         String jsonString = new String(Files.readAllBytes(Paths.get(PATH + fileName + EXT)));
@@ -28,6 +28,7 @@ public final class JsonUtils {
 
     /**
      * @EFFECTS: Saves a list of moves to the JSON file at the given path.
+     * @MODIFIES: ./data/{@code fileName}.cpsc
      */
     public static void save(String fileName, List<Move> moves) throws IOException {
         Files.write(Paths.get(PATH + fileName + EXT), toJson(moves).toString().getBytes());

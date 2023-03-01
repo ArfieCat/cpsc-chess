@@ -1,5 +1,6 @@
 package ui;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -80,11 +81,12 @@ public class Menu {
             return;
         }
 
-        // Catch any exceptions caused by a faulty path or JSON file.
         try {
             new Game(scanner).setupBoard().loadFile(input[1]).displayBoard().displayHelp().start();
+        } catch (IOException e) {
+            System.out.println("[!] File does not exist: " + input[1]);
         } catch (Exception e) {
-            System.out.println("[!] Could not load file: " + input[1]);
+            System.out.println("[!] Something went wrong.");
         }
     }
 }

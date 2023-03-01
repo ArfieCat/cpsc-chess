@@ -173,12 +173,13 @@ public class Game {
             return;
         }
 
-        // Catch any exceptions caused by a faulty path or JSON file.
         try {
             JsonUtils.save(input[1], board.getHistory());
             System.out.println("[@] Game successfully saved as: " + input[1]);
         } catch (IOException e) {
-            System.out.println("[!] Could not save to file: " + input[1]);
+            System.out.println("[!] Illegal file name: " + input[1]);
+        } catch (Exception e) {
+            System.out.println("[!] Something went wrong.");
         }
     }
 
