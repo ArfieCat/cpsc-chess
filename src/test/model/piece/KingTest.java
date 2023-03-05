@@ -10,22 +10,36 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Contains unit tests for {@code King}.
+ */
 public class KingTest {
     private King piece;
     private Board board;
 
+    /**
+     * @EFFECTS: Initializes the king and board for testing.
+     * @MODIFIES: {@code this}
+     */
     @BeforeEach
     public void init() {
         piece = new King(Colour.WHITE);
         board = new Board();
     }
 
+    /**
+     * @EFFECTS: Tests {@code King.new}.
+     */
     @Test
     public void initTest() {
         assertEquals(Colour.WHITE, piece.getColour());
         assertEquals("K", piece.getPrefix());
     }
 
+    /**
+     * @EFFECTS: Tests {@code King.getValidSquares}.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void getValidSquaresTest() {
         board.getSquare(5, 1).setPiece(new Pawn(Colour.WHITE));
@@ -37,9 +51,12 @@ public class KingTest {
         assertTrue(validSquares.contains(board.getSquare(3, 0)));
     }
 
-    // Successful king-side castle.
+    /**
+     * @EFFECTS: Tests {@code King.addCastleSquares}.
+     * @MODIFIES: {@code this}
+     */
     @Test
-    public void getValidSquaresTestCastle() {
+    public void addCastleSquaresTest() {
         board.getSquare(7, 0).setPiece(new Rook(Colour.WHITE));
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 
@@ -47,9 +64,12 @@ public class KingTest {
         assertTrue(validSquares.contains(board.getSquare(6, 0)));
     }
 
-    // Attempting to castle with a king that has already moved.
+    /**
+     * @EFFECTS: Tests {@code King.addCastleSquares} by trying to castle with a king that has already moved.
+     * @MODIFIES: {@code this}
+     */
     @Test
-    public void getValidSquaresTestCastleMovedKing() {
+    public void addCastleSquaresTestMovedKing() {
         piece.setHasMoved();
 
         board.getSquare(7, 0).setPiece(new Rook(Colour.WHITE));
@@ -59,9 +79,12 @@ public class KingTest {
         assertFalse(validSquares.contains(board.getSquare(6, 0)));
     }
 
-    // Attempting to castle with a rook that has already moved.
+    /**
+     * @EFFECTS: Tests {@code King.addCastleSquares} by trying to castle with a rook that has already moved.
+     * @MODIFIES: {@code this}
+     */
     @Test
-    public void getValidSquaresTestCastleMovedRook() {
+    public void addCastleSquaresTestMovedRook() {
         Rook rook = new Rook(Colour.WHITE);
         rook.setHasMoved();
 
@@ -72,9 +95,12 @@ public class KingTest {
         assertFalse(validSquares.contains(board.getSquare(6, 0)));
     }
 
-    // Attempting to castle with a piece that is not a rook.
+    /**
+     * @EFFECTS: Tests {@code King.addCastleSquares} by trying to castle with a piece that is not a rook.
+     * @MODIFIES: {@code this}
+     */
     @Test
-    public void getValidSquaresTestCastleWithoutRook() {
+    public void addCastleSquaresTestWithoutRook() {
         board.getSquare(7, 0).setPiece(new Pawn(Colour.WHITE));
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 
@@ -82,9 +108,12 @@ public class KingTest {
         assertFalse(validSquares.contains(board.getSquare(6, 0)));
     }
 
-    // Attempting to castle with a rook of the wrong colour.
+    /**
+     * @EFFECTS: Tests {@code King.addCastleSquares} by trying to castle with a rook of the wrong colour.
+     * @MODIFIES: {@code this}
+     */
     @Test
-    public void getValidSquaresTestCastleWrongRook() {
+    public void addCastleSquaresTestWrongRook() {
         board.getSquare(7, 0).setPiece(new Rook(Colour.BLACK));
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 

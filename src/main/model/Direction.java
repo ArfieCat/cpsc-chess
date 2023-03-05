@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Represents the 8 cardinal directions.
+ * Represents the 8 cardinal and ordinal directions.
  */
 public enum Direction {
     EAST(1, 0),

@@ -20,7 +20,7 @@ public class Game {
     private boolean isGameOver;
 
     /**
-     * @EFFECTS: Constructs a new Game.
+     * @EFFECTS: Constructs a new game.
      */
     public Game(Scanner scanner) {
         this.scanner = scanner;

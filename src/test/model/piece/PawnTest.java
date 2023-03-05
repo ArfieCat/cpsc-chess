@@ -10,22 +10,36 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Contains unit tests for {@code Pawn}.
+ */
 public class PawnTest {
     private Pawn piece;
     private Board board;
 
+    /**
+     * @EFFECTS: Initializes the pawn and board for testing.
+     * @MODIFIES: {@code this}
+     */
     @BeforeEach
     public void init() {
         piece = new Pawn(Colour.WHITE);
         board = new Board();
     }
 
+    /**
+     * @EFFECTS: Tests {@code Pawn.new}.
+     */
     @Test
     public void initTest() {
         assertEquals(Colour.WHITE, piece.getColour());
         assertEquals("P", piece.getPrefix());
     }
 
+    /**
+     * @EFFECTS: Tests {@code Pawn.getValidSquares}.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void getValidSquaresTest() {
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
@@ -33,9 +47,64 @@ public class PawnTest {
         assertTrue(validSquares.contains(board.getSquare(4, 2)));
     }
 
-    // Successful capture.
+    /**
+     * @EFFECTS: Tests {@code Pawn.getValidSquares} by trying to move two squares with a pawn that has already moved.
+     * @MODIFIES: {@code this}
+     */
     @Test
-    public void getValidSquaresTestCapture() {
+    public void getValidSquaresTestMoved() {
+        piece.setHasMoved();
+        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
+
+        assertEquals(1, validSquares.size());
+        assertFalse(validSquares.contains(board.getSquare(4, 2)));
+    }
+
+    /**
+     * @EFFECTS: Tests {@code Pawn.getValidSquares} by trying to move two squares with a pawn that is blocked by another
+     *           piece from the front.
+     * @MODIFIES: {@code this}
+     */
+    @Test
+    public void getValidSquaresTestBlocked() {
+        board.getSquare(4, 2).setPiece(new Pawn(Colour.WHITE));
+        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
+
+        assertEquals(1, validSquares.size());
+        assertFalse(validSquares.contains(board.getSquare(4, 2)));
+    }
+
+    /**
+     * @EFFECTS: Tests {@code Pawn.getValidSquares} by trying to move a pawn that is completely blocked from the front.
+     * @MODIFIES: {@code this}
+     */
+    @Test
+    public void getValidSquaresTestVeryBlocked() {
+        board.getSquare(4, 1).setPiece(new Pawn(Colour.WHITE));
+        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
+        assertEquals(0, validSquares.size());
+    }
+
+    /**
+     * @EFFECTS: Tests {@code Pawn.getValidSquares} by trying to move a pawn off the board (should never happen).
+     */
+    @Test
+    public void getValidSquaresTestOutOfBounds() {
+        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 6));
+        assertEquals(1, validSquares.size());
+        assertTrue(validSquares.contains(board.getSquare(4, 7)));
+
+        piece.setHasMoved();
+        validSquares = piece.getValidSquares(board, board.getSquare(4, 7));
+        assertEquals(0, validSquares.size());
+    }
+
+    /**
+     * @EFFECTS: Tests {@code Pawn.addCaptureSquares}.
+     * @MODIFIES: {@code this}
+     */
+    @Test
+    public void addCaptureSquaresTest() {
         board.getSquare(5, 1).setPiece(new Pawn(Colour.BLACK));
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 
@@ -43,9 +112,25 @@ public class PawnTest {
         assertTrue(validSquares.contains(board.getSquare(5, 1)));
     }
 
-    // Successful capture en passant.
+    /**
+     * @EFFECTS: Tests {@code Pawn.addCaptureSquares} by trying to capture a piece of the wrong colour.
+     * @MODIFIES: {@code this}
+     */
     @Test
-    public void getValidSquaresTestCaptureEnPassant() {
+    public void addCaptureSquaresTestWrongPiece() {
+        board.getSquare(5, 1).setPiece(new Pawn(Colour.WHITE));
+        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
+
+        assertEquals(2, validSquares.size());
+        assertFalse(validSquares.contains(board.getSquare(5, 1)));
+    }
+
+    /**
+     * @EFFECTS: Tests {@code Pawn.addCaptureSquares} by capturing en passant.
+     * @MODIFIES: {@code this}
+     */
+    @Test
+    public void addCaptureSquaresTestEnPassant() {
         Pawn pawn = new Pawn(Colour.BLACK);
         pawn.setEnPassable(true);
 
@@ -56,37 +141,12 @@ public class PawnTest {
         assertTrue(validSquares.contains(board.getSquare(5, 1)));
     }
 
-    // Attempting to move two squares with a pawn that has already moved.
+    /**
+     * @EFFECTS: Tests {@code Pawn.addCaptureSquares} by trying to capture a piece that is not a pawn en passant.
+     * @MODIFIES: {@code this}
+     */
     @Test
-    public void getValidSquaresTestMoved() {
-        piece.setHasMoved();
-        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
-
-        assertEquals(1, validSquares.size());
-        assertFalse(validSquares.contains(board.getSquare(4, 2)));
-    }
-
-    // Attempting to move a pawn that is completely blocked from the front.
-    @Test
-    public void getValidSquaresTestVeryBlocked() {
-        board.getSquare(4, 1).setPiece(new Pawn(Colour.WHITE));
-        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
-        assertEquals(0, validSquares.size());
-    }
-
-    // Attempting to move two squares with a pawn that is blocked from the front.
-    @Test
-    public void getValidSquaresTestBlocked() {
-        board.getSquare(4, 2).setPiece(new Pawn(Colour.WHITE));
-        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
-
-        assertEquals(1, validSquares.size());
-        assertFalse(validSquares.contains(board.getSquare(4, 2)));
-    }
-
-    // Attempting to capture a piece that is not a pawn en passant.
-    @Test
-    public void getValidSquaresTestCaptureEnPassantWithoutPawn() {
+    public void addCaptureSquaresTestEnPassantWithoutPawn() {
         board.getSquare(5, 0).setPiece(new Rook(Colour.BLACK));
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 
@@ -94,9 +154,13 @@ public class PawnTest {
         assertFalse(validSquares.contains(board.getSquare(5, 1)));
     }
 
-    // Attempting to capture a non-en-passable pawn en passant.
+    /**
+     * @EFFECTS: Tests {@code Pawn.addCaptureSquares} by trying to capture a pawn that cannot be captured en passant...
+     *           en passant.
+     * @MODIFIES: {@code this}
+     */
     @Test
-    public void getValidSquaresTestCaptureWrongPawn() {
+    public void addCaptureSquaresTestEnPassantWrongPawn() {
         board.getSquare(5, 0).setPiece(new Pawn(Colour.BLACK));
         Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
 
@@ -104,19 +168,12 @@ public class PawnTest {
         assertFalse(validSquares.contains(board.getSquare(5, 1)));
     }
 
-    // Attempting to capture a piece of the wrong colour.
+    /**
+     * @EFFECTS: Tests {@code Pawn.addCaptureSquares} by trying to capture a piece of the wrong colour en passant.
+     * @MODIFIES: {@code this}
+     */
     @Test
-    public void getValidSquaresTestCaptureWrongPiece() {
-        board.getSquare(5, 1).setPiece(new Pawn(Colour.WHITE));
-        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 0));
-
-        assertEquals(2, validSquares.size());
-        assertFalse(validSquares.contains(board.getSquare(5, 1)));
-    }
-
-    // Attempting to capture a piece of the wrong colour en passant.
-    @Test
-    public void getValidSquaresTestCaptureEnPassantWrongPiece() {
+    public void addCaptureSquaresTestEnPassantWrongPiece() {
         Pawn pawn = new Pawn(Colour.WHITE);
         pawn.setEnPassable(true);
 
@@ -125,17 +182,5 @@ public class PawnTest {
 
         assertEquals(2, validSquares.size());
         assertFalse(validSquares.contains(board.getSquare(5, 1)));
-    }
-
-    // Attempting to move a pawn off the board (should never happen).
-    @Test
-    public void getValidSquaresTestOutOfBounds() {
-        Set<Square> validSquares = piece.getValidSquares(board, board.getSquare(4, 6));
-        assertEquals(1, validSquares.size());
-        assertTrue(validSquares.contains(board.getSquare(4, 7)));
-
-        piece.setHasMoved();
-        validSquares = piece.getValidSquares(board, board.getSquare(4, 7));
-        assertEquals(0, validSquares.size());
     }
 }

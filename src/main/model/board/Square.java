@@ -11,7 +11,7 @@ public class Square {
     private Piece piece;
 
     /**
-     * @EFFECTS: Constructs a new Square with given params.
+     * @EFFECTS: Constructs a new square with the given params.
      */
     public Square(int x, int y) {
         this.positionX = x;
@@ -27,6 +27,9 @@ public class Square {
         return positionY;
     }
 
+    /**
+     * @EFFECTS: Returns {@code true} if the square is occupied by a piece.
+     */
     public boolean hasPiece() {
         return piece != null;
     }

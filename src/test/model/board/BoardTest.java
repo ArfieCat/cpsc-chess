@@ -8,15 +8,25 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Contains unit tests for {@code Board}.
+ */
 public class BoardTest {
     private Board board;
 
+    /**
+     * @EFFECTS: Initializes the board for testing.
+     * @MODIFIES: {@code this}
+     */
     @BeforeEach
     public void init() {
         board = new Board();
         board.setupPieces(Colour.WHITE);
     }
 
+    /**
+     * @EFFECTS: Tests {@code Board.new} and {@code Board.setupPieces}.
+     */
     @Test
     public void initTest() {
         for (int x = 0; x < 8; x++) {
@@ -26,6 +36,10 @@ public class BoardTest {
         assertEquals(0, board.getHistory().size());
     }
 
+    /**
+     * @EFFECTS: Tests {@code Board.doMove}.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void doMoveTest() {
         Move move = new Move(board.getSquare(6, 0), board.getSquare(5, 2));
@@ -39,6 +53,10 @@ public class BoardTest {
         assertSame(move, board.getHistory().get(0));
     }
 
+    /**
+     * @EFFECTS: Tests {@code Board.doMove} by making a move that ends the game.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void doMoveTestGameOver() {
         // This move is actually super illegal, but we're not testing that right now.
@@ -47,6 +65,10 @@ public class BoardTest {
         assertTrue(board.doMove(move));
     }
 
+    /**
+     * @EFFECTS: Tests {@code Board.doEnPassant}.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void doEnPassantTest() {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
@@ -60,7 +82,10 @@ public class BoardTest {
         assertFalse(setup.getEnd().hasPiece());
     }
 
-    // Capture with nothing on the adjacent square.
+    /**
+     * @EFFECTS: Tests {@code Board.doEnPassant} by trying to capture en passant with nothing on the adjacent square.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void doEnPassantTestWithoutPiece() {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
@@ -69,7 +94,11 @@ public class BoardTest {
         assertFalse(board.getSquare(4, 3).hasPiece());
     }
 
-    // Capture with a piece that is not a pawn on the adjacent square.
+    /**
+     * @EFFECTS: Tests {@code Board.doEnPassant} by trying to capture en passant with a piece that is not a pawn on the
+     *           adjacent square.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void doEnPassantTestWithoutPawn() {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
@@ -80,7 +109,11 @@ public class BoardTest {
         assertTrue(board.getSquare(4, 3).hasPiece());
     }
 
-    // Capture with a non-en-passable pawn on the adjacent square.
+    /**
+     * @EFFECTS: Tests {@code Board.doEnPassant} by trying to capture en passant with a pawn that cannot be captured en
+     *           passant on the adjacent square.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void doEnPassantTestWrongPawn() {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
@@ -93,7 +126,11 @@ public class BoardTest {
         assertTrue(board.getSquare(4, 3).hasPiece());
     }
 
-    // Capture with a pawn of the same colour on the adjacent square.
+    /**
+     * @EFFECTS: Tests {@code Board.doEnPassant} by trying to capture en passant with a pawn of the wrong colour on the
+     *           adjacent square.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void doEnPassantTestWrongPiece() {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
@@ -104,7 +141,11 @@ public class BoardTest {
         assertTrue(board.getSquare(4, 2).hasPiece());
     }
 
-    // Capture with a pawn that was previously but is no longer en-passable on the adjacent square.
+    /**
+     * @EFFECTS: Tests {@code Board.doEnPassant} by trying to capture en passant with a pawn that was previously, but
+     *           can no longer be captured en passant on the adjacent square.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void doEnPassantTestDisabled() {
         board.getSquare(3, 3).setPiece(new Pawn(Colour.BLACK));
@@ -114,6 +155,10 @@ public class BoardTest {
         assertTrue(board.getSquare(4, 2).hasPiece());
     }
 
+    /**
+     * @EFFECTS: Tests {@code Board.doPromotion}.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void doPromotionTest() {
         board.getSquare(4, 6).setPiece(new Pawn(Colour.WHITE));
@@ -123,6 +168,10 @@ public class BoardTest {
         assertTrue(move.getEnd().getPiece() instanceof Queen);
     }
 
+    /**
+     * @EFFECTS: Tests {@code Board.doPromotion} by trying to promote a pawn of the wrong colour.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void doPromotionTestWrongPawn() {
         // This move is also super illegal.
@@ -133,6 +182,10 @@ public class BoardTest {
         assertTrue(move.getEnd().getPiece() instanceof Pawn);
     }
 
+    /**
+     * @EFFECTS: Tests {@code Board.doCastling} kingside.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void doCastlingTestKingSide() {
         board.getSquare(5, 0).setPiece(null);
@@ -144,6 +197,10 @@ public class BoardTest {
         assertTrue(board.getSquare(5, 0).getPiece() instanceof Rook);
     }
 
+    /**
+     * @EFFECTS: Tests {@code Board.doCastling} queenside.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void doCastlingTestQueenSide() {
         board.getSquare(3, 0).setPiece(null);
@@ -156,6 +213,10 @@ public class BoardTest {
         assertTrue(board.getSquare(3, 0).getPiece() instanceof Rook);
     }
 
+    /**
+     * @EFFECTS: Tests {@code Board.getDisplayString} for WHITE.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void getDisplayStringTestWhite() {
         // Wayward Queen attack.
@@ -176,6 +237,10 @@ public class BoardTest {
         assertEquals(string, board.getDisplayString(Colour.WHITE));
     }
 
+    /**
+     * @EFFECTS: Tests {@code Board.getDisplayString} for BLACK.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void getDisplayStringTestBlack() {
         board.setupPieces(Colour.BLACK);
@@ -195,6 +260,10 @@ public class BoardTest {
         assertEquals(string, board.getDisplayString(Colour.BLACK));
     }
 
+    /**
+     * @EFFECTS: Tests {@code Board.clearPieces}.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void clearPiecesTest() {
         Pawn pawn = new Pawn(Colour.BLACK);

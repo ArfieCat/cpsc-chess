@@ -17,7 +17,7 @@ public class Pawn extends Piece implements FirstMove {
     private boolean holyHell; // Google en passant... Holy Hell! :]
 
     /**
-     * @EFFECTS: Constructs a new Pawn with given params.
+     * @EFFECTS: Constructs a new pawn with the given params.
      */
     public Pawn(Colour colour) {
         super(colour);

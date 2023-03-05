@@ -19,7 +19,7 @@ public class Rook extends Piece implements FirstMove {
     private boolean hasMoved;
 
     /**
-     * @EFFECTS: Constructs a new Rook with given params.
+     * @EFFECTS: Constructs a new rook with the given params.
      */
     public Rook(Colour colour) {
         super(colour);

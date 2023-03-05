@@ -22,7 +22,7 @@ public class King extends Piece implements FirstMove {
     private boolean hasMoved;
 
     /**
-     * @EFFECTS: Constructs a new King with given params.
+     * @EFFECTS: Constructs a new king with the given params.
      */
     public King(Colour colour) {
         super(colour);

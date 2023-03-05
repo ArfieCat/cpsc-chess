@@ -10,22 +10,36 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Contains unit tests for {@code Queen}.
+ */
 public class QueenTest {
     private Queen piece;
     private Board board;
 
+    /**
+     * @EFFECTS: Initializes the queen and board for testing.
+     * @MODIFIES: {@code this}
+     */
     @BeforeEach
     public void init() {
         piece = new Queen(Colour.WHITE);
         board = new Board();
     }
 
+    /**
+     * @EFFECTS: Tests {@code Queen.new}.
+     */
     @Test
     public void initTest() {
         assertEquals(Colour.WHITE, piece.getColour());
         assertEquals("Q", piece.getPrefix());
     }
 
+    /**
+     * @EFFECTS: Tests {@code Queen.getValidSquares}.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void getValidSquaresTest() {
         board.getSquare(7, 3).setPiece(new Pawn(Colour.WHITE));

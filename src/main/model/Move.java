@@ -11,7 +11,7 @@ public class Move {
     private final Square end;
 
     /**
-     * @EFFECTS: Constructs a new Move with given params.
+     * @EFFECTS: Constructs a new move with the given params.
      * @REQUIRES: {@code start.hasPiece()}
      */
     public Move(Square start, Square end) {

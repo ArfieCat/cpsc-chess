@@ -10,22 +10,36 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Contains unit tests for {@code Bishop}.
+ */
 public class BishopTest {
     private Bishop piece;
     private Board board;
 
+    /**
+     * @EFFECTS: Initializes the bishop and board for testing.
+     * @MODIFIES: {@code this}
+     */
     @BeforeEach
     public void init() {
         piece = new Bishop(Colour.WHITE);
         board = new Board();
     }
 
+    /**
+     * @EFFECTS: Tests {@code Bishop.new}.
+     */
     @Test
     public void initTest() {
         assertEquals(Colour.WHITE, piece.getColour());
         assertEquals("B", piece.getPrefix());
     }
 
+    /**
+     * @EFFECTS: Tests {@code Bishop.getValidSquares}.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void getValidSquaresTest() {
         board.getSquare(7, 3).setPiece(new Pawn(Colour.WHITE));

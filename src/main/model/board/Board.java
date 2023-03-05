@@ -19,7 +19,7 @@ public class Board {
     private Pawn lastEnPassantTarget;
 
     /**
-     * @EFFECTS: Constructs a new empty Board.
+     * @EFFECTS: Constructs a new empty board.
      */
     public Board() {
         this.gameState = new Square[SIZE * SIZE];
@@ -34,7 +34,7 @@ public class Board {
 
     /**
      * @EFFECTS: Sets all pieces of the given colour in their starting positions.
-     * @MODIFIES: this
+     * @MODIFIES: {@code this}
      */
     public void setupPieces(Colour colour) {
         int y = colour.getDirection() > 0 ? 0 : SIZE - 1;
@@ -89,7 +89,7 @@ public class Board {
     }
 
     /**
-     * @EFFECTS: Returns a String representation of the board for display.
+     * @EFFECTS: Returns a string representation of the board for display.
      */
     public String getDisplayString(Colour colour) {
         Set<Square> visibleSquares = getVisibleSquares(colour);
@@ -144,7 +144,7 @@ public class Board {
     }
 
     /**
-     * @EFFECTS: Handles en passant, if applicable.
+     * @EFFECTS: Captures a pawn en passant, if applicable.
      * @MODIFIES: {@code this}
      */
     private void doEnPassant(Move move) {
@@ -181,7 +181,7 @@ public class Board {
      */
     private void doCastling(Move move) {
         if (Math.abs(move.getEnd().getX() - move.getStart().getX()) == 2) {
-            // Determine if the castle was king- or queen-side.
+            // Determine if the castle was kingside or queenside.
             int x = move.getEnd().getX() - move.getStart().getX() < 0 ? 0 : SIZE - 1;
             int y = move.getEnd().getY();
             int offset = move.getEnd().getX() - move.getStart().getX() < 0 ? 1 : -1;
@@ -221,7 +221,7 @@ public class Board {
     }
 
     /**
-     * @EFFECTS: Returns a String representation of the given square.
+     * @EFFECTS: Returns a string representation of the given square.
      */
     private String getDisplaySymbol(Set<Square> visibleSquares, Square square, Colour colour) {
         if (!visibleSquares.contains(square)) {

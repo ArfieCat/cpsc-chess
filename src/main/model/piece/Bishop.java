@@ -18,7 +18,7 @@ public class Bishop extends Piece {
     };
 
     /**
-     * @EFFECTS: Constructs a new Bishop with given params.
+     * @EFFECTS: Constructs a new bishop with the given params.
      */
     public Bishop(Colour colour) {
         super(colour);

@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Static helper functions for reading and writing a list of moves to JSON.
+ * Contains static methods for reading and writing JSON.
  */
 public final class JsonUtils {
     private static final String PATH = "./data/";

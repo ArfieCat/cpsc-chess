@@ -19,7 +19,7 @@ public class Queen extends Piece {
     };
 
     /**
-     * @EFFECTS: Constructs a new Queen with given params.
+     * @EFFECTS: Constructs a new queen with the given params.
      */
     public Queen(Colour colour) {
         super(colour);

@@ -10,16 +10,26 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Contains unit tests for {@code Rook}.
+ */
 public class RookTest {
     private Rook piece;
     private Board board;
 
+    /**
+     * @EFFECTS: Initializes the rook and board for testing.
+     * @MODIFIES: {@code this}
+     */
     @BeforeEach
     public void init() {
         piece = new Rook(Colour.WHITE);
         board = new Board();
     }
 
+    /**
+     * @EFFECTS: Tests {@code Rook.new}.
+     */
     @Test
     public void initTest() {
         assertEquals(Colour.WHITE, piece.getColour());
@@ -27,6 +37,10 @@ public class RookTest {
         assertFalse(piece.getHasMoved());
     }
 
+    /**
+     * @EFFECTS: Tests {@code Rook.getValidSquares}.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void getValidSquaresTest() {
         board.getSquare(4, 7).setPiece(new Pawn(Colour.WHITE));
@@ -38,6 +52,10 @@ public class RookTest {
         assertTrue(validSquares.contains(board.getSquare(0, 0)));
     }
 
+    /**
+     * @EFFECTS: Tests {@code Rook.getHasMoved} and {@code Rook.setHasMoved}.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void hasMovedTest() {
         piece.setHasMoved();

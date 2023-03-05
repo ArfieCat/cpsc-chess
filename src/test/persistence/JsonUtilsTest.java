@@ -10,11 +10,18 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Contains unit tests for {@code JsonUtils}.
+ */
 public class JsonUtilsTest {
     private static final String FILE_NAME = "json-utils-test";
     private Board board;
     private List<Move> moves;
 
+    /**
+     * @EFFECTS: Initializes the board for testing, and tests {@code JsonUtils.load}.
+     * @REQUIRES: ./data/json-utils-test.cpsc
+     */
     @BeforeEach
     public void loadTest() {
         board = new Board();
@@ -29,6 +36,10 @@ public class JsonUtilsTest {
         }
     }
 
+    /**
+     * @EFFECTS: Tests {@code JsonUtils.save}.
+     * @MODIFIES: ./data/json-utils-test.cpsc
+     */
     @Test
     public void saveTest() {
         try {
@@ -43,11 +54,17 @@ public class JsonUtilsTest {
         }
     }
 
+    /**
+     * @EFFECTS: Tests {@code JsonUtils.load} by trying to load a non-existent file.
+     */
     @Test
     public void loadTestException() {
         assertThrows(Exception.class, () -> JsonUtils.load("", board));
     }
 
+    /**
+     * @EFFECTS: Tests {@code JsonUtils.save} by trying to save with an illegal file name.
+     */
     @Test
     public void saveTestException() {
         assertThrows(Exception.class, () -> JsonUtils.save("\0", moves));

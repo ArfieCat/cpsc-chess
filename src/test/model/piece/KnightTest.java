@@ -10,22 +10,36 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Contains unit tests for {@code Knight}.
+ */
 public class KnightTest {
     private Knight piece;
     private Board board;
 
+    /**
+     * @EFFECTS: Initializes the knight and board for testing.
+     * @MODIFIES: {@code this}
+     */
     @BeforeEach
     public void init() {
         piece = new Knight(Colour.WHITE);
         board = new Board();
     }
 
+    /**
+     * @EFFECTS: Tests {@code Knight.new}.
+     */
     @Test
     public void initTest() {
         assertEquals(Colour.WHITE, piece.getColour());
         assertEquals("N", piece.getPrefix());
     }
 
+    /**
+     * @EFFECTS: Tests {@code Knight.getValidSquares}.
+     * @MODIFIES: {@code this}
+     */
     @Test
     public void getValidSquaresTest() {
         board.getSquare(6, 1).setPiece(new Pawn(Colour.WHITE));

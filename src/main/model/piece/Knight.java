@@ -16,7 +16,7 @@ public class Knight extends Piece {
     private static final int[] MOVE_OFFSETS_Y = {1, 2, 2, 1, -1, -2, -2, -1};
 
     /**
-     * @EFFECTS: Constructs a new Knight with given params.
+     * @EFFECTS: Constructs a new knight with the given params.
      */
     public Knight(Colour colour) {
         super(colour);

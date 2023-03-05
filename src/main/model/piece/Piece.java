@@ -13,7 +13,7 @@ public abstract class Piece {
     private final Colour colour;
 
     /**
-     * @EFFECTS: Constructs a new Piece with given params.
+     * @EFFECTS: Constructs a new piece with the given params.
      */
     public Piece(Colour colour) {
         this.colour = colour;

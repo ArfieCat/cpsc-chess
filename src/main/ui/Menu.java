@@ -10,7 +10,7 @@ public class Menu {
     private final Scanner scanner;
 
     /**
-     * @EFFECTS: Constructs a new Menu.
+     * @EFFECTS: Constructs a new menu.
      */
     public Menu() {
         this.scanner = new Scanner(System.in);
