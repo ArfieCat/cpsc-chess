@@ -1,6 +1,5 @@
 package persistence;
 
-import model.Colour;
 import model.Move;
 import model.board.Board;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,8 +24,6 @@ public class JsonUtilsTest {
     @BeforeEach
     public void loadTest() {
         board = new Board();
-        board.setupPieces(Colour.WHITE);
-        board.setupPieces(Colour.BLACK);
 
         try {
             moves = JsonUtils.load(FILE_NAME, board);

@@ -12,11 +12,7 @@ import java.awt.*;
  * Represents a game of chess with graphics.
  */
 public class GamePanel extends JPanel {
-    private static final Colour[] PLAYERS = {Colour.WHITE, Colour.BLACK};
-
     private final Board board;
-    private boolean isGameOver;
-
     private final JPanel boardDisplay;
     private Square selection;
 
@@ -25,12 +21,7 @@ public class GamePanel extends JPanel {
      */
     public GamePanel() {
         this.board = new Board();
-        this.isGameOver = false;
         this.boardDisplay = new JPanel();
-
-        for (Colour colour : PLAYERS) {
-            board.setupPieces(colour);
-        }
 
         inflate();
     }
@@ -58,17 +49,10 @@ public class GamePanel extends JPanel {
     private void validateMove(Square start, Square end) {
         // This may violate a "REQUIRES" clause.
         Move move = new Move(start, end);
-        if (!start.hasPiece() || start.getPiece().getColour() != getCurrentPlayer() || !move.isValid(board)) {
+        if (!start.hasPiece() || start.getPiece().getColour() != board.getCurrentPlayer() || !move.isValid(board)) {
             return;
         }
 
-        isGameOver = board.doMove(move);
-    }
-
-    /**
-     * @EFFECTS: Returns the player colour whose turn it currently is.
-     */
-    private Colour getCurrentPlayer() {
-        return PLAYERS[board.getHistory().size() % PLAYERS.length];
+        board.doMove(move);
     }
 }

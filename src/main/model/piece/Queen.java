@@ -13,10 +13,6 @@ import java.util.Set;
  */
 public class Queen extends Piece {
     private static final String PREFIX = "Q";
-    private static final Direction[] MOVE_DIRECTIONS = {
-            Direction.EAST, Direction.NORTHEAST, Direction.NORTH, Direction.NORTHWEST,
-            Direction.WEST, Direction.SOUTHWEST, Direction.SOUTH, Direction.SOUTHEAST
-    };
 
     /**
      * @EFFECTS: Constructs a new queen with the given params.
@@ -32,7 +28,7 @@ public class Queen extends Piece {
     public Set<Square> getValidSquares(Board board, Square start) {
         Set<Square> validSquares = new HashSet<>();
 
-        for (Direction direction : MOVE_DIRECTIONS) {
+        for (Direction direction : Direction.values()) {
             // Apply offset to starting square based on direction until out of bounds.
             for (int x = start.getX() + direction.getX(), y = start.getY() + direction.getY();
                     !board.isOutOfBounds(x, y); x += direction.getX(), y += direction.getY()) {

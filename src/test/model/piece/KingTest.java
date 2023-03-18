@@ -25,6 +25,11 @@ public class KingTest {
     public void init() {
         piece = new King(Colour.WHITE);
         board = new Board();
+
+        // Clear the board to allow for custom positions.
+        for (int i = 0; i < Board.SIZE * Board.SIZE; i++) {
+            board.getSquare(i % Board.SIZE, i / Board.SIZE).setPiece(null);
+        }
     }
 
     /**

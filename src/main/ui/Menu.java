@@ -25,7 +25,7 @@ public class Menu {
 
             switch (input[0]) {
                 case "play":
-                    new Game(scanner).setupBoard().displayBoard().displayHelp().start();
+                    new Game(scanner).displayBoard().displayHelp().start();
                     break;
                 case "load":
                     loadFile(input);
@@ -82,7 +82,7 @@ public class Menu {
         }
 
         try {
-            new Game(scanner).setupBoard().loadFile(input[1]).displayBoard().displayHelp().start();
+            new Game(scanner).loadFile(input[1]).displayBoard().displayHelp().start();
         } catch (IOException e) {
             System.out.println("[!] File does not exist: " + input[1]);
         } catch (Exception e) {

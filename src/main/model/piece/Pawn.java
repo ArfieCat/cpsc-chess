@@ -11,7 +11,7 @@ import java.util.Set;
  * Represents a pawn piece.
  */
 public class Pawn extends Piece implements FirstMove {
-    private static final String PREFIX = "P";
+    private static final String PREFIX = "";
     private static final int[] CAPTURE_OFFSETS_X = {1, -1};
 
     private boolean hasMoved;
@@ -50,7 +50,6 @@ public class Pawn extends Piece implements FirstMove {
                 }
             }
         }
-
         addCaptureSquares(validSquares, board, start);
         return validSquares;
     }

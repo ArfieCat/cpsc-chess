@@ -18,6 +18,7 @@ public class Board {
     private final Square[] gameState;
     private final List<Move> history;
     private Pawn lastEnPassantTarget;
+    private boolean isGameOver;
 
     /**
      * @EFFECTS: Constructs a new empty board.
@@ -26,45 +27,22 @@ public class Board {
         this.gameState = new Square[SIZE * SIZE];
         this.history = new LinkedList<>();
         this.lastEnPassantTarget = null;
+        this.isGameOver = false;
 
         // Initialize an empty board.
         for (int i = 0; i < gameState.length; i++) {
             gameState[i] = new Square(i % SIZE, i / SIZE);
         }
+        setupPieces();
     }
 
     /**
-     * @EFFECTS: Sets all pieces of the given colour in their starting positions.
-     * @MODIFIES: {@code this}
-     */
-    public void setupPieces(Colour colour) {
-        int y = colour.getDirection() > 0 ? 0 : SIZE - 1;
-
-        // Remove any pieces of the given colour first.
-        clearPieces(colour);
-
-        // No better way than to hard-code this...
-        getSquare(0, y).setPiece(new Rook(colour));
-        getSquare(1, y).setPiece(new Knight(colour));
-        getSquare(2, y).setPiece(new Bishop(colour));
-        getSquare(3, y).setPiece(new Queen(colour));
-        getSquare(SIZE - 4, y).setPiece(new King(colour));
-        getSquare(SIZE - 3, y).setPiece(new Bishop(colour));
-        getSquare(SIZE - 2, y).setPiece(new Knight(colour));
-        getSquare(SIZE - 1, y).setPiece(new Rook(colour));
-
-        for (int i = 0; i < SIZE; i++) {
-            getSquare(i, y + colour.getDirection()).setPiece(new Pawn(colour));
-        }
-    }
-
-    /**
-     * @EFFECTS: Updates the board according to the given move, and returns {@code false} if the game is over.
+     * @EFFECTS: Updates the board according to the given move.
      * @MODIFIES: {@code this}
      * @REQUIRES: {@code move.isValid()}
      */
-    public boolean doMove(Move move) {
-        boolean isGameOver = move.getEnd().getPiece() instanceof King;
+    public void doMove(Move move) {
+        isGameOver = move.getEnd().getPiece() instanceof King;
 
         // Handle "special" moves.
         if (move.getStart().getPiece() instanceof Pawn) {
@@ -85,32 +63,28 @@ public class Board {
         if (move.getEnd().getPiece() instanceof Pawn) {
             doPromotion(move);
         }
-
-        return isGameOver;
     }
 
     /**
-     * @EFFECTS: Returns a string representation of the board for display.
+     * @EFFECTS: Returns the set of all squares visible to the current player colour.
      */
-    public String getDisplayString(Colour colour) {
-        Set<Square> visibleSquares = getVisibleSquares(colour);
-        StringBuilder stringBuilder = new StringBuilder();
+    public Set<Square> getVisibleSquares() {
+        Set<Square> visibleSquares = new HashSet<>();
 
-        // Iterate up or down depending on the current player to visually "flip" the board.
-        for (int y = colour.getDirection() < 0 ? 0 : SIZE - 1; !isOutOfBounds(0, y); y -= colour.getDirection()) {
-            stringBuilder.append(y + 1).append("  ");
-            for (int x = colour.getDirection() > 0 ? 0 : SIZE - 1;
-                    !isOutOfBounds(x, 0); x += colour.getDirection()) {
-                stringBuilder.append(getDisplaySymbol(visibleSquares, getSquare(x, y), colour)).append("  ");
+        for (Square square : gameState) {
+            if (square.hasPiece() && square.getPiece().getColour() == getCurrentPlayer()) {
+                visibleSquares.add(square);
+                visibleSquares.addAll(square.getPiece().getValidSquares(this, square));
             }
-            stringBuilder.append("\n");
         }
-        stringBuilder.append("   ");
-        for (int x = colour.getDirection() > 0 ? 0 : SIZE - 1; !isOutOfBounds(x, 0); x += colour.getDirection()) {
-            stringBuilder.append((char) (x + 'a')).append("  ");
-        }
+        return visibleSquares;
+    }
 
-        return stringBuilder.toString();
+    /**
+     * @EFFECTS: Returns the player colour whose turn it currently is.
+     */
+    public Colour getCurrentPlayer() {
+        return Colour.values()[history.size() % Colour.values().length];
     }
 
     /**
@@ -132,14 +106,30 @@ public class Board {
         return history;
     }
 
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
     /**
-     * @EFFECTS: Removes all pieces of the given colour from the board.
+     * @EFFECTS: Sets all pieces in their starting positions.
      * @MODIFIES: {@code this}
      */
-    private void clearPieces(Colour colour) {
-        for (Square square : gameState) {
-            if (square.hasPiece() && square.getPiece().getColour() == colour) {
-                square.setPiece(null);
+    private void setupPieces() {
+        for (Colour colour : Colour.values()) {
+            int y = colour.getDirection() > 0 ? 0 : SIZE - 1;
+
+            // No better way than to hard-code this...
+            getSquare(0, y).setPiece(new Rook(colour));
+            getSquare(1, y).setPiece(new Knight(colour));
+            getSquare(2, y).setPiece(new Bishop(colour));
+            getSquare(3, y).setPiece(new Queen(colour));
+            getSquare(SIZE - 4, y).setPiece(new King(colour));
+            getSquare(SIZE - 3, y).setPiece(new Bishop(colour));
+            getSquare(SIZE - 2, y).setPiece(new Knight(colour));
+            getSquare(SIZE - 1, y).setPiece(new Rook(colour));
+
+            for (int i = 0; i < SIZE; i++) {
+                getSquare(i, y + colour.getDirection()).setPiece(new Pawn(colour));
             }
         }
     }
@@ -206,33 +196,4 @@ public class Board {
             move.getEnd().setPiece(new Queen(pawn.getColour()));
         }
     }
-
-    /**
-     * @EFFECTS: Returns the set of all squares visible to the given player colour.
-     */
-    private Set<Square> getVisibleSquares(Colour colour) {
-        Set<Square> visibleSquares = new HashSet<>();
-        for (Square square : gameState) {
-            if (square.hasPiece() && square.getPiece().getColour() == colour) {
-                visibleSquares.add(square);
-                visibleSquares.addAll(square.getPiece().getValidSquares(this, square));
-            }
-        }
-        return visibleSquares;
-    }
-
-    /**
-     * @EFFECTS: Returns a string representation of the given square.
-     */
-    private String getDisplaySymbol(Set<Square> visibleSquares, Square square, Colour colour) {
-        if (!visibleSquares.contains(square)) {
-            return " ";
-        } else if (!square.hasPiece()) {
-            return ".";
-        } else if (square.getPiece().getColour() == colour) {
-            return square.getPiece().getPrefix();
-        }
-        return square.getPiece().getPrefix().toLowerCase();
-    }
 }
-

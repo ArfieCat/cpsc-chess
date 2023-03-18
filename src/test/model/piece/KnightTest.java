@@ -25,6 +25,11 @@ public class KnightTest {
     public void init() {
         piece = new Knight(Colour.WHITE);
         board = new Board();
+
+        // Clear the board to allow for custom positions.
+        for (int i = 0; i < Board.SIZE * Board.SIZE; i++) {
+            board.getSquare(i % Board.SIZE, i / Board.SIZE).setPiece(null);
+        }
     }
 
     /**

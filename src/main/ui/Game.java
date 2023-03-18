@@ -4,21 +4,19 @@ import model.Colour;
 import model.Move;
 import model.board.Board;
 import model.board.Square;
+import model.piece.Pawn;
 import persistence.JsonUtils;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Represents a game of chess.
  */
 public class Game {
-    private static final Colour[] PLAYERS = {Colour.WHITE, Colour.BLACK};
-
     private final Scanner scanner;
     private final Board board;
-    private boolean isGameOver;
 
     /**
      * @EFFECTS: Constructs a new game.
@@ -26,7 +24,6 @@ public class Game {
     public Game(Scanner scanner) {
         this.scanner = scanner;
         this.board = new Board();
-        this.isGameOver = false;
     }
 
     /**
@@ -73,23 +70,13 @@ public class Game {
      * @EFFECTS: Prints out the board, and returns {@code this} for chaining.
      */
     public Game displayBoard() {
-        System.out.println(board.getDisplayString(getCurrentPlayer()));
-        if (isGameOver) {
-            Colour previousPlayer = PLAYERS[(board.getHistory().size() - 1) % PLAYERS.length];
+        System.out.println(getDisplayString(board.getCurrentPlayer()));
+
+        if (board.isGameOver()) {
+            Colour previousPlayer = Colour.values()[(board.getHistory().size() - 1) % Colour.values().length];
             System.out.println("[@] King captured. " + previousPlayer + " wins.");
         } else {
-            System.out.println("[@] " + getCurrentPlayer() + " to play.");
-        }
-        return this;
-    }
-
-    /**
-     * @EFFECTS: Sets all pieces in their starting positions, and returns {@code this} for chaining.
-     * @MODIFIES: {@code this}
-     */
-    public Game setupBoard() {
-        for (Colour colour : PLAYERS) {
-            board.setupPieces(colour);
+            System.out.println("[@] " + board.getCurrentPlayer() + " to play.");
         }
         return this;
     }
@@ -99,11 +86,46 @@ public class Game {
      * @MODIFIES: {@code this}
      */
     public Game loadFile(String path) throws IOException {
-        List<Move> moves = JsonUtils.load(path, board);
-        for (Move move : moves) {
-            isGameOver = board.doMove(move);
+        for (Move move : JsonUtils.load(path, board)) {
+            board.doMove(move);
         }
         return this;
+    }
+
+    /**
+     * @EFFECTS: Returns a string representation of the board for display.
+     */
+    private String getDisplayString(Colour colour) {
+        Set<Square> visibleSquares = board.getVisibleSquares();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        // Iterate up or down depending on the current player to visually "flip" the board.
+        for (int y = colour.getDirection() < 0 ? 0 : Board.SIZE - 1; !board.isOutOfBounds(0, y);
+                y -= colour.getDirection()) {
+            stringBuilder.append(y + 1).append("  ");
+            for (int x = colour.getDirection() > 0 ? 0 : Board.SIZE - 1; !board.isOutOfBounds(x, 0);
+                    x += colour.getDirection()) {
+                stringBuilder.append(getDisplaySymbol(visibleSquares, board.getSquare(x, y), colour)).append("  ");
+            }
+            stringBuilder.append("\n");
+        }
+        stringBuilder.append("   ");
+        for (int x = colour.getDirection() > 0 ? 0 : Board.SIZE - 1; !board.isOutOfBounds(x, 0);
+                x += colour.getDirection()) {
+            stringBuilder.append((char) (x + 'a')).append("  ");
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
+     * @EFFECTS: Returns a string representation of the given square.
+     */
+    private String getDisplaySymbol(Set<Square> visibleSquares, Square square, Colour colour) {
+        if (visibleSquares.contains(square) && square.hasPiece()) {
+            String symbol = square.getPiece() instanceof Pawn ? "P" : square.getPiece().getPrefix();
+            return square.getPiece().getColour() == colour ? symbol.toUpperCase() : symbol.toLowerCase();
+        }
+        return visibleSquares.contains(square) ? "." : " ";
     }
 
     /**
@@ -111,7 +133,7 @@ public class Game {
      * @MODIFIES: {@code this}
      */
     private void parseMove(String[] input) {
-        if (isGameOver) {
+        if (board.isGameOver()) {
             System.out.println("[!] The game has ended.");
             return;
         }
@@ -138,8 +160,8 @@ public class Game {
         }
 
         Square start = board.getSquare(args[0].charAt(0) - 'a', args[0].charAt(1) - '1');
-        if (!start.hasPiece() || start.getPiece().getColour() != getCurrentPlayer()) {
-            System.out.println("[!] Not a " + getCurrentPlayer() + " piece.");
+        if (!start.hasPiece() || start.getPiece().getColour() != board.getCurrentPlayer()) {
+            System.out.println("[!] Not a " + board.getCurrentPlayer() + " piece.");
             return;
         }
 
@@ -149,10 +171,11 @@ public class Game {
             return;
         }
 
-        isGameOver = board.doMove(move);
-        if (!isGameOver) {
+        board.doMove(move);
+        if (!board.isGameOver()) {
             delay();
         }
+
         displayBoard();
     }
 
@@ -161,7 +184,7 @@ public class Game {
      */
     private void delay() {
         System.out.println(new String(new char[50]).replace("\0", "\n"));
-        System.out.println("[@] Pass the device to " + getCurrentPlayer() + ", then press ENTER to continue.");
+        System.out.println("[@] Pass the device to " + board.getCurrentPlayer() + ", then press ENTER to continue.");
         scanner.nextLine();
     }
 
@@ -182,12 +205,5 @@ public class Game {
         } catch (Exception e) {
             System.out.println("[!] Something went wrong.");
         }
-    }
-
-    /**
-     * @EFFECTS: Returns the player colour whose turn it currently is.
-     */
-    private Colour getCurrentPlayer() {
-        return PLAYERS[board.getHistory().size() % PLAYERS.length];
     }
 }

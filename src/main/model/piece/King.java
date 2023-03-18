@@ -13,10 +13,6 @@ import java.util.Set;
  */
 public class King extends Piece implements FirstMove {
     private static final String PREFIX = "K";
-    private static final Direction[] MOVE_DIRECTIONS = {
-            Direction.EAST, Direction.NORTHEAST, Direction.NORTH, Direction.NORTHWEST,
-            Direction.WEST, Direction.SOUTHWEST, Direction.SOUTH, Direction.SOUTHEAST
-    };
     private static final Direction[] CASTLE_DIRECTIONS = {Direction.EAST, Direction.WEST};
     private static final int[] CASTLE_OFFSETS_X = {2, -2};
 
@@ -37,7 +33,7 @@ public class King extends Piece implements FirstMove {
     public Set<Square> getValidSquares(Board board, Square start) {
         Set<Square> validSquares = new HashSet<>();
 
-        for (Direction direction : MOVE_DIRECTIONS) {
+        for (Direction direction : Direction.values()) {
             // Apply offset to starting square based on direction.
             int x = start.getX() + direction.getX();
             int y = start.getY() + direction.getY();
@@ -51,7 +47,6 @@ public class King extends Piece implements FirstMove {
                 }
             }
         }
-
         addCastleSquares(validSquares, board, start);
         return validSquares;
     }

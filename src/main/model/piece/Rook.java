@@ -50,7 +50,6 @@ public class Rook extends Piece implements FirstMove {
                 validSquares.add(square);
             }
         }
-
         return validSquares;
     }
 

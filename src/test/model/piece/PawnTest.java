@@ -25,6 +25,11 @@ public class PawnTest {
     public void init() {
         piece = new Pawn(Colour.WHITE);
         board = new Board();
+
+        // Clear the board to allow for custom positions.
+        for (int i = 0; i < Board.SIZE * Board.SIZE; i++) {
+            board.getSquare(i % Board.SIZE, i / Board.SIZE).setPiece(null);
+        }
     }
 
     /**
@@ -33,7 +38,7 @@ public class PawnTest {
     @Test
     public void initTest() {
         assertEquals(Colour.WHITE, piece.getColour());
-        assertEquals("P", piece.getPrefix());
+        assertEquals("", piece.getPrefix());
     }
 
     /**
@@ -62,7 +67,7 @@ public class PawnTest {
 
     /**
      * @EFFECTS: Tests {@code Pawn.getValidSquares} by trying to move two squares with a pawn that is blocked by another
-     *           piece from the front.
+     * piece from the front.
      * @MODIFIES: {@code this}
      */
     @Test
@@ -156,7 +161,7 @@ public class PawnTest {
 
     /**
      * @EFFECTS: Tests {@code Pawn.addCaptureSquares} by trying to capture a pawn that cannot be captured en passant...
-     *           en passant.
+     * en passant.
      * @MODIFIES: {@code this}
      */
     @Test
