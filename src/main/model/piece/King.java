@@ -19,6 +19,7 @@ public class King extends Piece implements FirstMove {
     };
     private static final Direction[] CASTLE_DIRECTIONS = {Direction.EAST, Direction.WEST};
     private static final int[] CASTLE_OFFSETS_X = {2, -2};
+
     private boolean hasMoved;
 
     /**

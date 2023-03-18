@@ -13,7 +13,8 @@ import java.util.Set;
  * Represents the game board.
  */
 public class Board {
-    private static final int SIZE = 8;
+    public static final int SIZE = 8;
+
     private final Square[] gameState;
     private final List<Move> history;
     private Pawn lastEnPassantTarget;

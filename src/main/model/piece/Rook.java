@@ -16,6 +16,7 @@ public class Rook extends Piece implements FirstMove {
     private static final Direction[] MOVE_DIRECTIONS = {
             Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH
     };
+
     private boolean hasMoved;
 
     /**

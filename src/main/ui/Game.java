@@ -15,6 +15,7 @@ import java.util.Scanner;
  */
 public class Game {
     private static final Colour[] PLAYERS = {Colour.WHITE, Colour.BLACK};
+
     private final Scanner scanner;
     private final Board board;
     private boolean isGameOver;

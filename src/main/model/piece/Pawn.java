@@ -13,6 +13,7 @@ import java.util.Set;
 public class Pawn extends Piece implements FirstMove {
     private static final String PREFIX = "P";
     private static final int[] CAPTURE_OFFSETS_X = {1, -1};
+
     private boolean hasMoved;
     private boolean holyHell; // Google en passant... Holy Hell! :]
 
