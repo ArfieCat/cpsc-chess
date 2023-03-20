@@ -38,7 +38,6 @@ public class GamePanel extends JPanel {
         for (Move move : JsonUtils.load(fileName, board)) {
             board.doMove(move);
         }
-        refreshAll();
     }
 
     public List<Move> getBoardHistory() {
@@ -57,17 +56,6 @@ public class GamePanel extends JPanel {
     }
 
     /**
-     * @EFFECTS: Updates all components to match the current board state.
-     * @MODIFIES: {@code this}
-     */
-    private void refreshAll() {
-        for (Component component : boardPanel.getComponents()) {
-            ((SquarePanel) component).refresh();
-        }
-        repaint();
-    }
-
-    /**
      * @EFFECTS: Sets attributes and adds components to a new board panel, and returns it.
      * @MODIFIES: {@code this}
      */
@@ -81,7 +69,7 @@ public class GamePanel extends JPanel {
                     @Override
                     public void mousePressed(MouseEvent e) {
                         validateMove((SquarePanel) e.getComponent());
-                        refreshAll();
+                        repaint();
                     }
                 });
                 boardPanel.add(squarePanel);
@@ -102,23 +90,19 @@ public class GamePanel extends JPanel {
      * @MODIFIES: {@code this}
      */
     private void validateMove(SquarePanel panel) {
-        if (board.isGameOver()) {
-            return;
-        }
-
-        System.out.println("do move");
-        if (selection != null) {
-            Move move = new Move(selection.getSquare(), panel.getSquare());
-            if (move.getStart().hasPiece() && move.getStart().getPiece().getColour() == board.getCurrentPlayer()
-                    && move.isValid(board)) {
-                board.doMove(move);
+        if (!board.isGameOver()) {
+            if (selection == null) {
+                panel.setHighlighted(true);
+                selection = panel;
+            } else {
+                Move move = new Move(selection.getSquare(), panel.getSquare());
+                if (move.getStart().hasPiece() && move.getStart().getPiece().getColour() == board.getCurrentPlayer()
+                        && move.isValid(board)) {
+                    board.doMove(move);
+                }
+                selection.setHighlighted(false);
+                selection = null;
             }
-            selection.setSelected(false);
-            selection = null;
-        } else {
-            panel.setSelected(true);
-            selection = panel;
         }
-        System.out.println("end do move");
     }
 }

@@ -1,6 +1,6 @@
 package ui;
 
-import ui.cli.ConsoleMenu;
+import ui.cli.ConsoleUI;
 import ui.gui.GraphicalUI;
 
 /**
@@ -12,6 +12,6 @@ public class Main {
      */
     public static void main(String[] args) {
         GraphicalUI.start();
-        new ConsoleMenu().displayIntro().displayHelp().start();
+        new ConsoleUI().displayIntro().displayHelp().start();
     }
 }

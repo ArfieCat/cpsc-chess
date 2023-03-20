@@ -6,13 +6,13 @@ import java.util.Scanner;
 /**
  * Represents the main menu via command line interface.
  */
-public class ConsoleMenu {
+public class ConsoleUI {
     private final Scanner scanner;
 
     /**
      * @EFFECTS: Constructs a new menu.
      */
-    public ConsoleMenu() {
+    public ConsoleUI() {
         this.scanner = new Scanner(System.in);
     }
 
@@ -45,7 +45,7 @@ public class ConsoleMenu {
     /**
      * @EFFECTS: Prints out a list of valid commands, and returns {@code this} for chaining.
      */
-    public ConsoleMenu displayHelp() {
+    public ConsoleUI displayHelp() {
         String string = "play             | Start a new game. \n"
                 + "load <file-name> | Load an existing game. \n"
                 + "help             | See valid commands. \n"
@@ -58,7 +58,7 @@ public class ConsoleMenu {
     /**
      * @EFFECTS: Prints out the intro blurb, and returns {@code this} for chaining.
      */
-    public ConsoleMenu displayIntro() {
+    public ConsoleUI displayIntro() {
         // It looks better without the extra backslashes...
         String string = "_________ __________  __________________ \n"
                 + "\\_   ___ \\\\______   \\/   _____/\\_   ___ \\ \n"

@@ -89,14 +89,16 @@ public class GraphicalUI {
         String input = JOptionPane.showInputDialog(null, "Input a file name.",
                 "Save", JOptionPane.PLAIN_MESSAGE);
 
-        try {
-            JsonUtils.save(input, gamePanel.getBoardHistory());
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Illegal file name: " + input,
-                    "Save", JOptionPane.PLAIN_MESSAGE);
-        } catch (RuntimeException e) {
-            JOptionPane.showMessageDialog(null, "Something went wrong.",
-                    "Save", JOptionPane.PLAIN_MESSAGE);
+        if (input != null) {
+            try {
+                JsonUtils.save(input, gamePanel.getBoardHistory());
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Illegal file name: " + input,
+                        "Save", JOptionPane.PLAIN_MESSAGE);
+            } catch (RuntimeException e) {
+                JOptionPane.showMessageDialog(null, "Something went wrong.",
+                        "Save", JOptionPane.PLAIN_MESSAGE);
+            }
         }
     }
 
@@ -104,19 +106,21 @@ public class GraphicalUI {
         String input = JOptionPane.showInputDialog(null, "Input a file name.",
                 "Load", JOptionPane.PLAIN_MESSAGE);
 
-        try {
-            frame.remove(gamePanel);
-            gamePanel = new GamePanel();
-            gamePanel.loadFile(input);
+        if (input != null) {
+            try {
+                frame.remove(gamePanel);
+                gamePanel = new GamePanel();
+                gamePanel.loadFile(input);
 
-            frame.add(gamePanel);
-            frame.revalidate();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "File does not exist: " + input,
-                    "Load", JOptionPane.PLAIN_MESSAGE);
-        } catch (RuntimeException e) {
-            JOptionPane.showMessageDialog(null, "Something went wrong.",
-                    "Load", JOptionPane.PLAIN_MESSAGE);
+                frame.add(gamePanel);
+                frame.revalidate();
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "File does not exist: " + input,
+                        "Load", JOptionPane.PLAIN_MESSAGE);
+            } catch (RuntimeException e) {
+                JOptionPane.showMessageDialog(null, "Something went wrong.",
+                        "Load", JOptionPane.PLAIN_MESSAGE);
+            }
         }
     }
 }
