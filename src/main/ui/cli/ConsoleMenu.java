@@ -1,18 +1,18 @@
-package ui;
+package ui.cli;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 /**
- * Represents the main menu for the program.
+ * Represents the main menu via command line interface.
  */
-public class Menu {
+public class ConsoleMenu {
     private final Scanner scanner;
 
     /**
      * @EFFECTS: Constructs a new menu.
      */
-    public Menu() {
+    public ConsoleMenu() {
         this.scanner = new Scanner(System.in);
     }
 
@@ -25,7 +25,7 @@ public class Menu {
 
             switch (input[0]) {
                 case "play":
-                    new Game(scanner).displayBoard().displayHelp().start();
+                    new ConsoleGame(scanner).displayBoard().displayHelp().start();
                     break;
                 case "load":
                     loadFile(input);
@@ -45,7 +45,7 @@ public class Menu {
     /**
      * @EFFECTS: Prints out a list of valid commands, and returns {@code this} for chaining.
      */
-    public Menu displayHelp() {
+    public ConsoleMenu displayHelp() {
         String string = "play             | Start a new game. \n"
                 + "load <file-name> | Load an existing game. \n"
                 + "help             | See valid commands. \n"
@@ -58,7 +58,7 @@ public class Menu {
     /**
      * @EFFECTS: Prints out the intro blurb, and returns {@code this} for chaining.
      */
-    public Menu displayIntro() {
+    public ConsoleMenu displayIntro() {
         // It looks better without the extra backslashes...
         String string = "_________ __________  __________________ \n"
                 + "\\_   ___ \\\\______   \\/   _____/\\_   ___ \\ \n"
@@ -82,10 +82,10 @@ public class Menu {
         }
 
         try {
-            new Game(scanner).loadFile(input[1]).displayBoard().displayHelp().start();
+            new ConsoleGame(scanner).loadFile(input[1]).displayBoard().displayHelp().start();
         } catch (IOException e) {
             System.out.println("[!] File does not exist: " + input[1]);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             System.out.println("[!] Something went wrong.");
         }
     }

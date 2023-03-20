@@ -4,20 +4,47 @@ import model.board.Square;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Random;
 
+/**
+ * Represents a square on the board graphically.
+ */
 public class SquarePanel extends JPanel {
-    private static final int SQUARE_SIZE = 50;
+    public static final int SIZE = 64;
+    private static final Color[] DEFAULT_COLOURS = {new Color(0xB58863), new Color(0xF0D9B5)};
+    private static final Color[] HIGHLIGHT_COLOURS = {new Color(0xACA249), new Color(0xCED17A)};
 
     private final Square square;
+    private final JLabel iconLabel;
 
+    /**
+     * @EFFECTS: Constructs a new square panel.
+     */
     public SquarePanel(Square square) {
         this.square = square;
-
-        inflate();
+        this.iconLabel = new JLabel();
+        setup();
     }
 
-    public void setIcon() {
+    /**
+     * @EFFECTS: Updates the square panel to match the current board state.
+     * @MODIFIES: {@code this}
+     */
+    public void refresh() {
+        if (square.hasPiece()) {
+            iconLabel.setIcon(new ImageIcon("./data/res/" + (square.getPiece().getClass().getSimpleName()
+                    + "-" + square.getPiece().getColour()).toLowerCase() + ".png"));
+        } else {
+            iconLabel.setIcon(null);
+        }
+    }
+
+    /**
+     * @EFFECTS: Updates the background colour to highlight the panel.
+     * @MODIFIES: {@code this}
+     */
+    public void setSelected(boolean to) {
+        setBackground(to ? HIGHLIGHT_COLOURS[(square.getX() + square.getY()) % HIGHLIGHT_COLOURS.length]
+                : DEFAULT_COLOURS[(square.getX() + square.getY()) % DEFAULT_COLOURS.length]);
     }
 
     public Square getSquare() {
@@ -25,11 +52,15 @@ public class SquarePanel extends JPanel {
     }
 
     /**
-     * @EFFECTS: Sets properties and adds components to the square panel.
+     * @EFFECTS: Sets properties and adds components.
      * @MODIFIES: {@code this}
      */
-    private void inflate() {
-        setPreferredSize(new Dimension(SQUARE_SIZE, SQUARE_SIZE));
-        setBackground(new Color(Color.HSBtoRGB(0, 0, new Random().nextFloat())));
+    private void setup() {
+        setPreferredSize(new Dimension(SIZE, SIZE));
+        setLayout(new BorderLayout());
+        setSelected(false);
+
+        add(iconLabel, BorderLayout.CENTER);
+        refresh();
     }
 }

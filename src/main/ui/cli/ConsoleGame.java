@@ -1,4 +1,4 @@
-package ui;
+package ui.cli;
 
 import model.Colour;
 import model.Move;
@@ -12,16 +12,16 @@ import java.util.Scanner;
 import java.util.Set;
 
 /**
- * Represents a game of chess.
+ * Represents a game of chess via command line interface.
  */
-public class Game {
+public class ConsoleGame {
     private final Scanner scanner;
     private final Board board;
 
     /**
      * @EFFECTS: Constructs a new game.
      */
-    public Game(Scanner scanner) {
+    public ConsoleGame(Scanner scanner) {
         this.scanner = scanner;
         this.board = new Board();
     }
@@ -56,7 +56,7 @@ public class Game {
     /**
      * @EFFECTS: Prints out a list of valid commands, and returns {@code this} for chaining.
      */
-    public Game displayHelp() {
+    public ConsoleGame displayHelp() {
         String string = "move <start> <end> | Move a piece. \n"
                 + "help               | See valid commands. \n"
                 + "save <file-name>   | Save the current game. \n"
@@ -69,7 +69,7 @@ public class Game {
     /**
      * @EFFECTS: Prints out the board, and returns {@code this} for chaining.
      */
-    public Game displayBoard() {
+    public ConsoleGame displayBoard() {
         System.out.println(getDisplayString(board.getCurrentPlayer()));
 
         if (board.isGameOver()) {
@@ -85,8 +85,8 @@ public class Game {
      * @EFFECTS: Loads an existing game from a JSON file, and returns {@code this} for chaining.
      * @MODIFIES: {@code this}
      */
-    public Game loadFile(String path) throws IOException {
-        for (Move move : JsonUtils.load(path, board)) {
+    public ConsoleGame loadFile(String fileName) throws IOException {
+        for (Move move : JsonUtils.load(fileName, board)) {
             board.doMove(move);
         }
         return this;
@@ -202,7 +202,7 @@ public class Game {
             System.out.println("[@] Game successfully saved as: " + input[1]);
         } catch (IOException e) {
             System.out.println("[!] Illegal file name: " + input[1]);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             System.out.println("[!] Something went wrong.");
         }
     }
