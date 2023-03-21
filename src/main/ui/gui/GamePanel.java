@@ -18,15 +18,10 @@ public class GamePanel extends JPanel {
     private final Board board;
     private SquarePanel selection;
 
-    private final JPanel boardPanel;
-    private final JPanel infoPanel;
-
     public GamePanel() {
         this.board = new Board();
         this.selection = null;
 
-        this.boardPanel = new JPanel();
-        this.infoPanel = new JPanel();
         setup();
     }
 
@@ -56,11 +51,11 @@ public class GamePanel extends JPanel {
     }
 
     /**
-     * @EFFECTS: Sets attributes and adds components to a new board panel, and returns it.
+     * @EFFECTS: Sets attributes and adds components to a new panel for the board, and returns it.
      * @MODIFIES: {@code this}
      */
     private JPanel setupBoardPanel() {
-        boardPanel.setLayout(new GridLayout(Board.SIZE, Board.SIZE));
+        JPanel boardPanel = new JPanel(new GridLayout(Board.SIZE, Board.SIZE));
 
         for (int y = Board.SIZE - 1; y >= 0; y--) {
             for (int x = 0; x < Board.SIZE; x++) {
@@ -79,10 +74,10 @@ public class GamePanel extends JPanel {
     }
 
     /**
-     * @EFFECTS: Sets attributes and adds components to a new info panel, and returns it.
+     * @EFFECTS: Sets attributes and adds components to a new panel for game info, and returns it.
      */
     private JPanel setupInfoPanel() {
-        return infoPanel;
+        return new JPanel();
     }
 
     /**

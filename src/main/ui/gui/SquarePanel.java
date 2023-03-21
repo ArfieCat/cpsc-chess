@@ -14,9 +14,9 @@ public class SquarePanel extends JPanel {
     private static final String PATH = "./data/.resources/piece/";
     private static final String EXT = ".png";
 
-    public static final int SIZE = 60;
     private static final Color[] DEFAULT_COLOURS = {new Color(0xB98761), new Color(0xEDD6B0)};
-    private static final Color HIGHLIGHT_COLOUR = Color.YELLOW;
+    private static final Color[] HIGHLIGHT_COLOURS = {new Color(0xDCC431), new Color(0xF7EB58)};
+    private static final int SIZE = 64;
 
     private final Square square;
     private final Color[] colours;
@@ -29,8 +29,9 @@ public class SquarePanel extends JPanel {
      */
     public SquarePanel(Square square) {
         this.square = square;
-        this.colours = getBackgroundColours(DEFAULT_COLOURS[(square.getX() + square.getY()) % DEFAULT_COLOURS.length]);
+        this.colours = getBackgroundColours();
         this.isHighlighted = false;
+
         this.iconLabel = new JLabel();
         setup();
     }
@@ -42,7 +43,7 @@ public class SquarePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         setBackground(isHighlighted ? colours[1] : colours[0]);
-        iconLabel.setIcon(getIconResource(square));
+        iconLabel.setIcon(square.hasPiece() ? getIconResource() : null);
 
         super.paintComponent(g);
     }
@@ -67,28 +68,19 @@ public class SquarePanel extends JPanel {
     }
 
     /**
-     * @EFFECTS: Returns the sprite matching the current piece occupying the square.
+     * @EFFECTS: Returns an array of the default and highlighted background colours.
      */
-    private static Icon getIconResource(Square square) {
-        if (square.hasPiece()) {
-            ImageIcon icon = new ImageIcon(Paths.get((PATH + square.getPiece().getColour().toString() + "/"
-                    + square.getPiece().getClass().getSimpleName() + EXT).toLowerCase(Locale.ROOT)).toString());
-            return new ImageIcon(icon.getImage().getScaledInstance(SIZE, SIZE, Image.SCALE_SMOOTH));
-        }
-        return null;
+    private Color[] getBackgroundColours() {
+        return new Color[]{DEFAULT_COLOURS[(square.getX() + square.getY()) % DEFAULT_COLOURS.length],
+                HIGHLIGHT_COLOURS[(square.getX() + square.getY()) % HIGHLIGHT_COLOURS.length]};
     }
 
     /**
-     * @EFFECTS: Returns an array of the default and highlighted background colours.
+     * @EFFECTS: Returns an icon with the sprite at the given path.
      */
-    private static Color[] getBackgroundColours(Color colour) {
-        float[] defaultComponents = colour.getRGBColorComponents(null);
-        float[] highlightComponents = HIGHLIGHT_COLOUR.getRGBColorComponents(null);
-        float[] components = new float[3];
-
-        for (int i = 0; i < components.length; i++) {
-            components[i] = Math.min(1.0f, 0.4f * highlightComponents[i] + 0.6f * defaultComponents[i]);
-        }
-        return new Color[]{colour, new Color(components[0], components[1], components[2])};
+    public Icon getIconResource() {
+        ImageIcon icon = new ImageIcon(Paths.get(PATH + (square.getPiece().getColour().toString() + "/"
+                + square.getPiece().getClass().getSimpleName()).toLowerCase(Locale.ROOT) + EXT).toString());
+        return new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getWidth(), Image.SCALE_SMOOTH));
     }
 }

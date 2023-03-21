@@ -1,5 +1,6 @@
 package ui.gui;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import persistence.JsonUtils;
 
 import javax.swing.*;
@@ -9,9 +10,7 @@ import java.io.IOException;
 /**
  * Represents the graphical user interface.
  */
-public class GraphicalUI {
-    private static final String THEME = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
-
+public class GraphicUI {
     private final JFrame frame;
     private GamePanel gamePanel;
 
@@ -19,16 +18,14 @@ public class GraphicalUI {
      * @EFFECTS: Starts the graphical user interface on the event dispatch thread.
      */
     public static void start() {
-        try {
-            UIManager.setLookAndFeel(THEME);
-        } catch (Exception e) { /* Whatever, man. */ }
-        SwingUtilities.invokeLater(GraphicalUI::new);
+        FlatLightLaf.setup();
+        SwingUtilities.invokeLater(GraphicUI::new);
     }
 
     /**
      * @EFFECTS: Constructs a new graphical UI and displays it on-screen.
      */
-    private GraphicalUI() {
+    private GraphicUI() {
         this.gamePanel = new GamePanel();
         this.frame = setupFrame();
         frame.setVisible(true);
@@ -56,27 +53,31 @@ public class GraphicalUI {
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
 
-        JButton newButton = new JButton("New Game");
+        // Disgusting use of magic strings to get bundled icons here...
+        JButton newButton = new JButton(UIManager.getIcon("FileChooser.listViewIcon"));
         newButton.addActionListener(e -> newGame());
 
-        JButton saveButton = new JButton("Save");
+        JButton saveButton = new JButton(UIManager.getIcon("FileView.floppyDriveIcon"));
         saveButton.addActionListener(e -> saveFile());
 
-        JButton loadButton = new JButton("Load");
+        JButton loadButton = new JButton(UIManager.getIcon("Tree.openIcon"));
         loadButton.addActionListener(e -> loadFile());
 
         toolBar.add(newButton);
+        toolBar.addSeparator();
         toolBar.add(saveButton);
         toolBar.add(loadButton);
 
         return toolBar;
     }
 
+    /**
+     * @EFFECTS: Starts a new game and replaces the current game panel.
+     * @MODIFIES: {@code this}
+     */
     private void newGame() {
-        int input = JOptionPane.showConfirmDialog(null, "Unsaved changes will be discarded.",
-                "New Game", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-        if (input == JOptionPane.OK_OPTION) {
+        if (JOptionPane.showConfirmDialog(frame, "Unsaved changes will be discarded.", "New Game",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
             frame.remove(gamePanel);
             gamePanel = new GamePanel();
 
@@ -85,27 +86,30 @@ public class GraphicalUI {
         }
     }
 
+    /**
+     * @EFFECTS: Saves the game to a JSON file.
+     */
     private void saveFile() {
-        String input = JOptionPane.showInputDialog(null, "Input a file name.",
-                "Save", JOptionPane.PLAIN_MESSAGE);
-
+        String input = JOptionPane.showInputDialog(frame, "Input a file name.", "Save Game",
+                JOptionPane.QUESTION_MESSAGE);
         if (input != null) {
             try {
                 JsonUtils.save(input, gamePanel.getBoardHistory());
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Illegal file name: " + input,
-                        "Save", JOptionPane.PLAIN_MESSAGE);
+                showWarningDialog("Illegal file name: " + input);
             } catch (RuntimeException e) {
-                JOptionPane.showMessageDialog(null, "Something went wrong.",
-                        "Save", JOptionPane.PLAIN_MESSAGE);
+                showWarningDialog("Something went wrong.");
             }
         }
     }
 
+    /**
+     * @EFFECTS: Loads an existing game from a JSON file and replaces the current game panel.
+     * @MODIFIES: {@code this}
+     */
     private void loadFile() {
-        String input = JOptionPane.showInputDialog(null, "Input a file name.",
-                "Load", JOptionPane.PLAIN_MESSAGE);
-
+        String input = JOptionPane.showInputDialog(frame, "Input a file name.", "Load Game",
+                JOptionPane.QUESTION_MESSAGE);
         if (input != null) {
             try {
                 frame.remove(gamePanel);
@@ -115,12 +119,20 @@ public class GraphicalUI {
                 frame.add(gamePanel);
                 frame.revalidate();
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "File does not exist: " + input,
-                        "Load", JOptionPane.PLAIN_MESSAGE);
+                showWarningDialog("File does not exist: " + input);
             } catch (RuntimeException e) {
-                JOptionPane.showMessageDialog(null, "Something went wrong.",
-                        "Load", JOptionPane.PLAIN_MESSAGE);
+                showWarningDialog("Something went wrong.");
             }
         }
+    }
+
+    /**
+     * @EFFECTS: Displays a warning dialog after a short delay (because instant popups are unnerving).
+     */
+    private void showWarningDialog(String message) {
+        Timer timer = new Timer(100, e -> JOptionPane.showMessageDialog(frame, message, null,
+                JOptionPane.WARNING_MESSAGE));
+        timer.setRepeats(false);
+        timer.start();
     }
 }
