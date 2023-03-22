@@ -6,23 +6,34 @@ import persistence.JsonUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Represents a game of chess graphically.
  */
 public class GamePanel extends JPanel {
+    private static final double SIDEBAR_RATIO = 0.618;
+
     private final Board board;
-    private SquarePanel selection;
+    private final BoardDisplayPanel boardDisplayPanel;
 
+    /**
+     * @EFFECTS: Constructs a new game panel.
+     */
     public GamePanel() {
+        super(new GridBagLayout());
         this.board = new Board();
-        this.selection = null;
+        this.boardDisplayPanel = new BoardDisplayPanel(board);
 
-        setup();
+        add(boardDisplayPanel, getConstraints(0, 0, 3, 1.0, 1.0));
+        addNewInfoDisplayPanels();
+    }
+
+    /**
+     * @EFFECTS: Saves the game to a JSON file.
+     */
+    public void saveFile(String fileName) throws IOException {
+        JsonUtils.save(fileName, board.getHistory());
     }
 
     /**
@@ -35,69 +46,45 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public List<Move> getBoardHistory() {
-        return board.getHistory();
-    }
-
     /**
-     * @EFFECTS: Sets properties and adds components.
+     * @EFFECTS: Creates and adds several new panels to display game information.
      * @MODIFIES: {@code this}
      */
-    private void setup() {
-        setLayout(new BorderLayout());
+    private void addNewInfoDisplayPanels() {
+        JPanel chatPanel = new JPanel(new BorderLayout());
 
-        add(setupBoardPanel(), BorderLayout.LINE_START);
-        add(setupInfoPanel(), BorderLayout.LINE_END);
+        JTextArea chatTextArea = new JTextArea();
+        chatTextArea.setEditable(false);
+
+        JTextField chatTextField = new JTextField();
+        chatTextField.addActionListener(e -> {
+            chatTextArea.append(boardDisplayPanel.getDisplayedPlayer() + ": " + chatTextField.getText() + "\n");
+            chatTextField.setText(null);
+        });
+
+        chatPanel.add(new JScrollPane(chatTextArea), BorderLayout.CENTER);
+        chatPanel.add(chatTextField, BorderLayout.PAGE_END);
+
+        // ...
+
+        add(chatPanel, getConstraints(1, 2, 1, SIDEBAR_RATIO + 1, 1.0));
     }
 
     /**
-     * @EFFECTS: Sets attributes and adds components to a new panel for the board, and returns it.
-     * @MODIFIES: {@code this}
+     * @EFFECTS: Returns a layout constraints object with the given params.
      */
-    private JPanel setupBoardPanel() {
-        JPanel boardPanel = new JPanel(new GridLayout(Board.SIZE, Board.SIZE));
+    private GridBagConstraints getConstraints(int x, int y, int h, double rx, double ry) {
+        GridBagConstraints constraints = new GridBagConstraints();
 
-        for (int y = Board.SIZE - 1; y >= 0; y--) {
-            for (int x = 0; x < Board.SIZE; x++) {
-                SquarePanel squarePanel = new SquarePanel(board.getSquare(x, y));
-                squarePanel.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        validateMove((SquarePanel) e.getComponent());
-                        repaint();
-                    }
-                });
-                boardPanel.add(squarePanel);
-            }
-        }
-        return boardPanel;
-    }
+        constraints.gridx = x;
+        constraints.gridy = y;
+        constraints.gridheight = h;
+        constraints.weightx = rx;
+        constraints.weighty = ry;
 
-    /**
-     * @EFFECTS: Sets attributes and adds components to a new panel for game info, and returns it.
-     */
-    private JPanel setupInfoPanel() {
-        return new JPanel();
-    }
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.fill = GridBagConstraints.BOTH;
 
-    /**
-     * @EFFECTS: Ensures that the user input for a move is valid and updates the game.
-     * @MODIFIES: {@code this}
-     */
-    private void validateMove(SquarePanel panel) {
-        if (!board.isGameOver()) {
-            if (selection == null) {
-                panel.setHighlighted(true);
-                selection = panel;
-            } else {
-                Move move = new Move(selection.getSquare(), panel.getSquare());
-                if (move.getStart().hasPiece() && move.getStart().getPiece().getColour() == board.getCurrentPlayer()
-                        && move.isValid(board)) {
-                    board.doMove(move);
-                }
-                selection.setHighlighted(false);
-                selection = null;
-            }
-        }
+        return constraints;
     }
 }

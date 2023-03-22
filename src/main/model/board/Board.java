@@ -66,13 +66,13 @@ public class Board {
     }
 
     /**
-     * @EFFECTS: Returns the set of all squares visible to the current player colour.
+     * @EFFECTS: Returns the set of all squares visible to the given player colour.
      */
-    public Set<Square> getVisibleSquares() {
+    public Set<Square> getVisibleSquares(Colour colour) {
         Set<Square> visibleSquares = new HashSet<>();
 
         for (Square square : gameState) {
-            if (square.hasPiece() && square.getPiece().getColour() == getCurrentPlayer()) {
+            if (square.hasPiece() && square.getPiece().getColour() == colour) {
                 visibleSquares.add(square);
                 visibleSquares.addAll(square.getPiece().getValidSquares(this, square));
             }

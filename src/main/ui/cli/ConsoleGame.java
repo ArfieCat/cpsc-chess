@@ -96,7 +96,7 @@ public class ConsoleGame {
      * @EFFECTS: Returns a string representation of the board for display.
      */
     private String getDisplayString(Colour colour) {
-        Set<Square> visibleSquares = board.getVisibleSquares();
+        Set<Square> visibleSquares = board.getVisibleSquares(colour);
         StringBuilder stringBuilder = new StringBuilder();
 
         // Iterate up or down depending on the current player to visually "flip" the board.

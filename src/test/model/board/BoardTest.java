@@ -36,7 +36,7 @@ public class BoardTest {
             assertTrue(board.getSquare(x, 1).getPiece() instanceof Pawn);
         }
 
-        assertEquals(32, board.getVisibleSquares().size());
+        assertEquals(32, board.getVisibleSquares(board.getCurrentPlayer()).size());
         assertEquals(Colour.WHITE, board.getCurrentPlayer());
 
         assertEquals(0, board.getHistory().size());
