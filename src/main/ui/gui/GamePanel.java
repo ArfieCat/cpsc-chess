@@ -46,6 +46,7 @@ public class GamePanel extends JPanel {
 
     /**
      * @EFFECTS: Saves the game to a JSON file.
+     * @MODIFIES: ./data/{@code fileName}.cpsc
      */
     public void saveFile(String fileName) throws IOException {
         JsonUtils.save(fileName, board.getHistory());
@@ -80,7 +81,7 @@ public class GamePanel extends JPanel {
 
     /**
      * @EFFECTS: Returns a PGN-like string representation of the given move.
-     * @REQUIRES: {@code Board.doMove(move)} called
+     * @REQUIRES: after {@code Board.doMove(move)}
      */
     private String getMoveDisplayString(Move move) {
         // Irregular notation for castling.

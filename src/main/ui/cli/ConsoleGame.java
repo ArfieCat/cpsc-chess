@@ -190,6 +190,7 @@ public class ConsoleGame {
 
     /**
      * @EFFECTS: Saves the game to a JSON file.
+     * @MODIFIES: ./data/{@code fileName}.cpsc
      */
     private void saveFile(String[] input) {
         if (input.length != 2) {

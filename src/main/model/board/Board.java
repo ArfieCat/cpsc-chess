@@ -38,7 +38,7 @@ public class Board {
 
     /**
      * @EFFECTS: Updates the board according to the given move.
-     * @MODIFIES: {@code this}
+     * @MODIFIES: {@code this}, {@code move}
      * @REQUIRES: {@code move.isValid()}
      */
     public void doMove(Move move) {
@@ -174,7 +174,7 @@ public class Board {
 
     /**
      * @EFFECTS: Castles with the appropriate rook, if applicable.
-     * @MODIFIES: {@code this}
+     * @MODIFIES: {@code this}, {@code move}
      */
     private void doCastling(Move move) {
         if (Math.abs(move.getEnd().getX() - move.getStart().getX()) == 2) {
@@ -192,7 +192,7 @@ public class Board {
 
     /**
      * @EFFECTS: Promotes a pawn on its last rank to a queen, if applicable.
-     * @MODIFIES: {@code this}
+     * @MODIFIES: {@code this}, {@code move}
      */
     private void doPromotion(Move move) {
         Pawn pawn = (Pawn) move.getEnd().getPiece();

@@ -1,6 +1,6 @@
 package ui.gui;
 
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import model.board.Board;
 
 import javax.swing.*;
@@ -17,7 +17,7 @@ public class GraphicUI extends JFrame {
      * @EFFECTS: Starts the graphical user interface on the event dispatch thread.
      */
     public static void start() {
-        FlatMacLightLaf.setup();
+        FlatIntelliJLaf.setup();
         SwingUtilities.invokeLater(GraphicUI::new);
     }
 
@@ -106,6 +106,7 @@ public class GraphicUI extends JFrame {
 
     /**
      * @EFFECTS: Saves the game to a JSON file.
+     * @MODIFIES: ./data/{@code fileName}.cpsc
      */
     private void saveFile() {
         String input = JOptionPane.showInputDialog(this, "Input a file name.",

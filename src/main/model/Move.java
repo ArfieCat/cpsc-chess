@@ -30,7 +30,7 @@ public class Move {
 
     /**
      * @EFFECTS: Returns {@code true} if the start piece can move to the end square.
-     * @REQUIRES: {@code Board.doMove(this)} not called
+     * @REQUIRES: before {@code Board.doMove(this)}
      */
     public boolean isValid(Board board) {
         return start.getPiece().getValidSquares(board, start).contains(end);
