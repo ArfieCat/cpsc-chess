@@ -43,20 +43,25 @@ public class Board {
      */
     public void doMove(Move move) {
         isGameOver = move.getEnd().getPiece() instanceof King;
+        move.setMovedPiece(move.getStart().getPiece());
 
         // Handle "special" moves.
-        if (move.getStart().getPiece() instanceof Pawn) {
+        if (move.getMovedPiece() instanceof Pawn) {
             doEnPassant(move);
-        } else if (move.getStart().getPiece() instanceof King) {
+        } else if (move.getMovedPiece() instanceof King) {
             doCastling(move);
         }
 
-        if (move.getStart().getPiece() instanceof FirstMove) {
-            ((FirstMove) move.getStart().getPiece()).setHasMoved();
+        // Set move-related flags.
+        if (move.getMovedPiece() instanceof FirstMove) {
+            ((FirstMove) move.getMovedPiece()).setHasMoved();
+        }
+        if (move.getEnd().hasPiece()) {
+            move.setFlag(Move.CAPTURE);
         }
 
         // Change the position of the piece on the start square.
-        move.getEnd().setPiece(move.getStart().getPiece());
+        move.getEnd().setPiece(move.getMovedPiece());
         move.getStart().setPiece(null);
         history.add(move);
 
@@ -136,10 +141,10 @@ public class Board {
 
     /**
      * @EFFECTS: Captures a pawn en passant, if applicable.
-     * @MODIFIES: {@code this}
+     * @MODIFIES: {@code this}, {@code move}
      */
     private void doEnPassant(Move move) {
-        Pawn pawn = (Pawn) move.getStart().getPiece();
+        Pawn pawn = (Pawn) move.getMovedPiece();
 
         if (move.getStart().getX() != move.getEnd().getX()) {
             // Backtrack one square to determine if the current move is en passant.
@@ -149,6 +154,7 @@ public class Board {
                 if (square.getPiece().getColour() != pawn.getColour()) {
                     if (square.getPiece() instanceof Pawn && ((Pawn) square.getPiece()).getEnPassable()) {
                         square.setPiece(null);
+                        move.setFlag(Move.CAPTURE);
                     }
                 }
             }
@@ -173,13 +179,14 @@ public class Board {
     private void doCastling(Move move) {
         if (Math.abs(move.getEnd().getX() - move.getStart().getX()) == 2) {
             // Determine if the castle was kingside or queenside.
-            int x = move.getEnd().getX() - move.getStart().getX() < 0 ? 0 : SIZE - 1;
-            int y = move.getEnd().getY();
-            int offset = move.getEnd().getX() - move.getStart().getX() < 0 ? 1 : -1;
+            int x = move.getEnd().getX() < move.getStart().getX() ? 0 : SIZE - 1;
+            int offset = move.getEnd().getX() < move.getStart().getX() ? 1 : -1;
 
             // Move the rook to the appropriate square.
-            getSquare(move.getEnd().getX() + offset, y).setPiece(getSquare(x, y).getPiece());
-            getSquare(x, y).setPiece(null);
+            getSquare(move.getEnd().getX() + offset, move.getEnd().getY()).setPiece(getSquare(x,
+                    move.getEnd().getY()).getPiece());
+            getSquare(x, move.getEnd().getY()).setPiece(null);
+            move.setFlag(Move.CASTLE);
         }
     }
 
@@ -194,6 +201,7 @@ public class Board {
         // Check if the pawn is on its last rank.
         if (move.getEnd().getY() == y) {
             move.getEnd().setPiece(new Queen(pawn.getColour()));
+            move.setFlag(Move.PROMOTE);
         }
     }
 }

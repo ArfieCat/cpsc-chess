@@ -1,6 +1,7 @@
 package ui.gui;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import model.board.Board;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,10 +54,14 @@ public class GraphicUI extends JFrame {
         JButton loadButton = new JButton(UIManager.getIcon("Tree.openIcon"));
         loadButton.addActionListener(e -> loadFile());
 
+        JButton copyButton = new JButton(UIManager.getIcon("FileChooser.detailsViewIcon"));
+        copyButton.addActionListener(e -> copyGame());
+
         toolBar.add(newButton);
         toolBar.addSeparator();
         toolBar.add(saveButton);
         toolBar.add(loadButton);
+        toolBar.add(copyButton);
 
         add(toolBar, BorderLayout.PAGE_START);
     }
@@ -129,10 +134,25 @@ public class GraphicUI extends JFrame {
     }
 
     /**
+     * @EFFECTS: Displays a PGN-like string representation of the current game.
+     * @MODIFIES: {@code this}
+     */
+    private void copyGame() {
+        JTextArea textArea = new JTextArea(Board.SIZE, 1);
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setText(currentGamePanel.getDisplayString());
+
+        JOptionPane.showMessageDialog(this, new JScrollPane(textArea), "Copy Game",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
      * @EFFECTS: Displays a warning dialog after a short delay (because instant popups are unnerving).
      */
     private void showWarningDialog(String message) {
-        Timer timer = new Timer(100, e -> JOptionPane.showMessageDialog(this, message,
+        Timer timer = new Timer(100, t -> JOptionPane.showMessageDialog(this, message,
                 null, JOptionPane.WARNING_MESSAGE));
         timer.setRepeats(false);
         timer.start();

@@ -23,5 +23,8 @@ https://images.chesscomfiles.com/chess-themes/sounds/_WAV_/default/<key>.wav
 | key      |              |
 |----------|--------------|
 | Move     | `move-self`  |
+| Capture  | `capture`    |
+| Castle   | `castle`     |
+| Promote  | `promote`    |
 | New game | `game-start` |
 | Game end | `game-end`   |
