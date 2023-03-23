@@ -96,7 +96,7 @@ public class GamePanel extends JPanel {
     }
 
     /**
-     * @EFFECTS: Returns an image icon with the sprite at the given path.
+     * @EFFECTS: Returns an image icon of the sprite at the given path with the given dimensions.
      */
     private static Icon getIconResource(String fileName, int width, int height) {
         ImageIcon icon = new ImageIcon(Paths.get(PATH + fileName + ".png").toString());
@@ -264,6 +264,7 @@ public class GamePanel extends JPanel {
 
         /**
          * @EFFECTS: Creates and adds a new panel for locally sending chat messages.
+         * @MODIFIES: {@code this}
          */
         private void addNewMessagePanel() {
             JTextArea messageArea = new JTextArea(1, 1);
