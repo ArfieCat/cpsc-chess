@@ -33,6 +33,7 @@ public class GraphicUI extends JFrame {
         replaceGamePanel(null);
 
         pack();
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 

@@ -134,7 +134,7 @@ public class GamePanel extends JPanel {
             this.selection = null;
 
             nextOrientation();
-            playSoundResource("game-start");
+            playSoundResource("new-game");
         }
 
         /**
@@ -311,12 +311,14 @@ public class GamePanel extends JPanel {
         private void delay() {
             setVisible(false);
             boardDisplayPanel.setVisible(false);
+            playSoundResource("continue");
 
             // Update the orientation of the board while it is hidden.
             boardDisplayPanel.nextOrientation();
             Timer timer = new Timer(1000, t -> {
                 setVisible(true);
                 boardDisplayPanel.setVisible(true);
+                playSoundResource("continue");
             });
             timer.setRepeats(false);
             timer.start();

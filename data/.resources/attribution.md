@@ -20,11 +20,12 @@ https://images.chesscomfiles.com/chess-themes/pieces/neo/256/<key>.png
 The **Default** sound theme can be found at the following directory:
 https://images.chesscomfiles.com/chess-themes/sounds/_WAV_/default/<key>.wav
 
-| key      |              |
+| Action   | key          |
 |----------|--------------|
 | Move     | `move-self`  |
 | Capture  | `capture`    |
 | Castle   | `castle`     |
 | Promote  | `promote`    |
+| Continue | `move-check` |
 | New game | `game-start` |
 | Game end | `game-end`   |

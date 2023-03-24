@@ -2,8 +2,8 @@
 
 ## What will the application do?
 
-**CPSC** (CPSC Program Similar to Chess) allows users to play a variant of chess with fog of war.
-In other words, a player can only see squares that a piece of their colour can move to on the next turn.
+**CPSC** (CPSC Program Similar to Chess) allows users to play a variant of chess with fog of war. In other words, a 
+player can only see squares that a piece of their colour can move to on the next turn.
 
 ## Who will use it?
 
@@ -28,7 +28,28 @@ As a user, I want to be able to...
 - [x] view the current state of the board.
 - [x] save a game that is currently in progress.
 - [x] load a previously saved game and continue playing.
-- [ ] export a game to a PGN-like(?) format.
+- [x] copy a game to the clipboard in a PGN-like format.
+
+---
+
+# :point_up: Instructions for the Grader
+
+The GUI has five main elements: the toolbar, board, history panel, chat panel, and continue button. On each player's 
+turn, they must move a piece on the board, then press the continue button to end their turn with a short delay. Feel 
+free to test unusual inputs; they should all be handled.
+
+- Add a move to the list of prior moves by interacting with the board.
+- Clear the list and start a new game using the first button in the toolbar.
+- Save the current game to a file using the second button.
+- Load an existing game from a file using the third.
+- The visual component is hard to miss.
+
+## Additional actions
+
+- The history panel updates automatically and displays only the current player's moves in a PGN-like format.
+- View the entire list or copy it to the clipboard by clicking the last button in the toolbar.
+- Send a message to the other player by typing into the chat panel.
+- Turn on sound for the best gameplay experience.
 
 ---
 
