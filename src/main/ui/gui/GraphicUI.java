@@ -140,7 +140,7 @@ public class GraphicUI extends JFrame {
      * @MODIFIES: {@code this}
      */
     private void copyGame() {
-        JTextArea textArea = new JTextArea(Board.SIZE, 1);
+        JTextArea textArea = new JTextArea(Board.SIZE, 2 * Board.SIZE);
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);

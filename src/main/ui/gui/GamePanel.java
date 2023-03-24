@@ -74,7 +74,13 @@ public class GamePanel extends JPanel {
             if (i % Colour.values().length == 0) {
                 stringBuilder.append(i / Colour.values().length + 1).append(". ");
             }
-            stringBuilder.append(getMoveDisplayString(history.get(i))).append(" ");
+            stringBuilder.append(getMoveDisplayString(history.get(i)));
+
+            // Add random brilliant moves and blunders. Just for fun.
+            if (Math.random() < 0.1) {
+                stringBuilder.append(Math.random() < 0.5 ? "!!" : "??");
+            }
+            stringBuilder.append(" ");
         }
         return stringBuilder.toString();
     }
