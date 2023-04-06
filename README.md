@@ -46,7 +46,7 @@ free to test unusual inputs; they should all be handled.
 
 ## Additional actions
 
-- The history panel updates automatically and displays only the current player's moves in a PGN-like format.
+- The history panel automatically displays the current player's moves in a PGN-like format.
 - View the entire list or copy it to the clipboard by clicking the last button in the toolbar.
 - Send a message to the other player by typing into the chat panel.
 - Turn on sound for the best gameplay experience.
@@ -58,3 +58,57 @@ free to test unusual inputs; they should all be handled.
 1. A square is only visible if a piece of the current player's colour can move to it.
 2. Players are not informed of check. The king may move into or be left in check.
 3. There is no checkmate. The game ends when a player's king is captured.
+
+---
+
+### Phase 4, Task 2:
+
+```text
+Thu Apr 06 11:08:54 PDT 2023
+Created new list of moves.
+Thu Apr 06 11:08:56 PDT 2023
+Added new move to list of moves.
+Thu Apr 06 11:09:01 PDT 2023
+Created new list of moves.
+Thu Apr 06 11:09:01 PDT 2023
+Converted JSON to list of moves.
+Thu Apr 06 11:09:01 PDT 2023
+Added new move to list of moves.
+Thu Apr 06 11:09:01 PDT 2023
+Added new move to list of moves.
+Thu Apr 06 11:09:01 PDT 2023
+Added new move to list of moves.
+Thu Apr 06 11:09:01 PDT 2023
+Added new move to list of moves.
+Thu Apr 06 11:09:01 PDT 2023
+Added new move to list of moves.
+Thu Apr 06 11:09:03 PDT 2023
+Holy Hell!
+Thu Apr 06 11:09:03 PDT 2023
+Added new move to list of moves.
+Thu Apr 06 11:09:08 PDT 2023
+Converted list of moves to JSON.
+Thu Apr 06 11:09:10 PDT 2023
+Created new list of moves.
+```
+
+### Task 3:
+
+![UML design diagram](uml-design-diagram.png)
+
+In chess programming, board representations are broadly categorized as square-centric or piece-centric. The former has 
+pieces as members of squares on the board (e.g. `Square --[0..1]--> Piece`). The latter does the opposite, storing
+positional information on a per-piece basis.
+
+Internally, **CPSC** uses a square-centric "mailbox" board representation. It is easy to implement and reason about, and
+simplifies the process of linking the model and user interface. However, it is less computationally efficient than a 
+piece-centric representation, often requiring looping and branching logic for common tasks such as move generation.
+
+One example of a potential large-scale refactor would be to switch to a piece-centric "bitboard" representation. This 
+would somewhat decrease the legibility of the code. However, it creates possibilities for the addition of features such 
+as a built-in chess engine, which is currently unfeasible due to performance constraints.
+
+Additionally, there are extensive interdependencies between classes of the model, as well as the UI. Some refactoring 
+could be done to further reduce the coupling between these classes. In particular, `GamePanel` contains multiple inner
+classes which are all dependent on each other, as well as the fields of the outer class. This could be addressed to some
+degree using design patterns, or by implementing a proper model-view-controller structure.

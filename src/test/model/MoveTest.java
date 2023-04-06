@@ -15,7 +15,7 @@ public class MoveTest {
     private Move move;
 
     /**
-     * @EFFECTS: Initializes the moves and board for testing.
+     * @EFFECTS: Initializes the move and board for testing.
      * @MODIFIES: {@code this}
      */
     @BeforeEach

@@ -2,6 +2,8 @@ package persistence;
 
 import model.Move;
 import model.board.Board;
+import model.log.Event;
+import model.log.EventLog;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -45,6 +47,9 @@ public final class JsonUtils {
             moves.add(new Move(board.getSquare(data.getInt(0), data.getInt(1)),
                     board.getSquare(data.getInt(2), data.getInt(3))));
         }
+
+        EventLog.getInstance().logEvent(new Event("Converted JSON to list of moves."));
+
         return moves;
     }
 
@@ -57,12 +62,14 @@ public final class JsonUtils {
             json.put(new JSONArray().put(move.getStart().getX()).put(move.getStart().getY())
                     .put(move.getEnd().getX()).put(move.getEnd().getY()));
         }
+
+        EventLog.getInstance().logEvent(new Event("Converted list of moves to JSON."));
+
         return new JSONObject().put("moves", json);
     }
 
     /**
      * @REQUIRES: Instantiation of a utility class is not allowed.
      */
-    private JsonUtils() {
-    }
+    private JsonUtils() { /* pass */ }
 }

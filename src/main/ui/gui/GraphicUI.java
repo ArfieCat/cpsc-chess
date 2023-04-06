@@ -2,9 +2,12 @@ package ui.gui;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import model.board.Board;
+import model.log.EventLog;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 /**
@@ -31,6 +34,14 @@ public class GraphicUI extends JFrame {
 
         addNewToolbar();
         replaceGamePanel(null);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                EventLog.getInstance().forEach(System.out::println);
+                super.windowClosing(e);
+            }
+        });
 
         pack();
         setLocationRelativeTo(null);
