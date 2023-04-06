@@ -32,27 +32,6 @@ As a user, I want to be able to...
 
 ---
 
-# :point_up: Instructions for the Grader
-
-The GUI has five main elements: the toolbar, board, history panel, chat panel, and continue button. On each player's 
-turn, they must move a piece on the board, then press the continue button to end their turn with a short delay. Feel 
-free to test unusual inputs; they should all be handled.
-
-- Add a move to the list of prior moves by interacting with the board.
-- Clear the list and start a new game using the first button in the toolbar.
-- Save the current game to a file using the second button.
-- Load an existing game from a file using the third.
-- The visual component is hard to miss.
-
-## Additional actions
-
-- The history panel automatically displays the current player's moves in a PGN-like format.
-- View the entire list or copy it to the clipboard by clicking the last button in the toolbar.
-- Send a message to the other player by typing into the chat panel.
-- Turn on sound for the best gameplay experience.
-
----
-
 # :mortar_board: Mechanics
 
 1. A square is only visible if a piece of the current player's colour can move to it.
@@ -61,7 +40,19 @@ free to test unusual inputs; they should all be handled.
 
 ---
 
-### Phase 4, Task 2:
+### Phase 3: Instructions
+
+The GUI has five main elements: the toolbar, board, history panel, chat panel, and continue button. On each player's
+turn, they must move a piece on the board, then press the continue button to end their turn with a short delay. Feel
+free to test unusual inputs; they should all be handled.
+
+- Add a move to the list of prior moves by interacting with the board.
+- Clear the list and start a new game using the first button in the toolbar.
+- Save the current game to a file using the second button.
+- Load an existing game from a file using the third.
+- The visual component is hard to miss.
+
+### Phase 4: Task 2
 
 ```text
 Thu Apr 06 11:08:54 PDT 2023
@@ -92,9 +83,9 @@ Thu Apr 06 11:09:10 PDT 2023
 Created new list of moves.
 ```
 
-### Task 3:
+### Phase 4: Task 3
 
-![UML design diagram](uml-design-diagram.png)
+![UML design diagram](UML_Design_Diagram.png)
 
 In chess programming, board representations are broadly categorized as square-centric or piece-centric. The former has 
 pieces as members of squares on the board (e.g. `Square --[0..1]--> Piece`). The latter does the opposite, storing
