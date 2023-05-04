@@ -2,8 +2,6 @@ package model.board;
 
 import model.Colour;
 import model.Move;
-import model.log.Event;
-import model.log.EventLog;
 import model.piece.*;
 
 import java.util.HashSet;
@@ -30,8 +28,6 @@ public class Board {
         this.history = new LinkedList<>();
         this.lastEnPassantTarget = null;
         this.isGameOver = false;
-
-        EventLog.getInstance().logEvent(new Event("Created new list of moves."));
 
         // Initialize an empty board.
         for (int i = 0; i < gameState.length; i++) {
@@ -68,8 +64,6 @@ public class Board {
         move.getEnd().setPiece(move.getMovedPiece());
         move.getStart().setPiece(null);
         history.add(move);
-
-        EventLog.getInstance().logEvent(new Event("Added new move to list of moves."));
 
         if (move.getEnd().getPiece() instanceof Pawn) {
             doPromotion(move);
@@ -161,8 +155,6 @@ public class Board {
                     if (square.getPiece() instanceof Pawn && ((Pawn) square.getPiece()).getEnPassable()) {
                         square.setPiece(null);
                         move.setFlag(Move.CAPTURE);
-
-                        EventLog.getInstance().logEvent(new Event("Holy Hell!"));
                     }
                 }
             }
