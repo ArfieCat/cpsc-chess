@@ -8,5 +8,5 @@ the game ends when a player's king is captured.
 - [x] Save and load games as `.cpsc` files.
 - [x] Copy games to the clipboard in a PGN-like format.
 
-# :tools: Project Structure
+# :hammer_and_wrench: Project Structure
 ![](flowchart.png)
